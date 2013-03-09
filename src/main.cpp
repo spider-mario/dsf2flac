@@ -158,23 +158,40 @@ int main(int argc, char **argv)
 
 	// add tags and a padding block
 	if(ok) {
-		if(
-		    (metadata[0] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT)) == NULL ||
-		    (metadata[1] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING)) == NULL ||
-		    !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ARTIST", dsf.getArtist()) ||
-		    !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false) || /* copy=false: let metadata object take control of entry's allocated string */
-		    !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ALBUM", dsf.getAlbum()) ||
-		    !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false) ||
-		    !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TITLE", dsf.getTitle()) ||
-		    !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false) ||
-		    !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TRACKNUMBER", dsf.getTrack()) ||
-		    !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false) ||
-		    !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "DATE", dsf.getYear()) ||
-		    !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false)
-		) {
+		
+		bool err = false;
+		err |= (metadata[0] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT)) == NULL;
+		err |= (metadata[1] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING)) == NULL;
+		char* tag = dsf.getArtist();
+		if (tag != NULL) {
+		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ARTIST", tag);
+		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+		}
+		tag = dsf.getAlbum();
+		if (tag != NULL) {
+		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ALBUM", tag);
+		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+		}
+		tag = dsf.getTitle();
+		if (tag != NULL) {
+		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TITLE", tag);
+		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+		}
+		tag = dsf.getTrack();
+		if (tag != NULL) {
+		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TRACKNUMBER", tag);
+		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+		}
+		tag = dsf.getYear();
+		if (tag != NULL) {
+		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "DATE", tag);
+		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+		}
+		if (err) {
 			fprintf(stderr, "ERROR: out of memory or tag error\n");
 			ok = false;
 		}
+		
 		metadata[1]->length = 2048; /* set the padding length */
 		ok = encoder.set_metadata(metadata, 2);
 	}

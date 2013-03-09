@@ -76,6 +76,7 @@ public:
 public:
 	// other public methods
 	void dispFileInfo();
+	// warning these will return NULL if metadata does not exist
 	char* getArtist() {return ID3_GetArtist ( &metadata );}
 	char* getAlbum() {return ID3_GetAlbum ( &metadata );}
 	char* getTitle() {return ID3_GetTitle ( &metadata );}
