@@ -23,7 +23,7 @@ flag
 off
 
 option "scale"	s	"Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs"
-int 
+float 
 typestr="dB"
 #values="-6","-4","-2","0","2","4","6"
 default="2"

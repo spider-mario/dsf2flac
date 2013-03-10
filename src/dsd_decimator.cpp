@@ -62,22 +62,29 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 {
 	reader = r;
 	outputSampleRate = rate;
-	// load the lookuptable based on in and out sample rate
-	if (outputSampleRate == 352800 && r->getSamplingFreq() == 2822400) {
+	
+	// ratio of out to in sampling rates
+	unsigned int ratio = r->getSamplingFreq() / outputSampleRate;
+	
+	// load the required filter into the lookuptable based on in and out sample rate
+	if (ratio == 8)
 		initLookupTable(nCoefs_352,coefs_352);
-	} else if (outputSampleRate == 176400 && r->getSamplingFreq() == 2822400) {
+	else if (ratio == 16)
 		initLookupTable(nCoefs_176,coefs_176);
-	} else if (outputSampleRate == 88200 && r->getSamplingFreq() == 2822400) {
+	else if (ratio == 32)
 		initLookupTable(nCoefs_88,coefs_88);
-	} else {
+	else
+	{
 		fputs ("Sorry, unsupported sample rate combination\n",stderr);
 		exit (EXIT_FAILURE);
 	}
+	
 	// set the buffer to the length of the table if not long enough
-	if (nLookupTable>(*reader).getBufferLength())
-		(*reader).setBufferLength(nLookupTable);
-	// cache values needed for filtering (saves a little time)
-	skip = (*reader).getSamplingFreq()/rate/8-1;
+	if (nLookupTable > reader->getBufferLength())
+		reader->setBufferLength(nLookupTable);
+		
+	// how many bytes to skip after each output sample is calculated.
+	skip = ratio/8 - 1; 
 }
 
 /**

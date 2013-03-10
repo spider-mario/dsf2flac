@@ -41,6 +41,7 @@
 #include <boost/filesystem.hpp>
 #include <dsd_decimator.h>
 #include <dsf_file_reader.h>
+#include <dsdiff_file_reader.h>
 #include "FLAC++/metadata.h"
 #include "FLAC++/encoder.h"
 #include "math.h"
@@ -127,11 +128,14 @@ int main(int argc, char **argv)
 	// feedback some info to the user
 	printf("Input file\n\t%s\n\n",inpath.c_str());
 	printf("Output file\n\t%s\n\n",outpath.c_str());
-	printf("Output format\n\tSampleRate: %dHz\n\tDepth: %dbit\n\tDither: %s\n\tScale: %1.0fdB\n\n",fs, bits, (dither)?"true":"false",userScaleDB);
+	printf("Output format\n\tSampleRate: %dHz\n\tDepth: %dbit\n\tDither: %s\n\tScale: %1.1fdB\n\n",fs, bits, (dither)?"true":"false",userScaleDB);
 
 	// create dsf reader
+	//dsdiffFileReader dsdiff((char*)inpath.c_str());
+	//return 0;
+	
 	dsfFileReader dsf((char*)inpath.c_str());
-
+	
 	// create decimator
 	dsdDecimator dec(&dsf,fs);
 

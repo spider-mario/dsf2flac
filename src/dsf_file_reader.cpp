@@ -73,10 +73,11 @@ dsfFileReader::dsfFileReader(char* filePath) : dsdSampleReader()
 		exit (1);
 	}
 	// only 2822400Hz sampling rate is allowed (could be upgraded later on)
-	if (getSamplingFreq()!=2822400) {
-		fputs ("Sorry, only sampling rate 2822400Hz is supported\n",stderr);
+	/*if (getSamplingFreq()!=44100*64 && getSamplingFreq()!=44100*128) {
+		fputs ("Sorry, only sampling rate dsd64 and dsd128 are supported\n",stderr);
 		exit (1);
 	}
+	 */
 	// read the metadata
 	readMetadata();
 	// allocate the blockBuffer

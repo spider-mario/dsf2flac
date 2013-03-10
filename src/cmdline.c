@@ -47,6 +47,7 @@ typedef enum {ARG_NO
   , ARG_FLAG
   , ARG_STRING
   , ARG_INT
+  , ARG_FLOAT
 } cmdline_parser_arg_type;
 
 static
@@ -496,6 +497,9 @@ int update_arg(void *field, char **orig_field,
   case ARG_INT:
     if (val) *((int *)field) = strtol (val, &stop_char, 0);
     break;
+  case ARG_FLOAT:
+    if (val) *((float *)field) = (float)strtod (val, &stop_char);
+    break;
   case ARG_STRING:
     if (val) {
       string_field = (char **)field;
@@ -511,6 +515,7 @@ int update_arg(void *field, char **orig_field,
   /* check numeric conversion */
   switch(arg_type) {
   case ARG_INT:
+  case ARG_FLOAT:
     if (val && !(stop_char && *stop_char == '\0')) {
       fprintf(stderr, "%s: invalid numeric value: %s\n", package_name, val);
       return 1; /* failure */
@@ -644,7 +649,7 @@ cmdline_parser_internal (
         
           if (update_arg( (void *)&(args_info->scale_arg), 
                &(args_info->scale_orig), &(args_info->scale_given),
-              &(local_args_info.scale_given), optarg, 0, "2", ARG_INT,
+              &(local_args_info.scale_given), optarg, 0, "2", ARG_FLOAT,
               check_ambiguity, override, 0, 0,
               "scale", 's',
               additional_error))
