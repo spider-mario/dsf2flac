@@ -47,7 +47,7 @@ struct gengetopt_args_info
   const char *bits_help; /**< @brief Output bitdepth help description.  */
   int nodither_flag;	/**< @brief Don't add dither before quantization (default=off).  */
   const char *nodither_help; /**< @brief Don't add dither before quantization help description.  */
-  float scale_arg;	/**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs (default='2').  */
+  float scale_arg;	/**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs (default='4').  */
   char * scale_orig;	/**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs original value given at command line.  */
   const char *scale_help; /**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs help description.  */
   char * infile_arg;	/**< @brief Input DSF file.  */

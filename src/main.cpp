@@ -47,6 +47,8 @@
 #include "math.h"
 #include "cmdline.h"
 
+#define flacBlockLen 4192;
+
 using boost::timer::cpu_timer;
 using boost::timer::cpu_times;
 using boost::timer::nanosecond_type;
@@ -108,8 +110,6 @@ int main(int argc, char **argv)
 	double userScaleDB = (double) args_info.scale_arg;
 	double userScale = pow(10.0d,userScaleDB/20);
 	boost::filesystem::path inpath(args_info.infile_arg);
-	if (inpath.extension() == "dsf")
-		printf("YES\n");
 	boost::filesystem::path outpath;
 	if (args_info.outfile_given)
 		outpath = args_info.outfile_arg;
@@ -125,21 +125,41 @@ int main(int argc, char **argv)
 	else
 		tpdfDitherPeakAmplitude = 0;
 		
+	// pointer to the dsdSampleReader (could be any valid type).
+	dsdSampleReader* dsr;
+	
+	// create either a reder for dsf or dsd
+	if (inpath.extension() == ".dsf" || inpath.extension() == ".DSF")
+		dsr = new dsfFileReader((char*)inpath.c_str());
+	else if (inpath.extension() == ".dff" || inpath.extension() == ".DFF")
+		dsr = new dsdiffFileReader((char*)inpath.c_str());
+	else {
+		printf("Sorry, only .dff or .dff input files are supported\n");
+		return 0;
+	}
+	
+	// check reader is valid.
+	if (!dsr->isValid())
+	{
+		printf("Error opening DSDFF file!\n");
+		printf("%s\n",dsr->getErrorMsg().c_str());
+		return 0;
+	}
+	
+	// create decimator
+	dsdDecimator dec(dsr,fs);
+	if (!dec.isValid()) {
+		printf("%s\n",dec.getErrorMsg().c_str());
+		return 0;
+	}
+	
 	// feedback some info to the user
 	printf("Input file\n\t%s\n\n",inpath.c_str());
 	printf("Output file\n\t%s\n\n",outpath.c_str());
-	printf("Output format\n\tSampleRate: %dHz\n\tDepth: %dbit\n\tDither: %s\n\tScale: %1.1fdB\n\n",fs, bits, (dither)?"true":"false",userScaleDB);
+	printf("Output format\n\tSampleRate: %dHz\n\tDepth: %dbit\n\tDither: %s\n\tScale: %1.1fdB\n",fs, bits, (dither)?"true":"false",userScaleDB);
+	printf("\tIdleSample: 0x%02x\n\n",dsr->getIdleSample());
 
-	// create dsf reader
-	//dsdiffFileReader dsdiff((char*)inpath.c_str());
-	//return 0;
-	
-	dsfFileReader dsf((char*)inpath.c_str());
-	
-	// create decimator
-	dsdDecimator dec(&dsf,fs);
-
-	setupTimer(dsf.getPositionInSeconds());
+	setupTimer(dsr->getPositionInSeconds());
 
 	// flac vars
 	bool ok = true;
@@ -166,27 +186,27 @@ int main(int argc, char **argv)
 		bool err = false;
 		err |= (metadata[0] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT)) == NULL;
 		err |= (metadata[1] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING)) == NULL;
-		char* tag = dsf.getArtist();
+		char* tag = dsr->getArtist();
 		if (tag != NULL) {
 		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ARTIST", tag);
 		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
 		}
-		tag = dsf.getAlbum();
+		tag = dsr->getAlbum();
 		if (tag != NULL) {
 		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ALBUM", tag);
 		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
 		}
-		tag = dsf.getTitle();
+		tag = dsr->getTitle();
 		if (tag != NULL) {
 		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TITLE", tag);
 		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
 		}
-		tag = dsf.getTrack();
+		tag = dsr->getTrack();
 		if (tag != NULL) {
 		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TRACKNUMBER", tag);
 		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
 		}
-		tag = dsf.getYear();
+		tag = dsr->getYear();
 		if (tag != NULL) {
 		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "DATE", tag);
 		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
@@ -210,18 +230,18 @@ int main(int argc, char **argv)
 	}
 
 	// create a FLAC__int32 buffer to hold the samples as they are converted
-	unsigned int bufferLen = dec.getNumChannels()*4192;
+	unsigned int bufferLen = dec.getNumChannels()*flacBlockLen;
 	FLAC__int32* buffer = new FLAC__int32[bufferLen];
 
 	// CONVERSION LOOP //
-	while (!dsf.isEOF()) {
+	while (!dsr->isEOF()) {
 		// get a block of pcm samples from the deocder
 		dec.getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude);
 		// pass samples to encoder
 		if(!(ok = encoder.process_interleaved(buffer, bufferLen/dec.getNumChannels())))
 			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
 		// check the timer
-		checkTimer(dsf.getPositionInSeconds(),dsf.getPositionAsPercent());
+		checkTimer(dsr->getPositionInSeconds(),dsr->getPositionAsPercent());
 	}
 	// close the flac file
 	ok &= encoder.finish();

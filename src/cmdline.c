@@ -37,7 +37,7 @@ const char *gengetopt_args_info_help[] = {
   "  -r, --samplerate=Hz     Output sample rate  (possible values=\"88200\", \n                            \"176400\", \"352800\" default=`88200')",
   "  -b, --bits=bits         Output bitdepth  (possible values=\"16\", \"20\", \n                            \"24\" default=`24')",
   "  -n, --nodither          Don't add dither before quantization  (default=off)",
-  "  -s, --scale=dB          Scale adjustment. Raw DSD has a modulation depth of \n                            approximately 0.5 so with no scaling the PCM peak \n                            level is approximately -6dB below 0dBFs  \n                            (default=`2')",
+  "  -s, --scale=dB          Scale adjustment. Raw DSD has a modulation depth of \n                            approximately 0.5 so with no scaling the PCM peak \n                            level is approximately -6dB below 0dBFs  \n                            (default=`4')",
   "  -i, --infile=filepath   Input DSF file",
   "  -o, --outfile=filepath  Output FLAC file, if not specified the output file be \n                            the same as the input file with the extension \n                            changed",
     0
@@ -90,7 +90,7 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->bits_arg = 24;
   args_info->bits_orig = NULL;
   args_info->nodither_flag = 0;
-  args_info->scale_arg = 2;
+  args_info->scale_arg = 4;
   args_info->scale_orig = NULL;
   args_info->infile_arg = NULL;
   args_info->infile_orig = NULL;
@@ -649,7 +649,7 @@ cmdline_parser_internal (
         
           if (update_arg( (void *)&(args_info->scale_arg), 
                &(args_info->scale_orig), &(args_info->scale_given),
-              &(local_args_info.scale_given), optarg, 0, "2", ARG_FLOAT,
+              &(local_args_info.scale_given), optarg, 0, "4", ARG_FLOAT,
               check_ambiguity, override, 0, 0,
               "scale", 's',
               additional_error))

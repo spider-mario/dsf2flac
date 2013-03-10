@@ -57,6 +57,7 @@
 dsdSampleReader::dsdSampleReader()
 {
 	bufferLength = defaultBufferLength;
+	isBufferAllocated = false;
 }
 
 /**
@@ -67,7 +68,8 @@ dsdSampleReader::dsdSampleReader()
  */
 dsdSampleReader::~dsdSampleReader()
 {
-	delete[] circularBuffers;
+	if (isBufferAllocated)
+		delete[] circularBuffers;
 }
 
 /**
@@ -103,15 +105,14 @@ unsigned int dsdSampleReader::getBufferLength()
  * beginning and the buffer will be filled by getIdleSample();
  * 
  */
-void dsdSampleReader::setBufferLength(unsigned int b)
+bool dsdSampleReader::setBufferLength(unsigned int b)
 {
 	if (b<1) {
-		fputs ("You can't set the buffer to length 0\n",stderr);
-		exit(EXIT_FAILURE);
+		errorMsg = "dsdSampleReader::setBufferLength:buffer length must be >0";
+		return false;
 	}
-		
 	bufferLength=b;
-	allocateBuffer();
+	return allocateBuffer();
 }
 
 /**
@@ -163,13 +164,34 @@ bool dsdSampleReader::isEOF()
 }
 
 /**
+ * bool dsdSampleReader::isValid()
+ * 
+ * Return false if the reader is invalid (format/file error for example).
+ * 
+ */
+bool dsdSampleReader::isValid()
+{
+	return valid;
+}
+
+/**
+ * bool dsdSampleReader::getErrorMsg()
+ * 
+ * Returns a message describing the last error which caused the reader to become invalid.
+ * 
+ */
+std::string dsdSampleReader::getErrorMsg() {
+	return errorMsg;
+}
+
+/**
  * void dsdSampleReader::allocateBuffer()
  * 
  * Protected function, allocated the buffer.
  * MUST be called by implementors on construction.
  * 
  */
-void dsdSampleReader::allocateBuffer()
+bool dsdSampleReader::allocateBuffer()
 {
 	circularBuffers = new boost::circular_buffer<unsigned char> [getNumChannels()];
 	for (long unsigned int i = 0; i<getNumChannels(); i++)
@@ -181,5 +203,6 @@ void dsdSampleReader::allocateBuffer()
 		circularBuffers[i] = cb;
 	}
 	rewind(); // rewind the file because we might have wrecked the previous buffer
-	return;
+	isBufferAllocated = true;
+	return true;
 }

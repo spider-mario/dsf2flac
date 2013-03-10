@@ -50,6 +50,8 @@
 #include <math.h>
 #include "filters.cpp"
 
+static bool lookupTableAllocated = false;
+
 /**
  * dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
  * 
@@ -62,6 +64,8 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 {
 	reader = r;
 	outputSampleRate = rate;
+	valid = true;;
+	errorMsg = "";
 	
 	// ratio of out to in sampling rates
 	unsigned int ratio = r->getSamplingFreq() / outputSampleRate;
@@ -75,8 +79,9 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 		initLookupTable(nCoefs_88,coefs_88);
 	else
 	{
-		fputs ("Sorry, unsupported sample rate combination\n",stderr);
-		exit (EXIT_FAILURE);
+		valid = false;
+		errorMsg = "Sorry, incompatible sample rate combination";
+		return;
 	}
 	
 	// set the buffer to the length of the table if not long enough
@@ -95,11 +100,13 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
  */
 dsdDecimator::~dsdDecimator()
 {
-	for (unsigned int n=0; n<nLookupTable; n++)
-	{
-		delete[] lookupTable[n];
+	if (lookupTableAllocated) {
+		for (unsigned int n=0; n<nLookupTable; n++)
+		{
+			delete[] lookupTable[n];
+		}
+		delete[] lookupTable;
 	}
-	delete[] lookupTable;
 }
 
 /**
@@ -122,6 +129,27 @@ unsigned long long int dsdDecimator::getLength()
 unsigned int dsdDecimator::getOutputSampleRate()
 {
 	return outputSampleRate;
+}
+
+/**
+ * bool dsdDecimator::isValid()
+ * 
+ * Return false if the reader is invalid (format/file error for example).
+ * 
+ */
+bool dsdDecimator::isValid()
+{
+	return valid;
+}
+
+/**
+ * bool dsdDecimator::getErrorMsg()
+ * 
+ * Returns a message describing the last error which caused the reader to become invalid.
+ * 
+ */
+std::string dsdDecimator::getErrorMsg() {
+	return errorMsg;
 }
 
 /**
@@ -151,12 +179,17 @@ void dsdDecimator::initLookupTable(const double nCoefs,const double* coefs)
 		for (int dsdSeq=0; dsdSeq<256; ++dsdSeq) {
 			double acc = 0.0;
 			for (int bit=0; bit<k; bit++) {
-				double val = -1 + 2*(double) !!( dsdSeq & (1<<(7-bit)) );
+				double val;
+				if (reader->msbIsYoungest())
+					val = -1 + 2*(double) !!( dsdSeq & (1<<(7-bit)) );
+				else
+					val = -1 + 2*(double) !!( dsdSeq & (1<<(bit)) );
 				acc += val * coefs[t*8+bit];
 			}
 			lookupTable[t][dsdSeq] = (calc_type) acc;
 		}
 	}
+	lookupTableAllocated = true;
 }
 
 

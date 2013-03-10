@@ -1,9 +1,9 @@
 /**
  * dsf2flac - http://code.google.com/p/dsf2flac/
- * 
+ *
  * A file conversion tool for translating dsf dsd audio files into
  * flac pcm audio files.
- * 
+ *
  *
  * Copyright (c) 2013 by respective authors.
  *
@@ -21,144 +21,101 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * 
+ *
  * Acknowledgements
- * 
+ *
  * Many thanks to the following authors and projects whose work has greatly
  * helped the development of this tool.
- * 
- * 
+ *
+ *
  * Sebastian Gesemann - dsd2pcm (http://code.google.com/p/dsd2pcm/)
  * SACD Ripper (http://code.google.com/p/sacd-ripper/)
  * Maxim V.Anisiutkin - foo_input_sacd (http://sourceforge.net/projects/sacddecoder/files/)
  * Vladislav Goncharov - foo_input_sacd_hq (http://vladgsound.wordpress.com)
- * 
+ *
  */
- 
- /**
-  * dsf_file_reader.cpp
-  * 
-  * Implementation of class dsfFileReader.
-  * 
-  * This class extends dsdSampleReader providing acces to dsd samples and other info
-  * from dsf files.
-  * 
-  * Some of the rarer features of dsf are not well tested due to a lack of files:
-  * dsd64
-  * 8bit dsd
-  */
+
+/**
+ * dsf_file_reader.cpp
+ *
+ * Implementation of class dsfFileReader.
+ *
+ * This class extends dsdSampleReader providing acces to dsd samples and other info
+ * from dsf files.
+ *
+ * Some of the rarer features of dsf are not well tested due to a lack of files:
+ * dsd64
+ * 8bit dsd
+ */
 
 #include "dsf_file_reader.h"
 
+static bool blockBufferAllocated = false;
+
 /**
  * dsfFileReader::dsfFileReader(char* filePath)
- * 
+ *
  * Constructor, pass in the location of a dsd file!
  */
 dsfFileReader::dsfFileReader(char* filePath) : dsdSampleReader()
 {
+	
 	// first let's open the file
-	fid = fopen(filePath,"r");
+	file.open(filePath, fstreamPlus::in | fstreamPlus::binary);
 	// throw exception if that did not work.
-	if (fid==NULL) {
-		fputs ("File error\n",stderr);
-		exit (1);
+	if (!file.is_open()) {
+		errorMsg = "could not open file";
+		valid = false;
+		return;
 	}
 	// read the header data
-	readHeaders();
-	
+	if (!(valid = readHeaders()))
+		return;
+
 	// this code only works with single bit data (could be upgraded later on)
 	if (samplesPerChar!=8) {
-		fputs ("Sorry, only one bit data is supported\n",stderr);
-		exit (1);
+		errorMsg = "Sorry, only one bit data is supported";
+		valid = false;
+		return;
 	}
-	// only 2822400Hz sampling rate is allowed (could be upgraded later on)
-	/*if (getSamplingFreq()!=44100*64 && getSamplingFreq()!=44100*128) {
-		fputs ("Sorry, only sampling rate dsd64 and dsd128 are supported\n",stderr);
-		exit (1);
-	}
-	 */
 	// read the metadata
 	readMetadata();
 	// allocate the blockBuffer
 	allocateBlockBuffer();
-	readFirstBlock(); // call here so that idle sample is set.... not great really.
+	readFirstBlock();
 	// allocate the circular buffer (this will cause rewind() to be called)
 	allocateBuffer();
 }
 
 /**
  * dsfFileReader::~dsfFileReader()
- * 
+ *
  * Destructor, close the file and free the block buffers
- * 
+ *
  */
 dsfFileReader::~dsfFileReader()
 {
 	// close the file
-	fclose(fid);
+	file.close();
 	// free the mem in the block buffers
-	for (long unsigned int i = 0; i<chanNum; i++) {
-		delete[] blockBuffer[i];
+	if (blockBufferAllocated) {
+		for (long unsigned int i = 0; i<chanNum; i++)
+		{
+			delete[] blockBuffer[i];
+		}
+		delete[] blockBuffer;
 	}
-	delete[] blockBuffer;
-}
-
-/**
- * unsigned int dsfFileReader::getNumChannels()
- * 
- * Return the number of channels of audio in the dsd file.
- * 
- */
-unsigned int dsfFileReader::getNumChannels()
-{
-	return chanNum;
-}
-
-/**
- * unsigned int dsfFileReader::getSamplingFreq()
- * 
- * Return the dsd sampling frequency.
- * Normally either 2822400Hz or 5644800Hz.
- * 
- */
-unsigned int dsfFileReader::getSamplingFreq()
-{
-	return samplingFreq;
-}
-
-/**
- * long long unsigned int dsfFileReader::getPosition()
- * 
- * Returns the current location in the file in dsd samples.
- * 
- */
-long long unsigned int dsfFileReader::getPosition()
-{
-	return (blockCounter*blockSzPerChan + blockMarker)*samplesPerChar;
-}
-
-/**
- * long long unsigned int dsfFileReader::getLength()
- * 
- * Returns the length of the file in samples.
- * i.e. each channel has getLength() dsd samples.
- * 
- */
-long long unsigned int dsfFileReader::getLength()
-{
-	return sampleCount;
 }
 
 /**
  * void dsfFileReader::step()
- * 
+ *
  * Increments the position in the file by 8 dsd samples (1 byte of data).
  * The block buffers are updated with the new samples.
- * 
+ *
  */
-void dsfFileReader::step()
-{	
+bool dsfFileReader::step()
+{
 	bool ok = true;
 	if (blockMarker>=blockSzPerChan) {
 		ok = readNextBlock();
@@ -173,41 +130,24 @@ void dsfFileReader::step()
 	}
 
 	blockMarker++;
+	return ok;
 }
 
-/**
- * void dsfFileReader::rewind()
- * 
- * Rewind to the start of the dsd data.
- * 
- */
-void dsfFileReader::rewind()
-{
-	readFirstBlock();
-}
-
-/**
- * unsigned char dsfFileReader::getIdleSample()
- * 
- * Return the idle sample used for this file.
- * 
- */
-unsigned char dsfFileReader::getIdleSample()
-{
-	return idleSample;
-}
 
 /**
  * bool dsfFileReader::readFirstBlock()
- * 
+ *
  * The dsd file is arranged in blocks. This private function is called
  * by the constructor to read the first block into the block buffer.
- * 
+ *
  */
 bool dsfFileReader::readFirstBlock()
 {
 	// position the file at the start of the data chunk
-	fseek(fid,sampleDataPointer,SEEK_SET);
+	if (file.seekg(sampleDataPointer)) {
+		errorMsg = "dsfFileReader::readFirstBlock:file seek error";
+		return false;
+	}
 	blockCounter = 0;
 	blockMarker = 0;
 	bool r = readNextBlock();
@@ -218,24 +158,31 @@ bool dsfFileReader::readFirstBlock()
 
 /**
  * bool dsfFileReader::readNextBlock()
- * 
+ *
  * The dsd file is arranged in blocks. This private function is called whenever
  * new data from the file is needed for the buffer.
- * 
+ *
  */
 bool dsfFileReader::readNextBlock()
 {
 	// return -1 if this is the end of the file
 	if (isEOF()) {
+		// fill the blockBuffer with the idle sample
+		unsigned char idle = getIdleSample();
+		for (unsigned int i=0; i<chanNum; i++)
+			for (unsigned int j=0; j<blockSzPerChan; j++)
+				blockBuffer[i][j] = idle;
 		return false;
 	}
 
-	size_t res;
-	for (long unsigned int i=0; i<chanNum; i++) {
-		res = fread(blockBuffer[i],sizeof(unsigned char),blockSzPerChan,fid);
-		if (res != (size_t)blockSzPerChan) {
-			fputs ("Read error\n",stderr);
-			exit (3);
+	for (unsigned int i=0; i<chanNum; i++) {
+		if (file.read_uchar(blockBuffer[i],blockSzPerChan)) {
+			// if read failed fill the blockBuffer with the idle sample
+			unsigned char idle = getIdleSample();
+			for (unsigned int i=0; i<chanNum; i++)
+				for (unsigned int j=0; j<blockSzPerChan; j++)
+					blockBuffer[i][j] = idle;
+			return false;
 		}
 	}
 
@@ -247,204 +194,173 @@ bool dsfFileReader::readNextBlock()
 
 /**
  * void dsfFileReader::readHeaders()
- * 
+ *
  * Private function, called on create. Reads lots of info from the file.
- * 
+ *
  */
-void dsfFileReader::readHeaders()
+bool dsfFileReader::readHeaders()
 {
-	size_t res;
 	long long unsigned int chunkStart;
 	long long unsigned int chunkSz;
 	char ident[4];
 
-	// blank current variables (seems to be necessary??)
-	fileSz = 0;
-	sampleDataPointer = 0;
-	metaChunkPointer = 0;
-	dataChunkSz = 0;
-	formatVer = 0;
-	formatID = 0;
-	chanType = 0;
-	chanNum = 0;
-	samplingFreq = 0;
-	samplesPerChar = 1;
-	sampleCount = 0;
-	blockSzPerChan = 0;
-
 	// double check that this is the start of the file.
-	fseek(fid,0,SEEK_SET);
+	if (file.seekg(0)) {
+		errorMsg = "dsfFileReader::readHeaders:file seek error";
+		return false;
+	}
 
 	// DSD CHUNK //
-	chunkStart = ftell(fid);
+	chunkStart = file.tellg();
 	// 4 bytes which should be "DSD "
-	res = fread(ident,1,4,fid);
-	if (res!=4) {
-		fputs ("Read error\n",stderr);
-		exit (1);
+	if (file.read_char(ident,4)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
-	if ( ident[0] != 'D' || ident[1] != 'S' || ident[2] != 'D' || ident[3] != ' ') {
-		fputs ("File format error\n",stderr);
-		exit (EXIT_FAILURE);
+	if ( !checkIdent(ident,const_cast<char*>("DSD ")) ) {
+		errorMsg = "dsfFileReader::readHeaders:DSD ident error";
+		return false;
 	}
 	// 8 bytes chunk size
-	res = fread(&chunkSz,8,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_llui(&chunkSz,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 8 bytes file size
-	res = fread(&fileSz,8,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_llui(&fileSz,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 8 bytes metadata pointer
-	res = fread(&metaChunkPointer,8,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_llui(&metaChunkPointer,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// we should be at the end of the DSD chunk now
-	if ( chunkStart + chunkSz != (long unsigned int) ftell(fid) ) {
-		fseek(fid,chunkStart + chunkSz,SEEK_SET);
+	if ( chunkStart + chunkSz != (long long unsigned int) file.tellg() ) {
+		if(file.seekg(chunkStart + chunkSz)) {
+			errorMsg = "dsfFileReader::readHeaders:file seek error";
+			return false;
+		}
 	}
 
 	// FMT CHUNK //
-	chunkStart = ftell(fid);
+	chunkStart = file.tellg();
 	// 4 bytes which should be "fmt "
-	res = fread(ident,1,4,fid);
-	if (res!=4) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_char(ident,4)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
-	if ( ident[0] != 'f' || ident[1] != 'm' || ident[2] != 't' || ident[3] != ' ') {
-		fputs ("File format error\n",stderr);
-		exit (EXIT_FAILURE);
+	if ( !checkIdent(ident,const_cast<char*>("fmt ")) ) {
+		errorMsg = "dsfFileReader::readHeaders:file ident error";
+		return false;
 	}
 	// 8 bytes chunk size
-	res = fread(&chunkSz,8,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_llui(&chunkSz,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes format version
-	res = fread(&formatVer,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_ui(&formatVer,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes format id
-	res = fread(&formatID,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_ui(&formatID,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes channel type
-	res = fread(&chanType,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_ui(&chanType,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes channel num
-	res = fread(&chanNum,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_ui(&chanNum,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes samplingFreq
-	res = fread(&samplingFreq,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_ui(&samplingFreq,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes bitsPerSample
-	long unsigned int bitsPerSample = 0;
-	res = fread(&bitsPerSample,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	unsigned int bitsPerSample = 0;
+	if (file.read_ui(&bitsPerSample,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	if (bitsPerSample==1) {
 		samplesPerChar = 8;
 	} else if (bitsPerSample==8) {
 		samplesPerChar = 1;
 	}
-	// 4 bytes sampleCount
-	res = fread(&sampleCount,8,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	// 8 bytes sampleCount
+	if (file.read_llui(&sampleCount,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes blockSzPerChan
-	res = fread(&blockSzPerChan,4,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_ui(&blockSzPerChan,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
 	// 4 bytes ununsed
-	fseek(fid,4,SEEK_CUR);
+	if (file.seekg(4,fstreamPlus::cur)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
+	}
 	// we are now at the end of the fmt chunk
-	if ( chunkStart + chunkSz != (long unsigned int) ftell(fid) ) {
-		fseek(fid,chunkStart + chunkSz,SEEK_SET);
+	if ( chunkStart + chunkSz != (long long unsigned int) file.tellg() ) {
+		if (file.seekg(chunkStart + chunkSz)) {
+			errorMsg = "dsfFileReader::readHeaders:file seek error";
+			return false;
+		}
 	}
 
 	// DATA CHUNK //
 	// 4 bytes which should be "data"
-	res = fread(ident,1,4,fid);
-	if (res!=4) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_char(ident,4)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
-	if ( ident[0] != 'd' || ident[1] != 'a' || ident[2] != 't' || ident[3] != 'a') {
-		fputs ("File format error\n",stderr);
-		exit (EXIT_FAILURE);
+	if ( !checkIdent(ident,const_cast<char*>("data")) ) {
+		errorMsg = "dsfFileReader::readHeaders:file ident error";
+		return false;
 	}
-
 	// 8 bytes chunk size
-	res = fread(&dataChunkSz,8,1,fid);
-	if (res!=1) {
-		fputs ("Read error\n",stderr);
-		exit (EXIT_FAILURE);
+	if (file.read_llui(&dataChunkSz,1)) {
+		errorMsg = "dsfFileReader::readHeaders:file read error";
+		return false;
 	}
-
 	// store the location of the data
-	sampleDataPointer = ftell(fid);
+	sampleDataPointer = file.tellg();
 
-	return;
+	return true;
 }
 
 /**
  * void dsfFileReader::allocateBlockBuffer()
- * 
+ *
  * Private function, called on create. Allocates the block buffer which
  * holds the dsd data read from the file for when it is required by the buffer.
- * 
+ *
  */
 void dsfFileReader::allocateBlockBuffer()
 {
-	//blockBuffer = (unsigned char**) malloc(chanNum * sizeof(unsigned char *));
 	blockBuffer = new unsigned char*[chanNum];
-	if (blockBuffer == NULL) {
-		fputs ("Memory error assigning blockBuffer\n",stderr);
-		exit (EXIT_FAILURE);
-	}
-	for (long unsigned int i = 0; i<chanNum; i++) {
-		//blockBuffer[i] = (unsigned char*) malloc(blockSzPerChan * sizeof(unsigned char));
+	for (long unsigned int i = 0; i<chanNum; i++)
 		blockBuffer[i] = new unsigned char[blockSzPerChan];
-		if (blockBuffer[i] == NULL) {
-			fputs ("Memory error assigning blockBuffer\n",stderr);
-			exit (EXIT_FAILURE);
-		}
-	}
+	blockBufferAllocated = true;
 }
 
 /**
  * void dsfFileReader::readMetadata()
- * 
+ *
  * Private function, called on create. Attempts to read the metadata from the
  * end of the dsf file.
- * 
+ *
  */
 void dsfFileReader::readMetadata()
 {
@@ -453,11 +369,15 @@ void dsfFileReader::readMetadata()
 		return;
 	}
 
-	fseek(fid,metaChunkPointer,SEEK_SET);
+	if (file.seekg(metaChunkPointer)) {
+		// if we failed then let's not worry too much
+		file.clear();
+		return;
+	}
+	
 	// read the first ID3_TAGHEADERSIZE bytes of the metadata (which should be the header).
 	unsigned char id3header[ID3_TAGHEADERSIZE];
-	size_t res = fread(id3header,1,ID3_TAGHEADERSIZE,fid);
-	if (res != (size_t) ID3_TAGHEADERSIZE) {
+	if (file.read_uchar(id3header,ID3_TAGHEADERSIZE)) {
 		return;
 	}
 	// check this is actually an id3 header
@@ -466,23 +386,31 @@ void dsfFileReader::readMetadata()
 		return;
 	// read the tag
 	unsigned char* id3tag = new unsigned char[ id3tagLen ];
-	res = fread(id3tag,1,id3tagLen,fid);
-	if (res != (size_t) id3tagLen) {
+	if (file.read_uchar(id3tag,id3tagLen)) {
 		return;
 	}
-		
+
 	metadata.Parse (id3header, id3tag);
-	
+
 	delete[] id3tag;
 }
 
-
+/**
+ * bool dsfFileReader::checkIdent(char* a, char* b)
+ *
+ * private method, pretty handy for cheking idents
+ *
+ */
+bool dsfFileReader::checkIdent(char* a, char* b)
+{
+	return ( a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] );
+}
 
 /**
  * void dsfFileReader::dispFileInfo()
  *
  * Can be called to display some useful info to stdout.
- * 
+ *
  */
 void dsfFileReader::dispFileInfo()
 {
@@ -490,14 +418,14 @@ void dsfFileReader::dispFileInfo()
 	printf("metaChunkPointer: %llu\n",metaChunkPointer);
 	printf("sampleDataPointer: %llu\n",sampleDataPointer);
 	printf("dataChunkSz: %llu\n",dataChunkSz);
-	printf("formatVer: %lu\n",formatVer);
-	printf("formatID: %lu\n",formatID);
-	printf("chanType: %lu\n",chanType);
-	printf("chanNum: %lu\n",chanNum);
-	printf("samplingFreq: %lu\n",samplingFreq);
-	printf("samplesPerChar: %lu\n",samplesPerChar);
+	printf("formatVer: %u\n",formatVer);
+	printf("formatID: %u\n",formatID);
+	printf("chanType: %u\n",chanType);
+	printf("chanNum: %u\n",chanNum);
+	printf("samplingFreq: %u\n",samplingFreq);
+	printf("samplesPerChar: %u\n",samplesPerChar);
 	printf("sampleCount: %llu\n",sampleCount);
-	printf("blockSzPerChan: %lu\n",blockSzPerChan);
+	printf("blockSzPerChan: %u\n",blockSzPerChan);
 
 	return;
 }

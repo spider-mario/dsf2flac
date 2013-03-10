@@ -55,6 +55,7 @@
 #include "dsd_sample_reader.h" // Base class: dsdSampleReader
 #include "id3/tag.h"
 #include "id3/misc_support.h"
+#include "fstream_plus.h"
 
 class dsfFileReader : public dsdSampleReader
 {
@@ -65,19 +66,20 @@ public:
 
 public:
 	// public methods required by dsdSampleReader
-	long long unsigned int getLength();
-	unsigned int getNumChannels();
-	long long unsigned int getPosition();
-	unsigned int getSamplingFreq();
-	void step();
-	void rewind();
+	long long unsigned int getLength() {return sampleCount;};
+	unsigned int getNumChannels() {return chanNum;};
+	long long unsigned int getPosition() {return (blockCounter*blockSzPerChan + blockMarker)*samplesPerChar;};
+	unsigned int getSamplingFreq() {return samplingFreq;};
+	bool step();
+	void rewind() {readFirstBlock();};
 	// overridden methods from dsdSampleReader
-	unsigned char getIdleSample();
+	unsigned char getIdleSample() {return idleSample;};
+	bool isEOF() {return file.eof() || dsdSampleReader::isEOF();};
 public:
 	// other public methods
 	void dispFileInfo();
 	// warning these will return NULL if metadata does not exist
-	char* getArtist() {return ID3_GetArtist ( &metadata );}
+	char* getArtist() {return ID3_GetArtist ( &metadata );} 
 	char* getAlbum() {return ID3_GetAlbum ( &metadata );}
 	char* getTitle() {return ID3_GetTitle ( &metadata );}
 	char* getTrack() {return ID3_GetTrack ( &metadata );}
@@ -85,20 +87,21 @@ public:
 	
 private:
 	// private variables
-	FILE *fid;
+	//FILE *fid;
+	fstreamPlus file;
 	// below store file info
 	long long unsigned int fileSz;
 	long long unsigned int metaChunkPointer;
 	long long unsigned int sampleDataPointer;
 	long long unsigned int dataChunkSz;
-	long unsigned int formatVer;
-	long unsigned int formatID;
-	long unsigned int chanType;
-	long unsigned int chanNum;
-	long unsigned int samplingFreq;
-	long unsigned int samplesPerChar;
-	long long unsigned int sampleCount;
-	long unsigned int blockSzPerChan;
+	unsigned int formatVer;
+	unsigned int formatID;
+	unsigned int chanType;
+	unsigned int chanNum;
+	unsigned int samplingFreq;
+	unsigned int samplesPerChar;
+	long long unsigned int sampleCount; //per channel
+	unsigned int blockSzPerChan;
 	ID3_Tag metadata;
 	// vars to hold the data and mark position
 	unsigned char** blockBuffer; // used to store blocks of raw data from the file
@@ -109,10 +112,11 @@ private:
 	
 	// private methods
 	void allocateBlockBuffer();
-	void readHeaders();
+	bool readHeaders();
 	void readMetadata();
 	bool readFirstBlock();
 	bool readNextBlock();
+	static bool checkIdent(char* a, char* b); // MUST be used with the char[4]s or you'll get segfaults!
 };
 
 #endif // DSFFILEREADER_H

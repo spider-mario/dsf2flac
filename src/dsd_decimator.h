@@ -67,13 +67,16 @@ public:
 	double getPositionAsPercent() { return reader->getPositionAsPercent(); };
 	double getLengthInSeconds() { return reader->getLengthInSeconds(); };
 	bool isEOF() { return reader->isEOF(); };
-
+	bool isValid(); // return false if the decimator is invalid
+	std::string getErrorMsg(); // returns a human readable error message
 private:
 	dsdSampleReader *reader;
 	unsigned int outputSampleRate;
 	unsigned int nLookupTable;
 	calc_type** lookupTable;
 	unsigned int skip;
+	bool valid;
+	std::string errorMsg;
 	// private methods
 	void initLookupTable(const double nCoefs,const double* coefs);
 	template <typename sampleType> void getSamplesInternal(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude, bool roundToInt);
