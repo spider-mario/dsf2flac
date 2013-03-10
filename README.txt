@@ -3,7 +3,7 @@ dsf2flac - http://code.google.com/p/dsf2flac/
 
 INTRODUCTION
 
-A file conversion tool for translating dsf dsd audio files into
+A file conversion tool for translating dsf or dff dsd audio files into
 flac pcm audio files.
 
 I originally wrote this because I could not quite find any tool which
@@ -94,6 +94,7 @@ Sebastian Gesemann - dsd2pcm (http://code.google.com/p/dsd2pcm/)
 SACD Ripper (http://code.google.com/p/sacd-ripper/)
 Maxim V.Anisiutkin - foo_input_sacd (http://sourceforge.net/projects/sacddecoder/files/)
 Vladislav Goncharov - foo_input_sacd_hq (http://vladgsound.wordpress.com)
+Jesus H (vortecjr on computeraudiophile.com)
 
 
 
