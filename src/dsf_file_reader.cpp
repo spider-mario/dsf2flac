@@ -118,9 +118,11 @@ dsfFileReader::~dsfFileReader()
 bool dsfFileReader::step()
 {
 	bool ok = true;
-	if (blockMarker>=blockSzPerChan) {
+	
+	if (isEOF())
+		ok = false;
+	else if (blockMarker>=blockSzPerChan)
 		ok = readNextBlock();
-	}
 
 	if (ok) {
 		for (long unsigned int i=0; i<chanNum; i++)
