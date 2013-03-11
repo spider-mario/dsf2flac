@@ -91,6 +91,10 @@ public:
 	double getLengthInSeconds(); // length of file in seconds
 	bool isValid(); // returns false if the reader is invalid
 	std::string getErrorMsg();
+	
+	// static method to help out with latin1 charset
+	static char* latin1_to_utf8(char* latin1);
+	static unsigned char* latin1_to_utf8(unsigned char* latin1);
 protected:
 	// protected properties
 	boost::circular_buffer<unsigned char>* circularBuffers;

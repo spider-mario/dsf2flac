@@ -80,11 +80,11 @@ public:
 	// other public methods
 	void dispFileInfo();
 	// warning these will return NULL if metadata does not exist
-	char* getArtist() {return ID3_GetArtist ( &metadata );} 
-	char* getAlbum() {return ID3_GetAlbum ( &metadata );}
-	char* getTitle() {return ID3_GetTitle ( &metadata );}
-	char* getTrack() {return ID3_GetTrack ( &metadata );}
-	char* getYear() {return ID3_GetYear ( &metadata );}
+	char* getArtist() {return latin1_to_utf8 (ID3_GetArtist ( &metadata ));} 
+	char* getAlbum() {return latin1_to_utf8 (ID3_GetAlbum ( &metadata ));}
+	char* getTitle() {return latin1_to_utf8 (ID3_GetTitle ( &metadata ));}
+	char* getTrack() {return latin1_to_utf8 (ID3_GetTrack ( &metadata ));}
+	char* getYear() {return latin1_to_utf8 (ID3_GetYear ( &metadata ));}
 	
 private:
 	// private variables

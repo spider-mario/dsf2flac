@@ -392,9 +392,9 @@ void dsfFileReader::readMetadata()
 	if (file.read_uchar(id3tag,id3tagLen)) {
 		return;
 	}
-
+	
 	metadata.Parse (id3header, id3tag);
-
+	
 	delete[] id3tag;
 }
 

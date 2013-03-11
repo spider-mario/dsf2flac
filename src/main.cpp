@@ -1,9 +1,9 @@
 /**
  * dsf2flac - http://code.google.com/p/dsf2flac/
- * 
+ *
  * A file conversion tool for translating dsf dsd audio files into
  * flac pcm audio files.
- * 
+ *
  *
  * Copyright (c) 2013 by respective authors.
  *
@@ -21,19 +21,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * 
+ *
  * Acknowledgements
- * 
+ *
  * Many thanks to the following authors and projects whose work has greatly
  * helped the development of this tool.
- * 
- * 
+ *
+ *
  * Sebastian Gesemann - dsd2pcm (http://code.google.com/p/dsd2pcm/)
  * SACD Ripper (http://code.google.com/p/sacd-ripper/)
  * Maxim V.Anisiutkin - foo_input_sacd (http://sourceforge.net/projects/sacddecoder/files/)
  * Vladislav Goncharov - foo_input_sacd_hq (http://vladgsound.wordpress.com)
  * Jesus R - www.sonore.us
- * 
+ *
  */
 
 #include <boost/timer/timer.hpp>
@@ -58,7 +58,7 @@ static double lastPos;
 
 /**
  * void setupTimer(double currPos)
- * 
+ *
  * called by main to setup the boost timer for reporting progress to the user
  */
 void setupTimer(double currPos)
@@ -69,7 +69,7 @@ void setupTimer(double currPos)
 
 /**
  * void checkTimer(double currPos, double percent)
- * 
+ *
  * called by main to report progress to the user.
  */
 void checkTimer(double currPos, double percent)
@@ -88,7 +88,7 @@ void checkTimer(double currPos, double percent)
 
 /**
  * int main(int argc, char **argv)
- * 
+ *
  * Main
  */
 int main(int argc, char **argv)
@@ -97,11 +97,11 @@ int main(int argc, char **argv)
 	gengetopt_args_info args_info;
 	if (cmdline_parser (argc, argv, &args_info) != 0)
 		exit(1) ;
-		
+
 	// if help or version given then exit now.
 	if (args_info.help_given || args_info.version_given)
 		exit(1);
-		
+
 	// collect the options
 	int fs = args_info.samplerate_arg;
 	int bits = args_info.bits_arg;
@@ -123,10 +123,10 @@ int main(int argc, char **argv)
 		tpdfDitherPeakAmplitude = 1;
 	else
 		tpdfDitherPeakAmplitude = 0;
-		
+
 	// pointer to the dsdSampleReader (could be any valid type).
 	dsdSampleReader* dsr;
-	
+
 	// create either a reder for dsf or dsd
 	if (inpath.extension() == ".dsf" || inpath.extension() == ".DSF")
 		dsr = new dsfFileReader((char*)inpath.c_str());
@@ -136,22 +136,21 @@ int main(int argc, char **argv)
 		printf("Sorry, only .dff or .dff input files are supported\n");
 		return 0;
 	}
-	
+
 	// check reader is valid.
-	if (!dsr->isValid())
-	{
+	if (!dsr->isValid()) {
 		printf("Error opening DSDFF file!\n");
 		printf("%s\n",dsr->getErrorMsg().c_str());
 		return 0;
 	}
-	
+
 	// create decimator
 	dsdDecimator dec(dsr,fs);
 	if (!dec.isValid()) {
 		printf("%s\n",dec.getErrorMsg().c_str());
 		return 0;
 	}
-	
+
 	// feedback some info to the user
 	printf("Input file\n\t%s\n\n",inpath.c_str());
 	printf("Output file\n\t%s\n\n",outpath.c_str());
@@ -181,40 +180,49 @@ int main(int argc, char **argv)
 
 	// add tags and a padding block
 	if(ok) {
-		
+
 		bool err = false;
 		err |= (metadata[0] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT)) == NULL;
 		err |= (metadata[1] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING)) == NULL;
 		char* tag = dsr->getArtist();
 		if (tag != NULL) {
-		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ARTIST", tag);
-		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ARTIST", tag);
+			if (!err1)
+				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			err |= err1;
 		}
 		tag = dsr->getAlbum();
 		if (tag != NULL) {
-		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ALBUM", tag);
-		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ALBUM", tag);
+			if (!err1)
+				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			err |= err1;
 		}
 		tag = dsr->getTitle();
 		if (tag != NULL) {
-		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TITLE", tag);
-		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TITLE", tag);
+			if (!err1)
+				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			err |= err1;
 		}
 		tag = dsr->getTrack();
 		if (tag != NULL) {
-		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TRACKNUMBER", tag);
-		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TRACKNUMBER", tag);
+			if (!err1)
+				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			err |= err1;
 		}
 		tag = dsr->getYear();
 		if (tag != NULL) {
-		    err |= !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "DATE", tag);
-		    err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "DATE", tag);
+			if (!err1)
+				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
+			err |= err1;
 		}
 		if (err) {
-			fprintf(stderr, "ERROR: out of memory or tag error\n");
-			ok = false;
-		}
-		
+			fprintf(stderr, "ERROR: error writing tags to flac, some might be missing.\n");
+			//ok = false;
+		} 
 		metadata[1]->length = 2048; /* set the padding length */
 		ok = encoder.set_metadata(metadata, 2);
 	}
@@ -234,6 +242,7 @@ int main(int argc, char **argv)
 
 	// CONVERSION LOOP //
 	while (!dsr->isEOF()) {
+	//while (dsr->getPositionInSeconds()<2) {
 		// get a block of pcm samples from the deocder
 		dec.getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude);
 		// pass samples to encoder
