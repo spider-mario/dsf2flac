@@ -79,13 +79,13 @@ public:
 	virtual char* getTrack() {return NULL;}
 	virtual char* getYear() {return NULL;}
 	
-	bool isEOF(); // you probably want to override this too, the default implementation is based on getPosition and getLength but your file might stop suddently!
+	virtual bool isEOF(); // you probably want to override this too, the default implementation is based on getPosition and getLength but your file might stop suddently!
+	virtual unsigned char getIdleSample() { return 0x69; }; // returns the idle tone used by this reader.
 	
 	// public methods
 	boost::circular_buffer<unsigned char>* getBuffer(); // get the char sample buffers (1 per channel) by default filled with getIdleSample()
 	bool setBufferLength(unsigned int bufferLength); // you can use this to set the length of the buffer WARNING: causes the file to be rewound!
 	unsigned int getBufferLength(); // return the length of the circular buffers
-	unsigned char getIdleSample() { return 0x69; }; // returns the idle tone used by this reader.
 	double getPositionInSeconds(); // current position in the file in seconds
 	double getPositionAsPercent();
 	double getLengthInSeconds(); // length of file in seconds
