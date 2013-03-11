@@ -94,7 +94,7 @@ Sebastian Gesemann - dsd2pcm (http://code.google.com/p/dsd2pcm/)
 SACD Ripper (http://code.google.com/p/sacd-ripper/)
 Maxim V.Anisiutkin - foo_input_sacd (http://sourceforge.net/projects/sacddecoder/files/)
 Vladislav Goncharov - foo_input_sacd_hq (http://vladgsound.wordpress.com)
-Jesus H (vortecjr on computeraudiophile.com)
+Jesus R - www.sonore.us
 
 
 

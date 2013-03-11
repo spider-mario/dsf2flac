@@ -32,6 +32,7 @@
  * SACD Ripper (http://code.google.com/p/sacd-ripper/)
  * Maxim V.Anisiutkin - foo_input_sacd (http://sourceforge.net/projects/sacddecoder/files/)
  * Vladislav Goncharov - foo_input_sacd_hq (http://vladgsound.wordpress.com)
+ * Jesus R - www.sonore.us
  * 
  */
  
