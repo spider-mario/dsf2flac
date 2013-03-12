@@ -214,6 +214,9 @@ char* dsdSampleReader::latin1_to_utf8(char* latin1) {
 }
 unsigned char* dsdSampleReader::latin1_to_utf8(unsigned char* latin1)
 {
+	if (latin1==NULL)
+		return NULL;
+		
 	// count latin1
 	int n=0;
 	while (latin1[n])

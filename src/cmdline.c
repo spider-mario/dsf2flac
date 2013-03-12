@@ -25,7 +25,7 @@
 
 #include "cmdline.h"
 
-const char *gengetopt_args_info_purpose = "Convert DSD dsf Sony audio files into PCM flac audio.";
+const char *gengetopt_args_info_purpose = "Convert DSD audio files from DFF or DSF format into PCM flac audio.";
 
 const char *gengetopt_args_info_usage = "Usage: dsf2flac [OPTIONS]...";
 
@@ -38,7 +38,7 @@ const char *gengetopt_args_info_help[] = {
   "  -b, --bits=bits         Output bitdepth  (possible values=\"16\", \"20\", \n                            \"24\" default=`24')",
   "  -n, --nodither          Don't add dither before quantization  (default=off)",
   "  -s, --scale=dB          Scale adjustment. Raw DSD has a modulation depth of \n                            approximately 0.5 so with no scaling the PCM peak \n                            level is approximately -6dB below 0dBFs  \n                            (default=`4')",
-  "  -i, --infile=filepath   Input DSF file",
+  "  -i, --infile=filepath   Input DSF or DFF file",
   "  -o, --outfile=filepath  Output FLAC file, if not specified the output file be \n                            the same as the input file with the extension \n                            changed",
     0
 };
@@ -656,7 +656,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'i':	/* Input DSF file.  */
+        case 'i':	/* Input DSF or DFF file.  */
         
         
           if (update_arg( (void *)&(args_info->infile_arg), 

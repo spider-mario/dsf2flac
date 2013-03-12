@@ -1,8 +1,8 @@
 package "dsf2flac"
-version "0.1"
-purpose "Convert DSD dsf Sony audio files into PCM flac audio."
+version "0.1Rev29"
+purpose "Convert DSD audio files from DFF or DSF format into PCM flac audio."
 #usage "<usage>"
-# args "<command line options>"
+#args "<command line options>"
 
 option "samplerate" r "Output sample rate"
 int
@@ -29,7 +29,7 @@ typestr="dB"
 default="4"
 optional
 
-option "infile" i "Input DSF file"
+option "infile" i "Input DSF or DFF file"
 string
 typestr="filepath"
 required

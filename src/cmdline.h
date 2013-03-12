@@ -31,7 +31,7 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION "0.1"
+#define CMDLINE_PARSER_VERSION "0.1Rev29"
 #endif
 
 /** @brief Where the command line options are stored */
@@ -50,9 +50,9 @@ struct gengetopt_args_info
   float scale_arg;	/**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs (default='4').  */
   char * scale_orig;	/**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs original value given at command line.  */
   const char *scale_help; /**< @brief Scale adjustment. Raw DSD has a modulation depth of approximately 0.5 so with no scaling the PCM peak level is approximately -6dB below 0dBFs help description.  */
-  char * infile_arg;	/**< @brief Input DSF file.  */
-  char * infile_orig;	/**< @brief Input DSF file original value given at command line.  */
-  const char *infile_help; /**< @brief Input DSF file help description.  */
+  char * infile_arg;	/**< @brief Input DSF or DFF file.  */
+  char * infile_orig;	/**< @brief Input DSF or DFF file original value given at command line.  */
+  const char *infile_help; /**< @brief Input DSF or DFF file help description.  */
   char * outfile_arg;	/**< @brief Output FLAC file, if not specified the output file be the same as the input file with the extension changed.  */
   char * outfile_orig;	/**< @brief Output FLAC file, if not specified the output file be the same as the input file with the extension changed original value given at command line.  */
   const char *outfile_help; /**< @brief Output FLAC file, if not specified the output file be the same as the input file with the extension changed help description.  */

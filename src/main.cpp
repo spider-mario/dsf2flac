@@ -123,6 +123,10 @@ int main(int argc, char **argv)
 		tpdfDitherPeakAmplitude = 1;
 	else
 		tpdfDitherPeakAmplitude = 0;
+		
+	//
+	printf("%s ",CMDLINE_PARSER_PACKAGE_NAME);
+	printf("%s\n\n",CMDLINE_PARSER_VERSION);
 
 	// pointer to the dsdSampleReader (could be any valid type).
 	dsdSampleReader* dsr;
