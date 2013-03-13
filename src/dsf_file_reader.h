@@ -64,28 +64,22 @@ public:
 	// constructor and destructor
 	dsfFileReader(char* filePath);
 	virtual ~dsfFileReader();
-
 public:
-	// public methods required by dsdSampleReader
-	long long unsigned int getLength() {return sampleCount;};
-	unsigned int getNumChannels() {return chanNum;};
-	long long unsigned int getPosition() {return (blockCounter*blockSzPerChan + blockMarker)*samplesPerChar;};
-	unsigned int getSamplingFreq() {return samplingFreq;};
+	// methods overriding dsdSampleReader
 	bool step();
-	void rewind() {readFirstBlock();};
-	// overridden methods from dsdSampleReader
-	unsigned char getIdleSample() {return idleSample;};
-	bool isEOF() {return file.eof() || dsdSampleReader::isEOF();};
-public:
-	// other public methods
-	void dispFileInfo();
-	// warning these will return NULL if metadata does not exist
+	void rewind();
+	long long int getLength() {return sampleCount;};
+	unsigned int getNumChannels() {return chanNum;};
+	unsigned int getSamplingFreq() {return samplingFreq;};
 	char* getArtist() {return latin1_to_utf8 (ID3_GetArtist ( &metadata ));} 
 	char* getAlbum() {return latin1_to_utf8 (ID3_GetAlbum ( &metadata ));}
 	char* getTitle() {return latin1_to_utf8 (ID3_GetTitle ( &metadata ));}
 	char* getTrack() {return latin1_to_utf8 (ID3_GetTrack ( &metadata ));}
 	char* getYear() {return latin1_to_utf8 (ID3_GetYear ( &metadata ));}
-	
+	bool samplesAvailable() { return !file.eof() && dsdSampleReader::samplesAvailable(); }; // false when no more samples left
+public:
+	// other public methods
+	void dispFileInfo();
 private:
 	// private variables
 	//FILE *fid;
@@ -100,22 +94,17 @@ private:
 	unsigned int chanType;
 	unsigned int chanNum;
 	unsigned int samplingFreq;
-	unsigned int samplesPerChar;
 	long long unsigned int sampleCount; //per channel
 	unsigned int blockSzPerChan;
 	ID3_Tag metadata;
 	// vars to hold the data and mark position
 	unsigned char** blockBuffer; // used to store blocks of raw data from the file
-	long unsigned int blockCounter; // stores the index to the current blockBuffer
-	long unsigned int blockMarker; // stores the current position in the blockBuffer
-	// other fields
-	unsigned char idleSample; // the idle sample to for this file.
-	
+	long long int blockCounter; // stores the index to the current blockBuffer
+	long long int blockMarker; // stores the current position in the blockBuffer
 	// private methods
 	void allocateBlockBuffer();
 	bool readHeaders();
 	void readMetadata();
-	bool readFirstBlock();
 	bool readNextBlock();
 	static bool checkIdent(char* a, char* b); // MUST be used with the char[4]s or you'll get segfaults!
 };

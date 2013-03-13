@@ -46,7 +46,7 @@
 #include "math.h"
 #include "cmdline.h"
 
-#define flacBlockLen 4192;
+#define flacBlockLen 1000
 
 using boost::timer::cpu_timer;
 using boost::timer::cpu_times;
@@ -240,25 +240,38 @@ int main(int argc, char **argv)
 		}
 	}
 
+
+	// creep up to the start point.
+	while (dec.getPosition()<0) {
+		dec.step();
+	}
 	// create a FLAC__int32 buffer to hold the samples as they are converted
 	unsigned int bufferLen = dec.getNumChannels()*flacBlockLen;
 	FLAC__int32* buffer = new FLAC__int32[bufferLen];
-
-	// CONVERSION LOOP //
-	while (!dsr->isEOF()) {
-	//while (dsr->getPositionInSeconds()<2) {
-		// get a block of pcm samples from the deocder
+	// MAIN CONVERSION LOOP //
+	while (dec.getPosition()<dec.getLength()-flacBlockLen) {
 		dec.getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude);
-		// pass samples to encoder
-		if(!(ok = encoder.process_interleaved(buffer, bufferLen/dec.getNumChannels())))
+		if(!(ok = encoder.process_interleaved(buffer, flacBlockLen)))
 			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
-		// check the timer
-		checkTimer(dsr->getPositionInSeconds(),dsr->getPositionAsPercent());
+		checkTimer(dec.getPositionInSeconds(),dec.getPositionAsPercent());
 	}
+	// delete the old buffer and make a new one with a single sample per chan
+	delete[] buffer;
+	buffer = new FLAC__int32[dec.getNumChannels()];
+	// creep up to the end
+	while (dec.getPosition()<dec.getLength()) {
+		dec.getSamples(buffer,dec.getNumChannels(),scale,tpdfDitherPeakAmplitude);
+		if(!(ok = encoder.process_interleaved(buffer, 1)))
+			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
+		checkTimer(dec.getPositionInSeconds(),dec.getPositionAsPercent());
+	}
+	delete[] buffer;
+	
 	// close the flac file
 	ok &= encoder.finish();
 	// report back to the user
 	printf("\33[2K\r");
+	printf("%3.1f%%\n",dec.getPositionAsPercent());
 	if (ok) {
 		printf("Conversion completed sucessfully.\n");
 	} else {
@@ -270,7 +283,7 @@ int main(int argc, char **argv)
 	// free things
 	FLAC__metadata_object_delete(metadata[0]);
 	FLAC__metadata_object_delete(metadata[1]);
-	delete[] buffer;
+	
 
 	return 0;
 }

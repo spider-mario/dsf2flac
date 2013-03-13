@@ -69,15 +69,17 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 	errorMsg = "";
 	
 	// ratio of out to in sampling rates
-	unsigned int ratio = r->getSamplingFreq() / outputSampleRate;
+	ratio = r->getSamplingFreq() / outputSampleRate;
+	// how many bytes to skip after each out sample calc.
+	skip = ratio/8 - 1; 
 	
 	// load the required filter into the lookuptable based on in and out sample rate
 	if (ratio == 8)
-		initLookupTable(nCoefs_352,coefs_352);
+		initLookupTable(nCoefs_352,coefs_352,tzero_352);
 	else if (ratio == 16)
-		initLookupTable(nCoefs_176,coefs_176);
+		initLookupTable(nCoefs_176,coefs_176,tzero_176);
 	else if (ratio == 32)
-		initLookupTable(nCoefs_88,coefs_88);
+		initLookupTable(nCoefs_88,coefs_88,tzero_88);
 	else
 	{
 		valid = false;
@@ -89,8 +91,7 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 	if (nLookupTable > reader->getBufferLength())
 		reader->setBufferLength(nLookupTable);
 		
-	// how many bytes to skip after each output sample is calculated.
-	skip = ratio/8 - 1; 
+	
 }
 
 /**
@@ -113,12 +114,23 @@ dsdDecimator::~dsdDecimator()
 /**
  * unsigned long long int dsdDecimator::dsdDecimator::getLength()
  * 
- * Return the reader length in output samples
+ * Return the data length in output samples
  * 
  */
-unsigned long long int dsdDecimator::getLength()
+long long int dsdDecimator::getLength()
 {
-	return (*reader).getLength()*outputSampleRate/(*reader).getSamplingFreq();
+	return reader->getLength()/ratio;
+}
+
+/**
+ * unsigned long long int dsdDecimator::dsdDecimator::getPosition()
+ * 
+ * Return the current position in output samples
+ * 
+ */
+double dsdDecimator::getPosition()
+{
+	return (double)reader->getPosition(tzero)/ratio;
 }
 
 /**
@@ -159,8 +171,9 @@ std::string dsdDecimator::getErrorMsg() {
  * private method. Initialises the lookup table used for very fast filtering.
  * 
  */
-void dsdDecimator::initLookupTable(const double nCoefs,const double* coefs)
+void dsdDecimator::initLookupTable(const int nCoefs,const double* coefs,const int tz)
 {
+	tzero = tz;
 	// calc how big the lookup table is.
 	nLookupTable = (nCoefs+7)/8;
 	// allocate the table
@@ -253,8 +266,7 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 	}
 	// get the sample buffer
 	boost::circular_buffer<unsigned char>* buff = (*reader).getBuffer();
-	unsigned int s = bufferLen/getNumChannels();
-	for (unsigned int i=0; i<s; i++) {
+	for (int i=0; i<d.quot ; i++) {
 		(*reader).step(); // step the buffer
 		// filter each chan in turn
 		for (unsigned int c=0; c<getNumChannels(); c++) {

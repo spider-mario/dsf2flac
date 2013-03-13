@@ -71,6 +71,7 @@ dsdSampleReader::~dsdSampleReader()
 {
 	if (isBufferAllocated)
 		delete[] circularBuffers;
+	isBufferAllocated = false;
 }
 
 /**
@@ -114,7 +115,9 @@ bool dsdSampleReader::setBufferLength(unsigned int b)
 		return false;
 	}
 	bufferLength=b;
-	return allocateBuffer();
+	resizeBuffer();
+	rewind();
+	return true;
 }
 
 /**
@@ -151,21 +154,6 @@ double dsdSampleReader::getLengthInSeconds()
 }
 
 /**
- * bool dsdSampleReader::isEOF()
- *
- * Return true if the current position is at the end of the reader
- *
- */
-bool dsdSampleReader::isEOF()
-{
-	if (getPosition() >= getLength()) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-/**
  * bool dsdSampleReader::isValid()
  *
  * Return false if the reader is invalid (format/file error for example).
@@ -190,24 +178,61 @@ std::string dsdSampleReader::getErrorMsg()
 /**
  * void dsdSampleReader::allocateBuffer()
  *
- * Protected function, allocated the buffer.
+ * Protected function, allocate the buffer.
  * MUST be called by implementors on construction.
- *
  */
-bool dsdSampleReader::allocateBuffer()
+void dsdSampleReader::allocateBuffer()
 {
+	if (isBufferAllocated)
+		return;
+		
 	circularBuffers = new boost::circular_buffer<unsigned char> [getNumChannels()];
 	for (long unsigned int i = 0; i<getNumChannels(); i++) {
 		boost::circular_buffer<unsigned char> cb(getBufferLength());
-		for (unsigned int j=0; j<getBufferLength(); j++) {
-			cb.push_front(getIdleSample());
-		}
 		circularBuffers[i] = cb;
 	}
-	rewind(); // rewind the file because we might have wrecked the previous buffer
 	isBufferAllocated = true;
-	return true;
+	clearBuffer();
+	return;
 }
+
+/**
+ * void dsdSampleReader::clearBuffer()
+ *
+ * Protected function, clear the buffer - fill with idleSamples
+ * MUST be called by implementors on construction.
+ */
+void dsdSampleReader::clearBuffer() 
+{
+	if (!isBufferAllocated) {
+		allocateBuffer();
+		return;
+	}
+	
+	unsigned char c = getIdleSample();
+	for (long unsigned int i = 0; i<getNumChannels(); i++)
+		for (unsigned int j=0; j<getBufferLength(); j++)
+			circularBuffers[i].push_front(c);
+
+}
+
+/**
+ * void dsdSampleReader::resizeBuffer()
+ *
+ * Protected function, resize the buffer and then clear the buffer.
+ * MUST be called by implementors on construction.
+ */
+void dsdSampleReader::resizeBuffer() {
+	if (!isBufferAllocated) {
+		allocateBuffer();
+		return;
+	}
+	for (long unsigned int i = 0; i<getNumChannels(); i++)
+		circularBuffers[i].set_capacity(getBufferLength());
+	clearBuffer();
+}
+
+
 
 char* dsdSampleReader::latin1_to_utf8(char* latin1) {
 	return reinterpret_cast<char*>(latin1_to_utf8( reinterpret_cast<unsigned char*>(latin1)));

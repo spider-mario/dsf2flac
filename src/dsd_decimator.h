@@ -59,27 +59,29 @@ class dsdDecimator
 public:
 	dsdDecimator(dsdSampleReader *reader, unsigned int outputSampleRate);
 	virtual ~dsdDecimator();
-	long long unsigned int getLength(); // return total length in samples of decimated data
-	unsigned int getOutputSampleRate();
+	// Method to get the output sampels
 	template <typename sampleType> void getSamples(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude = 0);
-	// some helpful wrappers around the reader
+	unsigned int getOutputSampleRate();
+	long long int getLength(); // return total length in samples of decimated data
+	double getPosition();
+	double getPositionInSeconds() { return getPosition()/outputSampleRate; };
+	double getPositionAsPercent() { return getPosition()/getLength()*100; };
 	unsigned int getNumChannels() { return reader->getNumChannels(); };
-	double getPositionInSeconds() { return reader->getPositionInSeconds(); };
-	double getPositionAsPercent() { return reader->getPositionAsPercent(); };
-	double getLengthInSeconds() { return reader->getLengthInSeconds(); };
-	bool isEOF() { return reader->isEOF(); };
 	bool isValid(); // return false if the decimator is invalid
 	std::string getErrorMsg(); // returns a human readable error message
+	void step() { reader->step(); }; // handy wrapper.
 private:
 	dsdSampleReader *reader;
 	unsigned int outputSampleRate;
 	unsigned int nLookupTable;
+	unsigned int tzero; // filter t=0 position
 	calc_type** lookupTable;
+	unsigned int ratio; // inFs/outFs
 	unsigned int skip;
 	bool valid;
 	std::string errorMsg;
 	// private methods
-	void initLookupTable(const double nCoefs,const double* coefs);
+	void initLookupTable(const int nCoefs,const double* coefs,const int tzero);
 	template <typename sampleType> void getSamplesInternal(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude, bool roundToInt);
 	
 };

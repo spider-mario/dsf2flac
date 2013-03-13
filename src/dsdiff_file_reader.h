@@ -35,8 +35,6 @@
  * Jesus R - www.sonore.us
  * 
  */
- 
-
 
 #ifndef DSDIFFFILEREADER_H
 #define DSDIFFFILEREADER_H
@@ -50,25 +48,18 @@ public:
 	// constructor and destructor
 	dsdiffFileReader(char* filePath);
 	virtual ~dsdiffFileReader();
-
 public:
-	// public methods required by dsdSampleReader
-	long long unsigned int getLength() {return sampleCount;};
-	unsigned int getNumChannels() {return chanNum;};
-	long long unsigned int getPosition() {return posMarker*samplesPerChar;};
-	unsigned int getSamplingFreq() {return samplingFreq;};
+	// public overriden from dsdSampleReader
 	bool step();
 	void rewind();
+	long long int getLength() {return sampleCount;};
+	unsigned int getNumChannels() {return chanNum;};
+	unsigned int getSamplingFreq() {return samplingFreq;};
 	bool msbIsYoungest() { return false;}
-	// overridden methods from dsdSampleReader
-	// unsigned char getIdleSample() {return 0;};
-	unsigned char getIdleSample() {return idleSample;};
-	bool isEOF() {return file.eof() || dsdSampleReader::isEOF();};
-	
+	bool samplesAvailable() { return !file.eof() && dsdSampleReader::samplesAvailable(); }; // false when no more samples left
 public:
 	// other public methods
 	void dispFileInfo();
-	
 private:
 	// private variables
 	fstreamPlus file;
@@ -83,16 +74,10 @@ private:
 	unsigned char  ast_mins;
 	unsigned char  ast_secs;
 	unsigned int   ast_samples;
-	unsigned int samplesPerChar;
 	long long unsigned int sampleDataPointer;
 	long long unsigned int sampleCount; //per channel
-	
-	// vars to hold the data and mark position
-	long long unsigned int posMarker;
+	// vars to hold the data
 	unsigned char* sampleBuffer;
-	// other fields
-	unsigned char idleSample; // the idle sample to for this file.
-	
 	// private methods
 	void allocateSampleBuffer();
 	// all below here are for reading the headers
@@ -109,9 +94,6 @@ private:
 	bool readChunk_CMPR(long long unsigned int chunkStart);
 	bool readChunk_ABSS(long long unsigned int chunkStart);
 	bool readChunk_DSD(long long unsigned int chunkStart);
-	
-	
-	
 };
 
 #endif // DSDIFFFILEREADER_H

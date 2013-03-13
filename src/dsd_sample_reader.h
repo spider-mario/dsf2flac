@@ -43,10 +43,9 @@
   * 
   * Abstract class defining anything which reads dsd samples from something.
   * If someone feels like it they could write an implementation of this class
-  * and allow this convertor to work with other dsd sources (e.g. dsdiff files).
+  * and allow this convertor to work with other dsd sources.
   * 
   */
-
 
 #ifndef DSDSAMPLEREADER_H
 #define DSDSAMPLEREADER_H
@@ -54,7 +53,7 @@
 #include "stdio.h"
 #include <boost/circular_buffer.hpp>
 
-static const unsigned int defaultBufferLength = 1024;
+static const unsigned int defaultBufferLength = 5000;
 
 class dsdSampleReader
 {
@@ -62,52 +61,53 @@ public:
 	// constructor and destructor
 	dsdSampleReader();
 	virtual ~dsdSampleReader();
-	
 	// CHILD CLASSES SHOULD OVERRIDE THESE!
 	virtual bool step() {return false;}; // move buffer forward by 1byte (8bits) of sample data.
-	virtual void rewind() {}; // resets the dsd reader to the start of the dsd data.
+	virtual void rewind() {}; // resets the dsd reader to the start of the dsd data. Implementors should call clearBuffer.
+	virtual long long int getLength() {return 1;}; // length of file in samples
 	virtual unsigned int getNumChannels() {return 2;}; // number of channels in the file
 	virtual unsigned int getSamplingFreq() {return 44100;}; // the sampling freq of the dsd data
-	virtual long long unsigned int getPosition() {return 0;}; // current position in the file in samples
-	virtual long long unsigned int getLength() {return 1;}; // length of file in samples
-	virtual bool msbIsYoungest() {return true;} // the data is stored in 8-bit chars, returns true if the left most bit (msb) is the youngest.
-	
 	// CHILD CLASSES CAN OPTIONALLY OVERRIDE THESE!
 	virtual char* getArtist() {return NULL;} 
 	virtual char* getAlbum() {return NULL;}
 	virtual char* getTitle() {return NULL;}
 	virtual char* getTrack() {return NULL;}
 	virtual char* getYear() {return NULL;}
-	
-	virtual bool isEOF(); // you probably want to override this too, the default implementation is based on getPosition and getLength but your file might stop suddently!
+	virtual bool msbIsYoungest() {return true;} // the data is stored in 8-bit chars, returns true if the left most bit (msb) is the youngest.
 	virtual unsigned char getIdleSample() { return 0x69; }; // returns the idle tone used by this reader.
-	
+	virtual bool samplesAvailable() { return getPosition()<getLength(); }; // false when no more samples left
+	// positioning.
 	// public methods
 	boost::circular_buffer<unsigned char>* getBuffer(); // get the char sample buffers (1 per channel) by default filled with getIdleSample()
 	bool setBufferLength(unsigned int bufferLength); // you can use this to set the length of the buffer WARNING: causes the file to be rewound!
 	unsigned int getBufferLength(); // return the length of the circular buffers
+	long long int getPosition() {return posMarker*samplesPerChar;}; // current position in the file in dsd samples
+	long long int getPosition(long long int bufferPos) { return getPosition() - bufferPos; }; // get the position in dsd samples in relation to a certain position in the buffer.
 	double getPositionInSeconds(); // current position in the file in seconds
 	double getPositionAsPercent();
 	double getLengthInSeconds(); // length of file in seconds
 	bool isValid(); // returns false if the reader is invalid
 	std::string getErrorMsg();
-	
 	// static method to help out with latin1 charset
 	static char* latin1_to_utf8(char* latin1);
 	static unsigned char* latin1_to_utf8(unsigned char* latin1);
 protected:
 	// protected properties
 	boost::circular_buffer<unsigned char>* circularBuffers;
+	// position marker
+	long long int posMarker; // implementors need to increment this on step()
+	unsigned int samplesPerChar; // should be set by implementors
 	// to hold feedback on errors
 	bool valid;
 	std::string errorMsg;
 protected:
 	// protected methods
-	bool allocateBuffer(); //implementors need to call this!
+	void allocateBuffer(); //implementors need to call this once they know the number of channels!
+	void clearBuffer(); // fill entire buffer with idleSample
+	void resizeBuffer(); // resize buffer, fill with idleSample, call rewind
 private:
 	// private properties
 	unsigned int bufferLength;
 	bool isBufferAllocated;
 };
-
 #endif // DSDSAMPLEREADER_H

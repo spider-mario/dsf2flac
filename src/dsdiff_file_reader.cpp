@@ -73,10 +73,7 @@ dsdiffFileReader::dsdiffFileReader(char* filePath) : dsdSampleReader()
 		return;
 	}
 	
-	allocateSampleBuffer();
-	rewind(); // set the position to the start of the dsd
-	// allocate the circular buffer (this will cause rewind() to be called)
-	allocateBuffer();	
+	rewind(); // calls allocateBlockBuffer
 }
 
 dsdiffFileReader::~dsdiffFileReader()
@@ -99,12 +96,14 @@ dsdiffFileReader::~dsdiffFileReader()
 /**
  * void dsdiffFileReader::allocateSampleBuffer()
  *
- * Reset the position back to the start of the file
+ * allocate the buffer to hold samples
  *
  */
 void dsdiffFileReader::allocateSampleBuffer() {
-		sampleBuffer = new unsigned char[chanNum];
-		sampleBufferAllocated = true;
+	if (sampleBufferAllocated)
+		return;
+	sampleBuffer = new unsigned char[chanNum];
+	sampleBufferAllocated = true;
 }
 
 /**
@@ -117,10 +116,11 @@ void dsdiffFileReader::rewind()
 {
 	// position the file at the start of the data chunk
 	if (file.seekg(sampleDataPointer)) {
-		errorMsg = "dsfFileReader::readFirstBlock:file seek error";
-		//return false;
+		errorMsg = "dsfFileReader::rewind:file seek error";
 	}
-	posMarker = 0;
+	allocateSampleBuffer();
+	posMarker = -1;
+	clearBuffer();
 }
 
 /**
@@ -133,14 +133,12 @@ void dsdiffFileReader::rewind()
 bool dsdiffFileReader::step()
 {
 	bool ok = true;
-	
-	if (isEOF())
+	if (!samplesAvailable())
 		ok = false;
 	else if (file.read_uchar(sampleBuffer,chanNum)) {
 		errorMsg = "dsfFileReader::step:file read error";
 		ok = false;
 	}
-	
 
 	if (ok) {
 		for (long unsigned int i=0; i<chanNum; i++)
@@ -458,10 +456,10 @@ bool dsdiffFileReader::readChunk_DSD(long long unsigned int chunkStart)
 	// chunkLen contains the number of samples
 	sampleCount = (chunkLen - 12)/chanNum*samplesPerChar;
 	// guess the idle sample
-	if (file.read_uchar(&idleSample,1)) {
-		errorMsg = "dsdiffFileReader::readChunk_DSD:file read error";
-		return false;
-	}
+	// if (file.read_uchar(&idleSample,1)) {
+	//	errorMsg = "dsdiffFileReader::readChunk_DSD:file read error";
+	//	return false;
+	//}
 	
 	return true;
 }

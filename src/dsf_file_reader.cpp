@@ -81,11 +81,8 @@ dsfFileReader::dsfFileReader(char* filePath) : dsdSampleReader()
 	}
 	// read the metadata
 	readMetadata();
-	// allocate the blockBuffer
-	allocateBlockBuffer();
-	readFirstBlock();
-	// allocate the circular buffer (this will cause rewind() to be called)
-	allocateBuffer();
+	
+	rewind(); // calls clearBuffer -> allocateBuffer
 }
 
 /**
@@ -119,44 +116,46 @@ bool dsfFileReader::step()
 {
 	bool ok = true;
 	
-	if (isEOF())
+	if (!samplesAvailable())
 		ok = false;
 	else if (blockMarker>=blockSzPerChan)
 		ok = readNextBlock();
-
+	
 	if (ok) {
 		for (long unsigned int i=0; i<chanNum; i++)
 			circularBuffers[i].push_front(blockBuffer[i][blockMarker]);
+		blockMarker++;
 	} else {
 		for (long unsigned int i=0; i<chanNum; i++)
 			circularBuffers[i].push_front(getIdleSample());
 	}
 
-	blockMarker++;
+	posMarker++;
 	return ok;
 }
 
 
 /**
- * bool dsfFileReader::readFirstBlock()
+ * bool dsfFileReader::rewind()
  *
- * The dsd file is arranged in blocks. This private function is called
- * by the constructor to read the first block into the block buffer.
+ * Position the file at the start of the data and clear the buffer.
  *
  */
-bool dsfFileReader::readFirstBlock()
+void dsfFileReader::rewind()
 {
 	// position the file at the start of the data chunk
 	if (file.seekg(sampleDataPointer)) {
 		errorMsg = "dsfFileReader::readFirstBlock:file seek error";
-		return false;
+		return;
 	}
+	allocateBlockBuffer();
 	blockCounter = 0;
 	blockMarker = 0;
-	bool r = readNextBlock();
+	readNextBlock();
 	blockCounter = 0;
-	idleSample = blockBuffer[0][0];
-	return r;
+	posMarker = -1;
+	clearBuffer();
+	return;
 }
 
 /**
@@ -169,7 +168,7 @@ bool dsfFileReader::readFirstBlock()
 bool dsfFileReader::readNextBlock()
 {
 	// return -1 if this is the end of the file
-	if (isEOF()) {
+	if (!samplesAvailable()) {
 		// fill the blockBuffer with the idle sample
 		unsigned char idle = getIdleSample();
 		for (unsigned int i=0; i<chanNum; i++)
@@ -346,12 +345,14 @@ bool dsfFileReader::readHeaders()
 /**
  * void dsfFileReader::allocateBlockBuffer()
  *
- * Private function, called on create. Allocates the block buffer which
+ * Private function, called on rewind. Allocates the block buffer which
  * holds the dsd data read from the file for when it is required by the buffer.
  *
  */
 void dsfFileReader::allocateBlockBuffer()
 {
+	if (blockBufferAllocated)
+		return;
 	blockBuffer = new unsigned char*[chanNum];
 	for (long unsigned int i = 0; i<chanNum; i++)
 		blockBuffer[i] = new unsigned char[blockSzPerChan];
