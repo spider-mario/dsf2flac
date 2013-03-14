@@ -77,7 +77,7 @@ private:
 	unsigned int tzero; // filter t=0 position
 	calc_type** lookupTable;
 	unsigned int ratio; // inFs/outFs
-	unsigned int skip;
+	unsigned int nStep;
 	bool valid;
 	std::string errorMsg;
 	// private methods

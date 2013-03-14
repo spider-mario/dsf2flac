@@ -71,7 +71,7 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 	// ratio of out to in sampling rates
 	ratio = r->getSamplingFreq() / outputSampleRate;
 	// how many bytes to skip after each out sample calc.
-	skip = ratio/8 - 1; 
+	nStep = ratio/8; 
 	
 	// load the required filter into the lookuptable based on in and out sample rate
 	if (ratio == 8)
@@ -119,7 +119,8 @@ dsdDecimator::~dsdDecimator()
  */
 long long int dsdDecimator::getLength()
 {
-	return reader->getLength()/ratio;
+	//return reader->getLength()/ratio;
+	return reader->getLength()/ratio - nLookupTable; // truncate filter
 }
 
 /**
@@ -130,7 +131,8 @@ long long int dsdDecimator::getLength()
  */
 double dsdDecimator::getPosition()
 {
-	return (double)reader->getPosition(tzero)/ratio;
+	//return (double)reader->getPosition(tzero)/ratio;
+	return (double)reader->getPosition(tzero)/ratio  - nLookupTable + tzero/ratio; // truncate filter
 }
 
 /**
@@ -267,7 +269,6 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 	// get the sample buffer
 	boost::circular_buffer<unsigned char>* buff = (*reader).getBuffer();
 	for (int i=0; i<d.quot ; i++) {
-		(*reader).step(); // step the buffer
 		// filter each chan in turn
 		for (unsigned int c=0; c<getNumChannels(); c++) {
 			calc_type sum = 0.0;
@@ -288,7 +289,8 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 			else
 				buffer[i*getNumChannels()+c] = static_cast<sampleType>(sum);
 		}
-		for (unsigned int m=0; m<skip; m++)
-			(*reader).step(); // step the buffer
+		// step the buffer
+		for (unsigned int m=0; m<nStep; m++)
+			reader->step();
 	}
 }

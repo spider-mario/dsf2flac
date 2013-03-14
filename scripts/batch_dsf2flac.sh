@@ -12,7 +12,7 @@ fi
 
 export IFS=$'\n'
 
-for dsdfile in $(find "$working_dir" -iname "*.dsf" -o -iname "*.dff")
+for dsdfile in $(find "$working_dir" -iname "*.dsf" -o -iname "*.dff" | sort)
 do
 	$dsf2flac_command $dsf2flac_options -i $dsdfile
 done
