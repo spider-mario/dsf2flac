@@ -97,7 +97,7 @@ dsfFileReader::~dsfFileReader()
 	file.close();
 	// free the mem in the block buffers
 	if (blockBufferAllocated) {
-		for (long unsigned int i = 0; i<chanNum; i++)
+		for (dsf2flac_uint32 i = 0; i<chanNum; i++)
 		{
 			delete[] blockBuffer[i];
 		}
@@ -122,11 +122,11 @@ bool dsfFileReader::step()
 		ok = readNextBlock();
 	
 	if (ok) {
-		for (long unsigned int i=0; i<chanNum; i++)
+		for (dsf2flac_uint32 i=0; i<chanNum; i++)
 			circularBuffers[i].push_front(blockBuffer[i][blockMarker]);
 		blockMarker++;
 	} else {
-		for (long unsigned int i=0; i<chanNum; i++)
+		for (dsf2flac_uint32 i=0; i<chanNum; i++)
 			circularBuffers[i].push_front(getIdleSample());
 	}
 
@@ -167,22 +167,22 @@ void dsfFileReader::rewind()
  */
 bool dsfFileReader::readNextBlock()
 {
-	// return -1 if this is the end of the file
+	// return false if this is the end of the file
 	if (!samplesAvailable()) {
 		// fill the blockBuffer with the idle sample
-		unsigned char idle = getIdleSample();
-		for (unsigned int i=0; i<chanNum; i++)
-			for (unsigned int j=0; j<blockSzPerChan; j++)
+		dsf2flac_uint8 idle = getIdleSample();
+		for (dsf2flac_uint32 i=0; i<chanNum; i++)
+			for (dsf2flac_uint32 j=0; j<blockSzPerChan; j++)
 				blockBuffer[i][j] = idle;
 		return false;
 	}
 
-	for (unsigned int i=0; i<chanNum; i++) {
-		if (file.read_uchar(blockBuffer[i],blockSzPerChan)) {
+	for (dsf2flac_uint32 i=0; i<chanNum; i++) {
+		if (file.read_uint8(blockBuffer[i],blockSzPerChan)) {
 			// if read failed fill the blockBuffer with the idle sample
-			unsigned char idle = getIdleSample();
-			for (unsigned int i=0; i<chanNum; i++)
-				for (unsigned int j=0; j<blockSzPerChan; j++)
+			dsf2flac_uint8 idle = getIdleSample();
+			for (dsf2flac_uint32 i=0; i<chanNum; i++)
+				for (dsf2flac_uint32 j=0; j<blockSzPerChan; j++)
 					blockBuffer[i][j] = idle;
 			return false;
 		}
@@ -202,9 +202,9 @@ bool dsfFileReader::readNextBlock()
  */
 bool dsfFileReader::readHeaders()
 {
-	long long unsigned int chunkStart;
-	long long unsigned int chunkSz;
-	char ident[4];
+	dsf2flac_uint32 chunkStart;
+	dsf2flac_uint64 chunkSz;
+	dsf2flac_int8 ident[4];
 
 	// double check that this is the start of the file.
 	if (file.seekg(0)) {
@@ -215,31 +215,31 @@ bool dsfFileReader::readHeaders()
 	// DSD CHUNK //
 	chunkStart = file.tellg();
 	// 4 bytes which should be "DSD "
-	if (file.read_char(ident,4)) {
+	if (file.read_int8(ident,4)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
-	if ( !checkIdent(ident,const_cast<char*>("DSD ")) ) {
+	if ( !checkIdent(ident,const_cast<dsf2flac_int8*>("DSD ")) ) {
 		errorMsg = "dsfFileReader::readHeaders:DSD ident error";
 		return false;
 	}
 	// 8 bytes chunk size
-	if (file.read_llui(&chunkSz,1)) {
+	if (file.read_uint64(&chunkSz,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 8 bytes file size
-	if (file.read_llui(&fileSz,1)) {
+	if (file.read_uint64(&fileSz,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 8 bytes metadata pointer
-	if (file.read_llui(&metaChunkPointer,1)) {
+	if (file.read_uint64(&metaChunkPointer,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// we should be at the end of the DSD chunk now
-	if ( chunkStart + chunkSz != (long long unsigned int) file.tellg() ) {
+	if ( chunkStart + chunkSz != (dsf2flac_uint64) file.tellg() ) {
 		if(file.seekg(chunkStart + chunkSz)) {
 			errorMsg = "dsfFileReader::readHeaders:file seek error";
 			return false;
@@ -249,47 +249,47 @@ bool dsfFileReader::readHeaders()
 	// FMT CHUNK //
 	chunkStart = file.tellg();
 	// 4 bytes which should be "fmt "
-	if (file.read_char(ident,4)) {
+	if (file.read_int8(ident,4)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
-	if ( !checkIdent(ident,const_cast<char*>("fmt ")) ) {
+	if ( !checkIdent(ident,const_cast<dsf2flac_int8*>("fmt ")) ) {
 		errorMsg = "dsfFileReader::readHeaders:file ident error";
 		return false;
 	}
 	// 8 bytes chunk size
-	if (file.read_llui(&chunkSz,1)) {
+	if (file.read_uint64(&chunkSz,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes format version
-	if (file.read_ui(&formatVer,1)) {
+	if (file.read_uint32(&formatVer,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes format id
-	if (file.read_ui(&formatID,1)) {
+	if (file.read_uint32(&formatID,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes channel type
-	if (file.read_ui(&chanType,1)) {
+	if (file.read_uint32(&chanType,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes channel num
-	if (file.read_ui(&chanNum,1)) {
+	if (file.read_uint32(&chanNum,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes samplingFreq
-	if (file.read_ui(&samplingFreq,1)) {
+	if (file.read_uint32(&samplingFreq,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes bitsPerSample
-	unsigned int bitsPerSample = 0;
-	if (file.read_ui(&bitsPerSample,1)) {
+	dsf2flac_uint32 bitsPerSample = 0;
+	if (file.read_uint32(&bitsPerSample,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
@@ -299,12 +299,12 @@ bool dsfFileReader::readHeaders()
 		samplesPerChar = 1;
 	}
 	// 8 bytes sampleCount
-	if (file.read_llui(&sampleCount,1)) {
+	if (file.read_uint64(&sampleCount,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
 	// 4 bytes blockSzPerChan
-	if (file.read_ui(&blockSzPerChan,1)) {
+	if (file.read_uint32(&blockSzPerChan,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
@@ -314,7 +314,7 @@ bool dsfFileReader::readHeaders()
 		return false;
 	}
 	// we are now at the end of the fmt chunk
-	if ( chunkStart + chunkSz != (long long unsigned int) file.tellg() ) {
+	if ( chunkStart + chunkSz != (dsf2flac_uint64) file.tellg() ) {
 		if (file.seekg(chunkStart + chunkSz)) {
 			errorMsg = "dsfFileReader::readHeaders:file seek error";
 			return false;
@@ -323,16 +323,16 @@ bool dsfFileReader::readHeaders()
 
 	// DATA CHUNK //
 	// 4 bytes which should be "data"
-	if (file.read_char(ident,4)) {
+	if (file.read_int8(ident,4)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
-	if ( !checkIdent(ident,const_cast<char*>("data")) ) {
+	if ( !checkIdent(ident,const_cast<dsf2flac_int8*>("data")) ) {
 		errorMsg = "dsfFileReader::readHeaders:file ident error";
 		return false;
 	}
 	// 8 bytes chunk size
-	if (file.read_llui(&dataChunkSz,1)) {
+	if (file.read_uint64(&dataChunkSz,1)) {
 		errorMsg = "dsfFileReader::readHeaders:file read error";
 		return false;
 	}
@@ -353,9 +353,9 @@ void dsfFileReader::allocateBlockBuffer()
 {
 	if (blockBufferAllocated)
 		return;
-	blockBuffer = new unsigned char*[chanNum];
-	for (long unsigned int i = 0; i<chanNum; i++)
-		blockBuffer[i] = new unsigned char[blockSzPerChan];
+	blockBuffer = new dsf2flac_uint8*[chanNum];
+	for (dsf2flac_uint32 i = 0; i<chanNum; i++)
+		blockBuffer[i] = new dsf2flac_uint8[blockSzPerChan];
 	blockBufferAllocated = true;
 }
 
@@ -380,17 +380,17 @@ void dsfFileReader::readMetadata()
 	}
 	
 	// read the first ID3_TAGHEADERSIZE bytes of the metadata (which should be the header).
-	unsigned char id3header[ID3_TAGHEADERSIZE];
-	if (file.read_uchar(id3header,ID3_TAGHEADERSIZE)) {
+	dsf2flac_uint8 id3header[ID3_TAGHEADERSIZE];
+	if (file.read_uint8(id3header,ID3_TAGHEADERSIZE)) {
 		return;
 	}
 	// check this is actually an id3 header
-	long long unsigned int id3tagLen;
+	dsf2flac_uint64 id3tagLen;
 	if ( (id3tagLen = ID3_IsTagHeader(id3header)) > -1 )
 		return;
 	// read the tag
-	unsigned char* id3tag = new unsigned char[ id3tagLen ];
-	if (file.read_uchar(id3tag,id3tagLen)) {
+	dsf2flac_uint8* id3tag = new dsf2flac_uint8[ id3tagLen ];
+	if (file.read_uint8(id3tag,id3tagLen)) {
 		return;
 	}
 	
@@ -400,12 +400,12 @@ void dsfFileReader::readMetadata()
 }
 
 /**
- * bool dsfFileReader::checkIdent(char* a, char* b)
+ * bool dsfFileReader::checkIdent(dsf2flac_int8* a, dsf2flac_int8* b)
  *
  * private method, pretty handy for cheking idents
  *
  */
-bool dsfFileReader::checkIdent(char* a, char* b)
+bool dsfFileReader::checkIdent(dsf2flac_int8* a, dsf2flac_int8* b)
 {
 	return ( a[0]==b[0] && a[1]==b[1] && a[2]==b[2] && a[3]==b[3] );
 }
@@ -418,17 +418,17 @@ bool dsfFileReader::checkIdent(char* a, char* b)
  */
 void dsfFileReader::dispFileInfo()
 {
-	printf("filesize: %llu\n",fileSz);
-	printf("metaChunkPointer: %llu\n",metaChunkPointer);
-	printf("sampleDataPointer: %llu\n",sampleDataPointer);
-	printf("dataChunkSz: %llu\n",dataChunkSz);
+	printf("filesize: %lu\n",fileSz);
+	printf("metaChunkPointer: %lu\n",metaChunkPointer);
+	printf("sampleDataPointer: %lu\n",sampleDataPointer);
+	printf("dataChunkSz: %lu\n",dataChunkSz);
 	printf("formatVer: %u\n",formatVer);
 	printf("formatID: %u\n",formatID);
 	printf("chanType: %u\n",chanType);
 	printf("chanNum: %u\n",chanNum);
 	printf("samplingFreq: %u\n",samplingFreq);
 	printf("samplesPerChar: %u\n",samplesPerChar);
-	printf("sampleCount: %llu\n",sampleCount);
+	printf("sampleCount: %lu\n",sampleCount);
 	printf("blockSzPerChan: %u\n",blockSzPerChan);
 
 	return;

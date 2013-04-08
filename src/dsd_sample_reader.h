@@ -51,9 +51,10 @@
 #define DSDSAMPLEREADER_H
 
 #include "stdio.h"
+#include "dsf2flac_types.h"
 #include <boost/circular_buffer.hpp>
 
-static const unsigned int defaultBufferLength = 5000;
+static const dsf2flac_uint32 defaultBufferLength = 5000;
 
 class dsdSampleReader
 {
@@ -64,9 +65,9 @@ public:
 	// CHILD CLASSES SHOULD OVERRIDE THESE!
 	virtual bool step() {return false;}; // move buffer forward by 1byte (8bits) of sample data.
 	virtual void rewind() {}; // resets the dsd reader to the start of the dsd data. Implementors should call clearBuffer.
-	virtual long long int getLength() {return 1;}; // length of file in samples
-	virtual unsigned int getNumChannels() {return 2;}; // number of channels in the file
-	virtual unsigned int getSamplingFreq() {return 44100;}; // the sampling freq of the dsd data
+	virtual dsf2flac_int64  getLength() {return 1;}; // length of file in samples
+	virtual dsf2flac_uint32 getNumChannels() {return 2;}; // number of channels in the file
+	virtual dsf2flac_uint32 getSamplingFreq() {return 44100;}; // the sampling freq of the dsd data
 	// CHILD CLASSES CAN OPTIONALLY OVERRIDE THESE!
 	virtual char* getArtist() {return NULL;} 
 	virtual char* getAlbum() {return NULL;}
@@ -74,18 +75,18 @@ public:
 	virtual char* getTrack() {return NULL;}
 	virtual char* getYear() {return NULL;}
 	virtual bool msbIsYoungest() {return true;} // the data is stored in 8-bit chars, returns true if the left most bit (msb) is the youngest.
-	virtual unsigned char getIdleSample() { return 0x69; }; // returns the idle tone used by this reader.
+	virtual dsf2flac_uint8 getIdleSample() { return 0x69; }; // returns the idle tone used by this reader.
 	virtual bool samplesAvailable() { return getPosition()<getLength(); }; // false when no more samples left
 	// positioning.
 	// public methods
-	boost::circular_buffer<unsigned char>* getBuffer(); // get the char sample buffers (1 per channel) by default filled with getIdleSample()
-	bool setBufferLength(unsigned int bufferLength); // you can use this to set the length of the buffer WARNING: causes the file to be rewound!
-	unsigned int getBufferLength(); // return the length of the circular buffers
-	long long int getPosition() {return posMarker*samplesPerChar;}; // current position in the file in dsd samples
-	long long int getPosition(long long int bufferPos) { return getPosition() - bufferPos; }; // get the position in dsd samples in relation to a certain position in the buffer.
-	double getPositionInSeconds(); // current position in the file in seconds
-	double getPositionAsPercent();
-	double getLengthInSeconds(); // length of file in seconds
+	boost::circular_buffer<dsf2flac_uint8>* getBuffer(); // get the char sample buffers (1 per channel) by default filled with getIdleSample()
+	bool setBufferLength(dsf2flac_uint32 bufferLength); // you can use this to set the length of the buffer WARNING: causes the file to be rewound!
+	dsf2flac_uint32 getBufferLength(); // return the length of the circular buffers
+	dsf2flac_int64 getPosition() {return posMarker*samplesPerChar;}; // current position in the file in dsd samples
+	dsf2flac_int64 getPosition(dsf2flac_int64 bufferPos) { return getPosition() - bufferPos; }; // get the position in dsd samples in relation to a certain position in the buffer.
+	dsf2flac_float64 getPositionInSeconds(); // current position in the file in seconds
+	dsf2flac_float64 getPositionAsPercent();
+	dsf2flac_float64 getLengthInSeconds(); // length of file in seconds
 	bool isValid(); // returns false if the reader is invalid
 	std::string getErrorMsg();
 	// static method to help out with latin1 charset
@@ -93,10 +94,10 @@ public:
 	static unsigned char* latin1_to_utf8(unsigned char* latin1);
 protected:
 	// protected properties
-	boost::circular_buffer<unsigned char>* circularBuffers;
+	boost::circular_buffer<dsf2flac_uint8>* circularBuffers;
 	// position marker
-	long long int posMarker; // implementors need to increment this on step()
-	unsigned int samplesPerChar; // should be set by implementors
+	dsf2flac_int64 posMarker; // implementors need to increment this on step()
+	dsf2flac_uint32 samplesPerChar; // should be set by implementors
 	// to hold feedback on errors
 	bool valid;
 	std::string errorMsg;
@@ -107,7 +108,7 @@ protected:
 	void resizeBuffer(); // resize buffer, fill with idleSample, call rewind
 private:
 	// private properties
-	unsigned int bufferLength;
+	dsf2flac_uint32 bufferLength;
 	bool isBufferAllocated;
 };
 #endif // DSDSAMPLEREADER_H

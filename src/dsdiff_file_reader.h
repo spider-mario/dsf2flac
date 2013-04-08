@@ -41,6 +41,53 @@
 
 #include "dsd_sample_reader.h" // Base class: dsdSampleReader
 #include "fstream_plus.h"
+#include "id3/tag.h"
+#include "id3/misc_support.h"
+#include <boost/ptr_container/ptr_vector.hpp>
+
+
+// this struct holds comments
+typedef struct{
+	dsf2flac_uint16		timeStampYear;
+	dsf2flac_uint8		timeStampMonth;
+	dsf2flac_uint8		timeStampDay;
+	dsf2flac_uint8		timeStampHour;
+	dsf2flac_uint8		timeStampMinutes;
+	dsf2flac_uint16		cmtType;
+	dsf2flac_uint16		cmtRef;
+	dsf2flac_uint32		count;
+	dsf2flac_int8*		commentText;
+} DsdiffComment;
+
+// this struct holds markers
+typedef struct{
+	dsf2flac_uint16		hours;
+	dsf2flac_uint8		minutes;
+	dsf2flac_uint8		seconds;
+	dsf2flac_uint32		samples;
+	dsf2flac_int32		offset;
+	dsf2flac_uint16		markType;
+	dsf2flac_uint16		markChannel;
+	dsf2flac_uint16		trackFlags;
+	dsf2flac_uint32		count;
+	dsf2flac_int8*		markerText;
+} DsdiffMarker;
+
+// this struct holds DST frame indexes
+typedef struct{
+	dsf2flac_uint64		offset;
+	dsf2flac_uint32		length;
+} DSTFrameIndex;
+
+// this struct holds DST frame info
+typedef struct {
+	dsf2flac_uint32		numFrames;
+	dsf2flac_uint16		frameRate;
+	dsf2flac_uint32		frameSizeInSamplesPerChan;
+	dsf2flac_uint32		frameSizeInBytesPerChan;
+} DSTFrameInformation;
+
+
 
 class dsdiffFileReader : public dsdSampleReader
 {
@@ -52,9 +99,14 @@ public:
 	// public overriden from dsdSampleReader
 	bool step();
 	void rewind();
-	long long int getLength() {return sampleCount;};
-	unsigned int getNumChannels() {return chanNum;};
-	unsigned int getSamplingFreq() {return samplingFreq;};
+	dsf2flac_int64 getLength() {return sampleCountPerChan;};
+	dsf2flac_uint32 getNumChannels() {return chanNum;};
+	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
+	char* getArtist() {return latin1_to_utf8 (ID3_GetArtist ( &tags[0] ));} 
+	char* getAlbum() {return latin1_to_utf8 (ID3_GetAlbum ( &tags[0] ));}
+	char* getTitle() {return latin1_to_utf8 (ID3_GetTitle ( &tags[0] ));}
+	char* getTrack() {return latin1_to_utf8 (ID3_GetTrack ( &tags[0] ));}
+	char* getYear() {return latin1_to_utf8 (ID3_GetYear ( &tags[0] ));}
 	bool msbIsYoungest() { return false;}
 	bool samplesAvailable() { return !file.eof() && dsdSampleReader::samplesAvailable(); }; // false when no more samples left
 public:
@@ -63,37 +115,67 @@ public:
 private:
 	// private variables
 	fstreamPlus file;
-	// read from the file
-	unsigned int dsdiffVersion;
-	unsigned int samplingFreq;
-	unsigned short int chanNum;
-	char** chanIdents;
-	char  compressionType[5];
-	char* compressionName;
-	unsigned short ast_hours;
-	unsigned char  ast_mins;
-	unsigned char  ast_secs;
-	unsigned int   ast_samples;
-	long long unsigned int sampleDataPointer;
-	long long unsigned int sampleCount; //per channel
+	// read from the file - these are always present...
+	dsf2flac_uint32 dsdiffVersion;
+	dsf2flac_uint32 samplingFreq;
+	dsf2flac_uint16 chanNum;
+	dsf2flac_int8** chanIdents;
+	dsf2flac_int8  compressionType[5];
+	dsf2flac_int8* compressionName;
+	dsf2flac_uint16	ast_hours;
+	dsf2flac_uint8	ast_mins;
+	dsf2flac_uint8	ast_secs;
+	dsf2flac_uint32	ast_samples;
+	dsf2flac_uint64 sampleDataPointer;
+	dsf2flac_uint64 dstChunkEnd;
+	dsf2flac_uint64 sampleCountPerChan;
+	dsf2flac_uint16 lsConfig;
+	// from optional chunks
+	std::vector<DsdiffComment> comments;
+	std::vector<ID3_Tag> tags;
+	std::vector<DsdiffMarker> markers;
+	bool isEm;
+	char* emid;
+	std::vector<DSTFrameIndex> dstFrameIndices;
+	DSTFrameInformation dstInfo;
+	
+	
 	// vars to hold the data
-	unsigned char* sampleBuffer;
+	dsf2flac_uint8* sampleBuffer;
+	dsf2flac_uint32 sampleBufferLenPerChan;
+	dsf2flac_int64 bufferCounter; // stores the index to the current blockBuffer
+	dsf2flac_int64 bufferMarker; // stores the current position in the blockBuffer
 	// private methods
 	void allocateSampleBuffer();
+	bool readNextBlock();
 	// all below here are for reading the headers
 	bool readHeaders();
-	static bool checkIdent(char* a, char* b); // MUST be used with the char[4]s or you'll get segfaults!
-	bool readChunkHeader(char* ident, long long unsigned int chunkStart);
-	bool readChunkHeader(char* ident, long long unsigned int chunkStart, long long unsigned int *chunkSz);
+	static bool checkIdent(dsf2flac_int8* a, dsf2flac_int8* b); // MUST be used with the char[4]s or you'll get segfaults!
+	bool readChunkHeader(dsf2flac_int8* ident, dsf2flac_uint64 chunkStart);
+	bool readChunkHeader(dsf2flac_int8* ident, dsf2flac_uint64 chunkStart, dsf2flac_uint64 *chunkSz);
 	// readers for specific types of chunk (return true if loaded ok)
-	bool readChunk_FRM8(long long unsigned int chunkStart);
-	bool readChunk_FVER(long long unsigned int chunkStart);
-	bool readChunk_PROP(long long unsigned int chunkStart);
-	bool readChunk_FS(long long unsigned int chunkStart);
-	bool readChunk_CHNL(long long unsigned int chunkStart);
-	bool readChunk_CMPR(long long unsigned int chunkStart);
-	bool readChunk_ABSS(long long unsigned int chunkStart);
-	bool readChunk_DSD(long long unsigned int chunkStart);
+	bool readChunk_FRM8(dsf2flac_uint64 chunkStart);
+	bool readChunk_FVER(dsf2flac_uint64 chunkStart);
+	bool readChunk_PROP(dsf2flac_uint64 chunkStart);
+	bool readChunk_FS(dsf2flac_uint64 chunkStart);
+	bool readChunk_CHNL(dsf2flac_uint64 chunkStart);
+	bool readChunk_CMPR(dsf2flac_uint64 chunkStart);
+	bool readChunk_ABSS(dsf2flac_uint64 chunkStart);
+	bool readChunk_DSD(dsf2flac_uint64 chunkStart);
+	bool readChunk_DST(dsf2flac_uint64 chunkStart);
+	bool readChunk_DSTF(dsf2flac_uint64 chunkStart);
+	bool readChunk_COMT(dsf2flac_uint64 chunkStart);
+	bool readChunk_LSCO(dsf2flac_uint64 chunkStart);
+	bool readChunk_ID3(dsf2flac_uint64 chunkStart);
+	bool readChunk_DIIN(dsf2flac_uint64 chunkStart);
+	bool readChunk_EMID(dsf2flac_uint64 chunkStart);
+	bool readChunk_MARK(dsf2flac_uint64 chunkStart);
+	bool readChunk_DSTI(dsf2flac_uint64 chunkStart);
+	bool readChunk_FRTE(dsf2flac_uint64 chunkStart);
+	
+	void dispComment(DsdiffComment c);
+	void dispMarker(DsdiffMarker m);
+	
 };
 
 #endif // DSDIFFFILEREADER_H

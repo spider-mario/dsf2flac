@@ -68,9 +68,9 @@ public:
 	// methods overriding dsdSampleReader
 	bool step();
 	void rewind();
-	long long int getLength() {return sampleCount;};
-	unsigned int getNumChannels() {return chanNum;};
-	unsigned int getSamplingFreq() {return samplingFreq;};
+	dsf2flac_int64 getLength() {return sampleCount;};
+	dsf2flac_uint32 getNumChannels() {return chanNum;};
+	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
 	char* getArtist() {return latin1_to_utf8 (ID3_GetArtist ( &metadata ));} 
 	char* getAlbum() {return latin1_to_utf8 (ID3_GetAlbum ( &metadata ));}
 	char* getTitle() {return latin1_to_utf8 (ID3_GetTitle ( &metadata ));}
@@ -85,28 +85,28 @@ private:
 	//FILE *fid;
 	fstreamPlus file;
 	// below store file info
-	long long unsigned int fileSz;
-	long long unsigned int metaChunkPointer;
-	long long unsigned int sampleDataPointer;
-	long long unsigned int dataChunkSz;
-	unsigned int formatVer;
-	unsigned int formatID;
-	unsigned int chanType;
-	unsigned int chanNum;
-	unsigned int samplingFreq;
-	long long unsigned int sampleCount; //per channel
-	unsigned int blockSzPerChan;
+	dsf2flac_uint64 fileSz;
+	dsf2flac_uint64 metaChunkPointer;
+	dsf2flac_uint64 sampleDataPointer;
+	dsf2flac_uint64 dataChunkSz;
+	dsf2flac_uint32 formatVer;
+	dsf2flac_uint32 formatID;
+	dsf2flac_uint32 chanType;
+	dsf2flac_uint32 chanNum;
+	dsf2flac_uint32 samplingFreq;
+	dsf2flac_uint64 sampleCount; //per channel
+	dsf2flac_uint32 blockSzPerChan;
 	ID3_Tag metadata;
 	// vars to hold the data and mark position
-	unsigned char** blockBuffer; // used to store blocks of raw data from the file
-	long long int blockCounter; // stores the index to the current blockBuffer
-	long long int blockMarker; // stores the current position in the blockBuffer
+	dsf2flac_uint8** blockBuffer; // used to store blocks of raw data from the file
+	dsf2flac_int64 blockCounter; // stores the index to the current blockBuffer
+	dsf2flac_int64 blockMarker; // stores the current position in the blockBuffer
 	// private methods
 	void allocateBlockBuffer();
 	bool readHeaders();
 	void readMetadata();
 	bool readNextBlock();
-	static bool checkIdent(char* a, char* b); // MUST be used with the char[4]s or you'll get segfaults!
+	static bool checkIdent(dsf2flac_int8* a, dsf2flac_int8* b); // MUST be used with the char[4]s or you'll get segfaults!
 };
 
 #endif // DSFFILEREADER_H

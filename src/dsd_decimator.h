@@ -47,7 +47,7 @@
   * 
   */
   
-#define calc_type double // you can change the type used to do the filtering... but there is barely any change in calc speed between float and double
+#define calc_type dsf2flac_float64 // you can change the type used to do the filtering... but there is barely any change in calc speed between float and double
 
 #ifndef DSDDECIMATOR_H
 #define DSDDECIMATOR_H
@@ -57,32 +57,32 @@
 class dsdDecimator
 {
 public:
-	dsdDecimator(dsdSampleReader *reader, unsigned int outputSampleRate);
+	dsdDecimator(dsdSampleReader *reader, dsf2flac_uint32 outputSampleRate);
 	virtual ~dsdDecimator();
 	// Method to get the output sampels
-	template <typename sampleType> void getSamples(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude = 0);
-	unsigned int getOutputSampleRate();
-	long long int getLength(); // return total length in samples of decimated data
-	double getPosition();
-	double getPositionInSeconds() { return getPosition()/outputSampleRate; };
-	double getPositionAsPercent() { return getPosition()/getLength()*100; };
-	unsigned int getNumChannels() { return reader->getNumChannels(); };
+	template <typename sampleType> void getSamples(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude = 0);
+	dsf2flac_uint32 getOutputSampleRate();
+	dsf2flac_int64 getLength(); // return total length in samples of decimated data
+	dsf2flac_float64 getPosition();
+	dsf2flac_float64 getPositionInSeconds() { return getPosition()/outputSampleRate; };
+	dsf2flac_float64 getPositionAsPercent() { return getPosition()/getLength()*100; };
+	dsf2flac_uint32 getNumChannels() { return reader->getNumChannels(); };
 	bool isValid(); // return false if the decimator is invalid
 	std::string getErrorMsg(); // returns a human readable error message
 	void step() { reader->step(); }; // handy wrapper.
 private:
 	dsdSampleReader *reader;
-	unsigned int outputSampleRate;
-	unsigned int nLookupTable;
-	unsigned int tzero; // filter t=0 position
+	dsf2flac_uint32 outputSampleRate;
+	dsf2flac_uint32 nLookupTable;
+	dsf2flac_uint32 tzero; // filter t=0 position
 	calc_type** lookupTable;
-	unsigned int ratio; // inFs/outFs
-	unsigned int nStep;
+	dsf2flac_uint32 ratio; // inFs/outFs
+	dsf2flac_uint32 nStep;
 	bool valid;
 	std::string errorMsg;
 	// private methods
-	void initLookupTable(const int nCoefs,const double* coefs,const int tzero);
-	template <typename sampleType> void getSamplesInternal(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude, bool roundToInt);
+	void initLookupTable(const dsf2flac_int32 nCoefs,const dsf2flac_float64* coefs,const dsf2flac_int32 tzero);
+	template <typename sampleType> void getSamplesInternal(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude, bool roundToInt);
 	
 };
 

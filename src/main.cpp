@@ -54,25 +54,25 @@ using boost::timer::nanosecond_type;
 
 static nanosecond_type reportInterval(500000000LL);
 static cpu_timer timer;
-static double lastPos;
+static dsf2flac_float64 lastPos;
 
 /**
- * void setupTimer(double currPos)
+ * void setupTimer(dsf2flac_float64 currPos)
  *
  * called by main to setup the boost timer for reporting progress to the user
  */
-void setupTimer(double currPos)
+void setupTimer(dsf2flac_float64 currPos)
 {
 	timer = cpu_timer();
 	lastPos = currPos;
 }
 
 /**
- * void checkTimer(double currPos, double percent)
+ * void checkTimer(dsf2flac_float64 currPos, dsf2flac_float64 percent)
  *
  * called by main to report progress to the user.
  */
-void checkTimer(double currPos, double percent)
+void checkTimer(dsf2flac_float64 currPos, dsf2flac_float64 percent)
 {
 	cpu_times const elapsed_times(timer.elapsed());
 	nanosecond_type const elapsed(elapsed_times.system + elapsed_times.user);
@@ -106,8 +106,8 @@ int main(int argc, char **argv)
 	int fs = args_info.samplerate_arg;
 	int bits = args_info.bits_arg;
 	bool dither = !args_info.nodither_flag;
-	double userScaleDB = (double) args_info.scale_arg;
-	double userScale = pow(10.0d,userScaleDB/20);
+	dsf2flac_float64 userScaleDB = (dsf2flac_float64) args_info.scale_arg;
+	dsf2flac_float64 userScale = pow(10.0d,userScaleDB/20);
 	boost::filesystem::path inpath(args_info.infile_arg);
 	boost::filesystem::path outpath;
 	if (args_info.outfile_given)
@@ -117,8 +117,8 @@ int main(int argc, char **argv)
 		outpath.replace_extension(".flac");
 	}
 	// calc real scale and dither amplitude
-	double scale = userScale * pow(2.0d,bits-1); // increase scale by factor of 2^23 (24bit).
-	double tpdfDitherPeakAmplitude;
+	dsf2flac_float64 scale = userScale * pow(2.0d,bits-1); // increase scale by factor of 2^23 (24bit).
+	dsf2flac_float64 tpdfDitherPeakAmplitude;
 	if (dither)
 		tpdfDitherPeakAmplitude = 1;
 	else
@@ -159,7 +159,8 @@ int main(int argc, char **argv)
 	printf("Input file\n\t%s\n\n",inpath.c_str());
 	printf("Output file\n\t%s\n\n",outpath.c_str());
 	printf("Output format\n\tSampleRate: %dHz\n\tDepth: %dbit\n\tDither: %s\n\tScale: %1.1fdB\n",fs, bits, (dither)?"true":"false",userScaleDB);
-	printf("\tIdleSample: 0x%02x\n\n",dsr->getIdleSample());
+	//printf("\tIdleSample: 0x%02x\n",dsr->getIdleSample());
+	printf("\n");
 
 	setupTimer(dsr->getPositionInSeconds());
 
@@ -230,7 +231,6 @@ int main(int argc, char **argv)
 		metadata[1]->length = 2048; /* set the padding length */
 		ok = encoder.set_metadata(metadata, 2);
 	}
-
 	// initialize encoder
 	if(ok) {
 		init_status = encoder.init(outpath.c_str());
@@ -239,8 +239,6 @@ int main(int argc, char **argv)
 			ok = false;
 		}
 	}
-
-
 	// creep up to the start point.
 	while (dec.getPosition()<0) {
 		dec.step();
@@ -266,7 +264,6 @@ int main(int argc, char **argv)
 		checkTimer(dec.getPositionInSeconds(),dec.getPositionAsPercent());
 	}
 	delete[] buffer;
-	
 	// close the flac file
 	ok &= encoder.finish();
 	// report back to the user
@@ -279,11 +276,8 @@ int main(int argc, char **argv)
 		fprintf(stderr, "encoding: %s\n", ok? "succeeded" : "FAILED");
 		fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
 	}
-
 	// free things
 	FLAC__metadata_object_delete(metadata[0]);
 	FLAC__metadata_object_delete(metadata[1]);
-	
-
 	return 0;
 }

@@ -23,7 +23,24 @@
     <File Name="./src/dsdiff_file_reader.cpp"/>
     <File Name="./src/fstream_plus.h"/>
     <File Name="./src/fstream_plus.cpp"/>
+    <File Name="src/dsf2flac_types.h"/>
+    <VirtualDirectory Name="libdstdec">
+      <File Name="src/libdstdec/ccp_calc.c"/>
+      <File Name="src/libdstdec/ccp_calc.h"/>
+      <File Name="src/libdstdec/conststr.h"/>
+      <File Name="src/libdstdec/dst_init.c"/>
+      <File Name="src/libdstdec/dst_init.h"/>
+      <File Name="src/libdstdec/types.h"/>
+      <File Name="src/libdstdec/dst_fram.c"/>
+      <File Name="src/libdstdec/dst_fram.h"/>
+      <File Name="src/libdstdec/dst_data.c"/>
+      <File Name="src/libdstdec/dst_data.h"/>
+      <File Name="src/libdstdec/unpack_dst.c"/>
+      <File Name="src/libdstdec/unpack_dst.h"/>
+    </VirtualDirectory>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="">
@@ -36,7 +53,8 @@
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-g;-O0;-Wall" C_Options="-g;-O0;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
-        <IncludePath Value="./src/"/>
+        <IncludePath Value="./src"/>
+        <IncludePath Value="./src/libdstdec"/>
       </Compiler>
       <Linker Options="" Required="yes">
         <Library Value="FLAC++"/>
@@ -46,7 +64,7 @@
         <Library Value="id3"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="-i/home/jacko/Music/04-UnknownArtist.dsf" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments=" -i /home/jacko/Music/SACD/2L50SACD_tr1_DSD_stereo.dff" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -82,6 +100,7 @@
     <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-O3;-Wall" C_Options="-O3;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="./src/"/>
+        <IncludePath Value="./src/libdstdec"/>
       </Compiler>
       <Linker Options="-static" Required="yes">
         <Library Value="FLAC++"/>
@@ -96,7 +115,7 @@
         <Library Value="ogg"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments=" -i /home/jacko/Music/2L50SACD_tr1_DSD_stereo.dff" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments=" -i /home/jacko/Music/UnknownAlbum.dff" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="no"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>

@@ -69,34 +69,34 @@ bool fstreamPlus::seekg(streamoff pos, ios_base::seekdir way)
 }
 
 /** Additional read methods - native bit order **/
-bool fstreamPlus::read_char(char* b,stream_size n) {return read_helper(b,n);}
-bool fstreamPlus::read_uchar(unsigned char* b,stream_size n) {return read_helper(b,n);}
-bool fstreamPlus::read_ui(unsigned int* b,stream_size n) {return read_helper(b,n);}
-bool fstreamPlus::read_lui(long unsigned int* b,stream_size n) {return read_helper(b,n);}
-bool fstreamPlus::read_llui(long long unsigned int* b,stream_size n) {return read_helper(b,n);}
+bool fstreamPlus::read_int8   (dsf2flac_int8*   b,stream_size n) {return read_helper(b,n);}
+bool fstreamPlus::read_uint8  (dsf2flac_uint8*  b,stream_size n) {return read_helper(b,n);}
+bool fstreamPlus::read_uint16 (dsf2flac_uint16* b,stream_size n) {return read_helper(b,n);}
+bool fstreamPlus::read_uint32 (dsf2flac_uint32* b,stream_size n) {return read_helper(b,n);}
+bool fstreamPlus::read_uint64 (dsf2flac_uint64* b,stream_size n) {return read_helper(b,n);}
 
 /** Additional read methods - reverse byte order **/
-bool fstreamPlus::read_sui_rev(short unsigned int* b,stream_size n) {return read_helper_rev(b,n);}
-bool fstreamPlus::read_ui_rev(unsigned int* b,stream_size n) {return read_helper_rev(b,n);}
-bool fstreamPlus::read_lui_rev(long unsigned int* b,stream_size n) {return read_helper_rev(b,n);}
-bool fstreamPlus::read_llui_rev(long long unsigned int* b,stream_size n) {return read_helper_rev(b,n);}
+bool fstreamPlus::read_int32_rev	(dsf2flac_int32*  b,stream_size n) {return read_helper_rev(b,n);}
+bool fstreamPlus::read_uint16_rev	(dsf2flac_uint16* b,stream_size n) {return read_helper_rev(b,n);}
+bool fstreamPlus::read_uint32_rev	(dsf2flac_uint32* b,stream_size n) {return read_helper_rev(b,n);}
+bool fstreamPlus::read_uint64_rev	(dsf2flac_uint64* b,stream_size n) {return read_helper_rev(b,n);}
 
 /** templates for the readers **/
 template<typename rType> bool fstreamPlus::read_helper(rType* b, stream_size n) {
-	read( reinterpret_cast<char*>(b),sizeof(rType)*n);
+	read( reinterpret_cast<char*>(b), sizeof(rType)*n);
 	return bad();
 }
 template<typename rType> bool fstreamPlus::read_helper_rev(rType* b, stream_size n) {
-	read( reinterpret_cast<char*>(b),sizeof(rType)*n);
+	read( reinterpret_cast<char*>(b), sizeof(rType)*n);
 	reverseByteOrder(b,n);
 	return bad();
 }
 
 
 /** Extra things **/
-template<typename rType> void fstreamPlus::reverseByteOrder(rType* b,long long unsigned int n)
+template<typename rType> void fstreamPlus::reverseByteOrder(rType* b,stream_size n)
 {
-	for (long long unsigned int i=0; i<n; i++)
+	for (stream_size i=0; i<n; i++)
 		b[i] = reverseByteOrder(b[i]);
 }
 template<typename rType> rType fstreamPlus::reverseByteOrder(rType b)

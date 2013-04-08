@@ -75,7 +75,7 @@ dsdSampleReader::~dsdSampleReader()
 }
 
 /**
- * boost::circular_buffer<unsigned char>* dsdSampleReader::getBuffer()
+ * boost::circular_buffer<dsf2flac_uint8>* dsdSampleReader::getBuffer()
  *
  * Returns the circular buffers, one per channel in an array.
  * When step() is called a new 1byte (8 dsd bits) sample is added to the start
@@ -84,31 +84,31 @@ dsdSampleReader::~dsdSampleReader()
  * response, call step() to shift to the next dsd sample and do the same!
  *
  */
-boost::circular_buffer<unsigned char>* dsdSampleReader::getBuffer()
+boost::circular_buffer<dsf2flac_uint8>* dsdSampleReader::getBuffer()
 {
 	return circularBuffers;
 }
 
 /**
- * unsigned int dsdSampleReader::getBufferLength()
+ * dsf2flac_uint32 dsdSampleReader::getBufferLength()
  *
  * Returns the current length of the buffers.
  *
  */
-unsigned int dsdSampleReader::getBufferLength()
+dsf2flac_uint32 dsdSampleReader::getBufferLength()
 {
 	return bufferLength;
 }
 
 /**
- * void dsdSampleReader::setBufferLength(unsigned int b)
+ * void dsdSampleReader::setBufferLength(dsf2flac_uint32 b)
  *
  * Sets the length of the buffers.
  * WARNING! calling this will cause the dsd reader to be rewound to the
  * beginning and the buffer will be filled by getIdleSample();
  *
  */
-bool dsdSampleReader::setBufferLength(unsigned int b)
+bool dsdSampleReader::setBufferLength(dsf2flac_uint32 b)
 {
 	if (b<1) {
 		errorMsg = "dsdSampleReader::setBufferLength:buffer length must be >0";
@@ -121,36 +121,36 @@ bool dsdSampleReader::setBufferLength(unsigned int b)
 }
 
 /**
- * double dsdSampleReader::getPositionInSeconds()
+ * dsf2flac_float64 dsdSampleReader::getPositionInSeconds()
  *
  * Return the current position in seconds.
  *
  */
-double dsdSampleReader::getPositionInSeconds()
+dsf2flac_float64 dsdSampleReader::getPositionInSeconds()
 {
-	return getPosition() / (double) getSamplingFreq();
+	return getPosition() / (dsf2flac_float64) getSamplingFreq();
 }
 
 /**
- * double dsdSampleReader::getPositionAsPercent()
+ * dsf2flac_float64 dsdSampleReader::getPositionAsPercent()
  *
  * Return the current position as a percent of the reader length.
  *
  */
-double dsdSampleReader::getPositionAsPercent()
+dsf2flac_float64 dsdSampleReader::getPositionAsPercent()
 {
-	return 100* getPosition() / (double) getLength();
+	return 100* getPosition() / (dsf2flac_float64) getLength();
 }
 
 /**
- * double dsdSampleReader::getLengthInSeconds()
+ * dsf2flac_float64 dsdSampleReader::getLengthInSeconds()
  *
  * Return the total length of the reader in seconds
  *
  */
-double dsdSampleReader::getLengthInSeconds()
+dsf2flac_float64 dsdSampleReader::getLengthInSeconds()
 {
-	return getLength() / (double) getSamplingFreq();
+	return getLength() / (dsf2flac_float64) getSamplingFreq();
 }
 
 /**
@@ -186,9 +186,9 @@ void dsdSampleReader::allocateBuffer()
 	if (isBufferAllocated)
 		return;
 		
-	circularBuffers = new boost::circular_buffer<unsigned char> [getNumChannels()];
-	for (long unsigned int i = 0; i<getNumChannels(); i++) {
-		boost::circular_buffer<unsigned char> cb(getBufferLength());
+	circularBuffers = new boost::circular_buffer<dsf2flac_uint8> [getNumChannels()];
+	for (dsf2flac_uint32 i = 0; i<getNumChannels(); i++) {
+		boost::circular_buffer<dsf2flac_uint8> cb(getBufferLength());
 		circularBuffers[i] = cb;
 	}
 	isBufferAllocated = true;
@@ -209,9 +209,9 @@ void dsdSampleReader::clearBuffer()
 		return;
 	}
 	
-	unsigned char c = getIdleSample();
-	for (long unsigned int i = 0; i<getNumChannels(); i++)
-		for (unsigned int j=0; j<getBufferLength(); j++)
+	dsf2flac_uint8 c = getIdleSample();
+	for (dsf2flac_uint32 i = 0; i<getNumChannels(); i++)
+		for (dsf2flac_uint32 j=0; j<getBufferLength(); j++)
 			circularBuffers[i].push_front(c);
 
 }
@@ -227,7 +227,7 @@ void dsdSampleReader::resizeBuffer() {
 		allocateBuffer();
 		return;
 	}
-	for (long unsigned int i = 0; i<getNumChannels(); i++)
+	for (dsf2flac_uint32 i = 0; i<getNumChannels(); i++)
 		circularBuffers[i].set_capacity(getBufferLength());
 	clearBuffer();
 }

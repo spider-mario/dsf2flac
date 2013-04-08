@@ -54,14 +54,14 @@
 static bool lookupTableAllocated = false;
 
 /**
- * dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
+ * dsdDecimator::dsdDecimator(dsdSampleReader *r, dsf2flac_uint32 rate)
  * 
  * Constructor!
  * 
  * Pass in a dsdSampleReader and the desired output sample rate.
  * 
  */
-dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
+dsdDecimator::dsdDecimator(dsdSampleReader *r, dsf2flac_uint32 rate)
 {
 	reader = r;
 	outputSampleRate = rate;
@@ -86,12 +86,9 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 		errorMsg = "Sorry, incompatible sample rate combination";
 		return;
 	}
-	
 	// set the buffer to the length of the table if not long enough
 	if (nLookupTable > reader->getBufferLength())
 		reader->setBufferLength(nLookupTable);
-		
-	
 }
 
 /**
@@ -103,7 +100,7 @@ dsdDecimator::dsdDecimator(dsdSampleReader *r, unsigned int rate)
 dsdDecimator::~dsdDecimator()
 {
 	if (lookupTableAllocated) {
-		for (unsigned int n=0; n<nLookupTable; n++)
+		for (dsf2flac_uint32 n=0; n<nLookupTable; n++)
 		{
 			delete[] lookupTable[n];
 		}
@@ -117,7 +114,7 @@ dsdDecimator::~dsdDecimator()
  * Return the data length in output samples
  * 
  */
-long long int dsdDecimator::getLength()
+dsf2flac_int64 dsdDecimator::getLength()
 {
 	//return reader->getLength()/ratio;
 	return reader->getLength()/ratio - nLookupTable; // truncate filter
@@ -129,19 +126,19 @@ long long int dsdDecimator::getLength()
  * Return the current position in output samples
  * 
  */
-double dsdDecimator::getPosition()
+dsf2flac_float64 dsdDecimator::getPosition()
 {
-	//return (double)reader->getPosition(tzero)/ratio;
-	return (double)reader->getPosition(tzero)/ratio  - nLookupTable + tzero/ratio; // truncate filter
+	//return (dsf2flac_float64)reader->getPosition(tzero)/ratio;
+	return (dsf2flac_float64)reader->getPosition(tzero)/ratio  - nLookupTable + tzero/ratio; // truncate filter
 }
 
 /**
- * unsigned int dsdDecimator::getOutputSampleRate()
+ * dsf2flac_uint32 dsdDecimator::getOutputSampleRate()
  * 
  * Return the output sample rate
  * 
  */
-unsigned int dsdDecimator::getOutputSampleRate()
+dsf2flac_uint32 dsdDecimator::getOutputSampleRate()
 {
 	return outputSampleRate;
 }
@@ -168,38 +165,38 @@ std::string dsdDecimator::getErrorMsg() {
 }
 
 /**
- * void dsdDecimator::initLookupTable(const double nCoefs,const double* coefs)
+ * void dsdDecimator::initLookupTable(const dsf2flac_float64 nCoefs,const dsf2flac_float64* coefs)
  * 
  * private method. Initialises the lookup table used for very fast filtering.
  * 
  */
-void dsdDecimator::initLookupTable(const int nCoefs,const double* coefs,const int tz)
+void dsdDecimator::initLookupTable(const int nCoefs,const dsf2flac_float64* coefs,const int tz)
 {
 	tzero = tz;
 	// calc how big the lookup table is.
 	nLookupTable = (nCoefs+7)/8;
 	// allocate the table
 	lookupTable = new calc_type*[nLookupTable];
-	for (unsigned int n=0; n<nLookupTable; n++)
+	for (dsf2flac_uint32 n=0; n<nLookupTable; n++)
 	{
 		lookupTable[n] = new calc_type[256];
 		for (int m=0; m<256; m++)
 			lookupTable[n][m] = 0;
 	}
 	// loop over each entry in the lookup table
-	for (unsigned int t=0; t<nLookupTable; t++) {
+	for (dsf2flac_uint32 t=0; t<nLookupTable; t++) {
 		// how many samples from the filter are spanned in this entry
 		int k = nCoefs - t*8;
 		if (k>8) k=8;
 		// loop over all possible 8bit dsd sequences
 		for (int dsdSeq=0; dsdSeq<256; ++dsdSeq) {
-			double acc = 0.0;
+			dsf2flac_float64 acc = 0.0;
 			for (int bit=0; bit<k; bit++) {
-				double val;
+				dsf2flac_float64 val;
 				if (reader->msbIsYoungest())
-					val = -1 + 2*(double) !!( dsdSeq & (1<<(7-bit)) );
+					val = -1 + 2*(dsf2flac_float64) !!( dsdSeq & (1<<(7-bit)) );
 				else
-					val = -1 + 2*(double) !!( dsdSeq & (1<<(bit)) );
+					val = -1 + 2*(dsf2flac_float64) !!( dsdSeq & (1<<(bit)) );
 				acc += val * coefs[t*8+bit];
 			}
 			lookupTable[t][dsdSeq] = (calc_type) acc;
@@ -210,7 +207,7 @@ void dsdDecimator::initLookupTable(const int nCoefs,const double* coefs,const in
 
 
 /**
- * template <typename sampleType> void getSamples(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude);
+ * template <typename sampleType> void getSamples(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude);
  * 
  * Read pcm output samples in format sampleType into a buffer of length bufferLen.
  * bufferLen must be a multiple of getNumChannels(). Channels are interleaved into the buffer.
@@ -225,40 +222,40 @@ void dsdDecimator::initLookupTable(const int nCoefs,const double* coefs,const in
  * int
  * long int
  * float
- * double
+ * dsf2flac_float64
  * 
  * Others should be very simple to add (just take a look at the templates below).
  * 
  */
-template<> void dsdDecimator::getSamples(short int *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude)
+template<> void dsdDecimator::getSamples(short int *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
 {
 	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,true);
 }
-template<> void dsdDecimator::getSamples(int *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude)
+template<> void dsdDecimator::getSamples(int *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
 {
 	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,true);
 }
-template<> void dsdDecimator::getSamples(long int *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude)
+template<> void dsdDecimator::getSamples(long int *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
 {
 	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,true);
 }
-template<> void dsdDecimator::getSamples(float *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude)
+template<> void dsdDecimator::getSamples(float *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
 {
 	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,false);
 }
-template<> void dsdDecimator::getSamples(double *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude)
+template<> void dsdDecimator::getSamples(double *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
 {
 	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,false);
 }
 
 /**
- * template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude, bool roundToInt)
+ * template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude, bool roundToInt)
  *  
  * private method. Does the actual calculation for the getSamples method. Using the lookup tables FIR calculation is a pretty simple summing operation.
  * 
  */
 
-template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType *buffer, unsigned int bufferLen, double scale, double tpdfDitherPeakAmplitude, bool roundToInt)
+template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude, bool roundToInt)
 {
 	// check the buffer seems sensible
 	div_t d = div(bufferLen,getNumChannels());
@@ -267,13 +264,13 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 		exit(EXIT_FAILURE);
 	}
 	// get the sample buffer
-	boost::circular_buffer<unsigned char>* buff = (*reader).getBuffer();
+	boost::circular_buffer<dsf2flac_uint8>* buff = (*reader).getBuffer();
 	for (int i=0; i<d.quot ; i++) {
 		// filter each chan in turn
-		for (unsigned int c=0; c<getNumChannels(); c++) {
+		for (dsf2flac_uint32 c=0; c<getNumChannels(); c++) {
 			calc_type sum = 0.0;
-			for (unsigned int t=0; t<nLookupTable; t++) {
-				unsigned int byte = (unsigned int) buff[c][t] & 0xFF;
+			for (dsf2flac_uint32 t=0; t<nLookupTable; t++) {
+				dsf2flac_uint32 byte = (dsf2flac_uint32) buff[c][t] & 0xFF;
 				sum += lookupTable[t][byte];
 			}
 			sum = sum*scale;
@@ -290,7 +287,7 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 				buffer[i*getNumChannels()+c] = static_cast<sampleType>(sum);
 		}
 		// step the buffer
-		for (unsigned int m=0; m<nStep; m++)
+		for (dsf2flac_uint32 m=0; m<nStep; m++)
 			reader->step();
 	}
 }
