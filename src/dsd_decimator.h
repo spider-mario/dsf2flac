@@ -64,12 +64,15 @@ public:
 	dsf2flac_uint32 getOutputSampleRate();
 	dsf2flac_int64 getLength(); // return total length in samples of decimated data
 	dsf2flac_float64 getPosition();
+	dsf2flac_float64 getFirstValidSample();
+	dsf2flac_float64 getLastValidSample();
 	dsf2flac_float64 getPositionInSeconds() { return getPosition()/outputSampleRate; };
 	dsf2flac_float64 getPositionAsPercent() { return getPosition()/getLength()*100; };
 	dsf2flac_uint32 getNumChannels() { return reader->getNumChannels(); };
 	bool isValid(); // return false if the decimator is invalid
 	std::string getErrorMsg(); // returns a human readable error message
-	void step() { reader->step(); }; // handy wrapper.
+	void step() { reader->step(); }; // handy wrappers.
+	dsf2flac_uint32 getDecimationRatio() {return ratio;};
 private:
 	dsdSampleReader *reader;
 	dsf2flac_uint32 outputSampleRate;

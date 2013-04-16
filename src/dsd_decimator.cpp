@@ -116,10 +116,8 @@ dsdDecimator::~dsdDecimator()
  */
 dsf2flac_int64 dsdDecimator::getLength()
 {
-	//return reader->getLength()/ratio;
-	return reader->getLength()/ratio - nLookupTable; // truncate filter
+	return reader->getLength()/ratio;
 }
-
 /**
  * unsigned long long int dsdDecimator::dsdDecimator::getPosition()
  * 
@@ -128,10 +126,24 @@ dsf2flac_int64 dsdDecimator::getLength()
  */
 dsf2flac_float64 dsdDecimator::getPosition()
 {
-	//return (dsf2flac_float64)reader->getPosition(tzero)/ratio;
-	return (dsf2flac_float64)reader->getPosition(tzero)/ratio  - nLookupTable + tzero/ratio; // truncate filter
+	return (dsf2flac_float64)reader->getPosition(tzero)/ratio;
 }
-
+/**
+ * dsf2flac_float64 dsdDecimator::dsdDecimator::getFirstValidSample()
+ * 
+ * return the position of the first output sample that is completely defined.
+ */
+dsf2flac_float64 dsdDecimator::dsdDecimator::getFirstValidSample() {
+	return (dsf2flac_float64)nLookupTable / nStep - (dsf2flac_float64)tzero / ratio;
+}
+/**
+ * dsf2flac_float64 dsdDecimator::dsdDecimator::getLastValidSample()
+ * 
+ * return the position of the last output samples that is compeltely defined.
+ */
+dsf2flac_float64 dsdDecimator::dsdDecimator::getLastValidSample() {
+	return (dsf2flac_float64)getLength() - (dsf2flac_float64)tzero / ratio;
+}
 /**
  * dsf2flac_uint32 dsdDecimator::getOutputSampleRate()
  * 

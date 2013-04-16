@@ -54,8 +54,6 @@
 #define DSFFILEREADER_H
 
 #include "dsd_sample_reader.h" // Base class: dsdSampleReader
-#include "id3/tag.h"
-#include "id3/misc_support.h"
 #include "fstream_plus.h"
 
 class dsfFileReader : public dsdSampleReader
@@ -71,18 +69,14 @@ public:
 	dsf2flac_int64 getLength() {return sampleCount;};
 	dsf2flac_uint32 getNumChannels() {return chanNum;};
 	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
-	char* getArtist() {return latin1_to_utf8 (ID3_GetArtist ( &metadata ));} 
-	char* getAlbum() {return latin1_to_utf8 (ID3_GetAlbum ( &metadata ));}
-	char* getTitle() {return latin1_to_utf8 (ID3_GetTitle ( &metadata ));}
-	char* getTrack() {return latin1_to_utf8 (ID3_GetTrack ( &metadata ));}
-	char* getYear() {return latin1_to_utf8 (ID3_GetYear ( &metadata ));}
 	bool samplesAvailable() { return !file.eof() && dsdSampleReader::samplesAvailable(); }; // false when no more samples left
+	ID3_Tag getID3Tag(dsf2flac_uint32 trackNum) {return metadata;}
 public:
 	// other public methods
 	void dispFileInfo();
 private:
 	// private variables
-	//FILE *fid;
+	char* filePath;
 	fstreamPlus file;
 	// below store file info
 	dsf2flac_uint64 fileSz;

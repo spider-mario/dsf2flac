@@ -41,8 +41,6 @@
 
 #include "dsd_sample_reader.h" // Base class: dsdSampleReader
 #include "fstream_plus.h"
-#include "id3/tag.h"
-#include "id3/misc_support.h"
 #include <boost/ptr_container/ptr_vector.hpp>
 
 
@@ -58,6 +56,14 @@ typedef struct{
 	dsf2flac_uint32		count;
 	dsf2flac_int8*		commentText;
 } DsdiffComment;
+
+// this struct holds absolute start time
+typedef struct{
+	dsf2flac_uint16		hours;
+	dsf2flac_uint8		minutes;
+	dsf2flac_uint8		seconds;
+	dsf2flac_uint32		samples;
+} DsdiffAst;
 
 // this struct holds markers
 typedef struct{
@@ -102,13 +108,12 @@ public:
 	dsf2flac_int64 getLength() {return sampleCountPerChan;};
 	dsf2flac_uint32 getNumChannels() {return chanNum;};
 	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
-	char* getArtist() {return latin1_to_utf8 (ID3_GetArtist ( &tags[0] ));} 
-	char* getAlbum() {return latin1_to_utf8 (ID3_GetAlbum ( &tags[0] ));}
-	char* getTitle() {return latin1_to_utf8 (ID3_GetTitle ( &tags[0] ));}
-	char* getTrack() {return latin1_to_utf8 (ID3_GetTrack ( &tags[0] ));}
-	char* getYear() {return latin1_to_utf8 (ID3_GetYear ( &tags[0] ));}
 	bool msbIsYoungest() { return false;}
 	bool samplesAvailable() { return !file.eof() && dsdSampleReader::samplesAvailable(); }; // false when no more samples left
+	ID3_Tag getID3Tag(dsf2flac_uint32 trackNum);
+	dsf2flac_uint32 getNumTracks() {return numTracks;}; // the number of audio tracks in the dsd data
+	dsf2flac_uint64 getTrackStart(dsf2flac_uint32 trackNum);// return the index to the first sample of the nth track
+	dsf2flac_uint64 getTrackEnd(dsf2flac_uint32 trackNum); // return the index to the first sample of the nth track
 public:
 	// other public methods
 	void dispFileInfo();
@@ -122,10 +127,7 @@ private:
 	dsf2flac_int8** chanIdents;
 	dsf2flac_int8  compressionType[5];
 	dsf2flac_int8* compressionName;
-	dsf2flac_uint16	ast_hours;
-	dsf2flac_uint8	ast_mins;
-	dsf2flac_uint8	ast_secs;
-	dsf2flac_uint32	ast_samples;
+	DsdiffAst ast;
 	dsf2flac_uint64 sampleDataPointer;
 	dsf2flac_uint64 dstChunkEnd;
 	dsf2flac_uint64 sampleCountPerChan;
@@ -138,7 +140,10 @@ private:
 	char* emid;
 	std::vector<DSTFrameIndex> dstFrameIndices;
 	DSTFrameInformation dstInfo;
-	
+	// track info
+	dsf2flac_uint32 numTracks;
+	std::vector<dsf2flac_uint64> trackStartPositions;
+	std::vector<dsf2flac_uint64> trackEndPositions;
 	
 	// vars to hold the data
 	dsf2flac_uint8* sampleBuffer;
@@ -148,6 +153,7 @@ private:
 	// private methods
 	void allocateSampleBuffer();
 	bool readNextBlock();
+	void processTracks();
 	// all below here are for reading the headers
 	bool readHeaders();
 	static bool checkIdent(dsf2flac_int8* a, dsf2flac_int8* b); // MUST be used with the char[4]s or you'll get segfaults!

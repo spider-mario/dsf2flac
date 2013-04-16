@@ -41,10 +41,12 @@
 #include <dsd_decimator.h>
 #include <dsf_file_reader.h>
 #include <dsdiff_file_reader.h>
+#include <tagConversion.h>
 #include "FLAC++/metadata.h"
 #include "FLAC++/encoder.h"
 #include "math.h"
 #include "cmdline.h"
+#include <sstream>
 
 #define flacBlockLen 1000
 
@@ -85,6 +87,107 @@ void checkTimer(dsf2flac_float64 currPos, dsf2flac_float64 percent)
 		timer = cpu_timer();
 	}
 }
+
+/**
+ * int helper()
+ * 
+ * converts a track at a time.
+ * 
+ */
+int helper(
+	boost::filesystem::path outpath,
+	dsdDecimator* dec,
+	int bits,
+	dsf2flac_float64 scale,
+	dsf2flac_float64 tpdfDitherPeakAmplitude,
+	dsf2flac_float64 startPos,
+	dsf2flac_float64 endPos,
+	ID3_Tag	id3tag)
+{
+	
+	if ( startPos > dec->getLength()-1 )
+		startPos = dec->getLength()-1;
+		
+	if ( endPos > dec->getLength() )
+		endPos = dec->getLength();
+	
+	// flac vars
+	bool ok = true;
+	FLAC::Encoder::File encoder;
+	FLAC__StreamEncoderInitStatus init_status;
+	FLAC__StreamMetadata *metadata[2];
+
+	// setup the encoder
+	if(!encoder) {
+		fprintf(stderr, "ERROR: allocating encoder\n");
+		return 1;
+	}
+	ok &= encoder.set_verify(true);
+	ok &= encoder.set_compression_level(5);
+	ok &= encoder.set_channels(dec->getNumChannels());
+	ok &= encoder.set_bits_per_sample(bits);
+	ok &= encoder.set_sample_rate(dec->getOutputSampleRate());
+	ok &= encoder.set_total_samples_estimate(endPos - startPos);
+
+	// add tags and a padding block
+	if(ok) {
+		metadata[0] = id3v2_to_flac( id3tag );
+		metadata[1] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING);
+		metadata[1]->length = 2048; /* set the padding length */
+		ok = encoder.set_metadata(metadata, 2);
+	}
+	
+	// initialize encoder
+	if(ok) {
+		init_status = encoder.init(outpath.c_str());
+		if(init_status != FLAC__STREAM_ENCODER_INIT_STATUS_OK) {
+			fprintf(stderr, "ERROR: initializing encoder: %s\n", FLAC__StreamEncoderInitStatusString[init_status]);
+			ok = false;
+		}
+	}
+	// creep up to the start point.
+	while (dec->getPosition() < startPos) {
+		dec->step();
+	}
+	// create a FLAC__int32 buffer to hold the samples as they are converted
+	unsigned int bufferLen = dec->getNumChannels()*flacBlockLen;
+	FLAC__int32* buffer = new FLAC__int32[bufferLen];
+	// MAIN CONVERSION LOOP //
+	while (dec->getPosition() <= endPos-flacBlockLen) {
+		dec->getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude);
+		if(!(ok = encoder.process_interleaved(buffer, flacBlockLen)))
+			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
+		checkTimer(dec->getPositionInSeconds(),dec->getPositionAsPercent());
+	}
+	// delete the old buffer and make a new one with a single sample per chan
+	delete[] buffer;
+	buffer = new FLAC__int32[dec->getNumChannels()];
+	// creep up to the end
+	while (dec->getPosition() <= endPos) {
+		dec->getSamples(buffer,dec->getNumChannels(),scale,tpdfDitherPeakAmplitude);
+		if(!(ok = encoder.process_interleaved(buffer, 1)))
+			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
+		checkTimer(dec->getPositionInSeconds(),dec->getPositionAsPercent());
+	}
+	delete[] buffer;
+	// close the flac file
+	ok &= encoder.finish();
+	// report back to the user
+	printf("\33[2K\r");
+	printf("%3.1f%%\t",dec->getPositionAsPercent());
+	if (ok) {
+		printf("Conversion completed sucessfully.\n");
+	} else {
+		printf("\nError during conversion.\n");
+		fprintf(stderr, "encoding: %s\n", ok? "succeeded" : "FAILED");
+		fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
+	}
+	// free things
+	FLAC__metadata_object_delete(metadata[0]);
+	FLAC__metadata_object_delete(metadata[1]);
+	return 0;
+}
+
 
 /**
  * int main(int argc, char **argv)
@@ -147,7 +250,7 @@ int main(int argc, char **argv)
 		printf("%s\n",dsr->getErrorMsg().c_str());
 		return 0;
 	}
-
+	
 	// create decimator
 	dsdDecimator dec(dsr,fs);
 	if (!dec.isValid()) {
@@ -156,128 +259,44 @@ int main(int argc, char **argv)
 	}
 
 	// feedback some info to the user
-	printf("Input file\n\t%s\n\n",inpath.c_str());
-	printf("Output file\n\t%s\n\n",outpath.c_str());
+	printf("Input file\n\t%s\n",inpath.c_str());
 	printf("Output format\n\tSampleRate: %dHz\n\tDepth: %dbit\n\tDither: %s\n\tScale: %1.1fdB\n",fs, bits, (dither)?"true":"false",userScaleDB);
 	//printf("\tIdleSample: 0x%02x\n",dsr->getIdleSample());
-	printf("\n");
-
+	
 	setupTimer(dsr->getPositionInSeconds());
-
-	// flac vars
-	bool ok = true;
-	FLAC::Encoder::File encoder;
-	FLAC__StreamEncoderInitStatus init_status;
-	FLAC__StreamMetadata *metadata[2];
-	FLAC__StreamMetadata_VorbisComment_Entry entry;
-
-	// setup the encoder
-	if(!encoder) {
-		fprintf(stderr, "ERROR: allocating encoder\n");
-		return 1;
-	}
-	ok &= encoder.set_verify(true);
-	ok &= encoder.set_compression_level(5);
-	ok &= encoder.set_channels(dec.getNumChannels());
-	ok &= encoder.set_bits_per_sample(bits);
-	ok &= encoder.set_sample_rate(dec.getOutputSampleRate());
-	ok &= encoder.set_total_samples_estimate(dec.getLength());
-
-	// add tags and a padding block
-	if(ok) {
-
-		bool err = false;
-		err |= (metadata[0] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT)) == NULL;
-		err |= (metadata[1] = FLAC__metadata_object_new(FLAC__METADATA_TYPE_PADDING)) == NULL;
-		char* tag = dsr->getArtist();
-		if (tag != NULL) {
-			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ARTIST", tag);
-			if (!err1)
-				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
-			err |= err1;
+	
+	// convert each track in the file in turn
+	for (dsf2flac_uint32 n = 0; n < dsr->getNumTracks();n++) {
+		
+		// get and check the start and end samples
+		dsf2flac_float64 trackStart = (dsf2flac_float64)dsr->getTrackStart(n) / dec.getDecimationRatio();
+		dsf2flac_float64 trackEnd = (dsf2flac_float64)dsr->getTrackEnd(n) / dec.getDecimationRatio();
+		if (trackStart < dec.getFirstValidSample())
+			trackStart = dec.getFirstValidSample();
+		if (trackStart >= dec.getLastValidSample() )
+			trackStart = dec.getLastValidSample() - 1;
+		if (trackEnd <= dec.getFirstValidSample())
+			trackEnd = dec.getFirstValidSample() + 1;
+		if (trackEnd > dec.getLastValidSample())
+			trackEnd = dec.getLastValidSample();
+			
+		// construct an appropriate filename for multi track files.
+		boost::filesystem::path trackOutPath;
+		if (dsr->getNumTracks() > 1)
+		{
+			std::ostringstream prefix;
+			prefix << "track ";
+			prefix << n+1;
+			prefix << " - ";
+			trackOutPath = outpath.parent_path() / (prefix.str() + outpath.filename().string());
+		} else
+		{
+			trackOutPath = outpath;
 		}
-		tag = dsr->getAlbum();
-		if (tag != NULL) {
-			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "ALBUM", tag);
-			if (!err1)
-				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
-			err |= err1;
-		}
-		tag = dsr->getTitle();
-		if (tag != NULL) {
-			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TITLE", tag);
-			if (!err1)
-				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
-			err |= err1;
-		}
-		tag = dsr->getTrack();
-		if (tag != NULL) {
-			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "TRACKNUMBER", tag);
-			if (!err1)
-				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
-			err |= err1;
-		}
-		tag = dsr->getYear();
-		if (tag != NULL) {
-			bool err1 = !FLAC__metadata_object_vorbiscomment_entry_from_name_value_pair(&entry, "DATE", tag);
-			if (!err1)
-				err |= !FLAC__metadata_object_vorbiscomment_append_comment(metadata[0], entry, /*copy=*/false); // copy=false: let metadata object take control of entry's allocated string
-			err |= err1;
-		}
-		if (err) {
-			fprintf(stderr, "ERROR: error writing tags to flac, some might be missing.\n");
-			//ok = false;
-		} 
-		metadata[1]->length = 2048; /* set the padding length */
-		ok = encoder.set_metadata(metadata, 2);
+		
+		printf("Output file\n\t%s\n",trackOutPath.c_str());
+		
+		// use the helper
+		helper(trackOutPath,&dec,bits,scale,tpdfDitherPeakAmplitude,trackStart,trackEnd,dsr->getID3Tag(n));
 	}
-	// initialize encoder
-	if(ok) {
-		init_status = encoder.init(outpath.c_str());
-		if(init_status != FLAC__STREAM_ENCODER_INIT_STATUS_OK) {
-			fprintf(stderr, "ERROR: initializing encoder: %s\n", FLAC__StreamEncoderInitStatusString[init_status]);
-			ok = false;
-		}
-	}
-	// creep up to the start point.
-	while (dec.getPosition()<0) {
-		dec.step();
-	}
-	// create a FLAC__int32 buffer to hold the samples as they are converted
-	unsigned int bufferLen = dec.getNumChannels()*flacBlockLen;
-	FLAC__int32* buffer = new FLAC__int32[bufferLen];
-	// MAIN CONVERSION LOOP //
-	while (dec.getPosition()<dec.getLength()-flacBlockLen) {
-		dec.getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude);
-		if(!(ok = encoder.process_interleaved(buffer, flacBlockLen)))
-			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
-		checkTimer(dec.getPositionInSeconds(),dec.getPositionAsPercent());
-	}
-	// delete the old buffer and make a new one with a single sample per chan
-	delete[] buffer;
-	buffer = new FLAC__int32[dec.getNumChannels()];
-	// creep up to the end
-	while (dec.getPosition()<dec.getLength()) {
-		dec.getSamples(buffer,dec.getNumChannels(),scale,tpdfDitherPeakAmplitude);
-		if(!(ok = encoder.process_interleaved(buffer, 1)))
-			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
-		checkTimer(dec.getPositionInSeconds(),dec.getPositionAsPercent());
-	}
-	delete[] buffer;
-	// close the flac file
-	ok &= encoder.finish();
-	// report back to the user
-	printf("\33[2K\r");
-	printf("%3.1f%%\n",dec.getPositionAsPercent());
-	if (ok) {
-		printf("Conversion completed sucessfully.\n");
-	} else {
-		printf("Error during conversion.\n");
-		fprintf(stderr, "encoding: %s\n", ok? "succeeded" : "FAILED");
-		fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
-	}
-	// free things
-	FLAC__metadata_object_delete(metadata[0]);
-	FLAC__metadata_object_delete(metadata[1]);
-	return 0;
 }

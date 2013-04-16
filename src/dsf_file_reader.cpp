@@ -50,6 +50,8 @@
  */
 
 #include "dsf_file_reader.h"
+#include "taglib/tfile.h"
+#include "taglib/id3v2tag.h"
 
 static bool blockBufferAllocated = false;
 
@@ -60,7 +62,7 @@ static bool blockBufferAllocated = false;
  */
 dsfFileReader::dsfFileReader(char* filePath) : dsdSampleReader()
 {
-	
+	this->filePath = filePath;
 	// first let's open the file
 	file.open(filePath, fstreamPlus::in | fstreamPlus::binary);
 	// throw exception if that did not work.
@@ -368,6 +370,7 @@ void dsfFileReader::allocateBlockBuffer()
  */
 void dsfFileReader::readMetadata()
 {
+
 	// zero if no metadata
 	if (metaChunkPointer == 0) {
 		return;
@@ -379,11 +382,13 @@ void dsfFileReader::readMetadata()
 		return;
 	}
 	
-	// read the first ID3_TAGHEADERSIZE bytes of the metadata (which should be the header).
-	dsf2flac_uint8 id3header[ID3_TAGHEADERSIZE];
-	if (file.read_uint8(id3header,ID3_TAGHEADERSIZE)) {
+	// read the first 10 bytes of the metadata (which should be the header).
+	dsf2flac_uint8 id3header[10];
+	if (file.read_uint8(id3header,10)) {
 		return;
 	}
+	
+	
 	// check this is actually an id3 header
 	dsf2flac_uint64 id3tagLen;
 	if ( (id3tagLen = ID3_IsTagHeader(id3header)) > -1 )

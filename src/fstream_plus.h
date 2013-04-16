@@ -87,6 +87,8 @@ public:
 	template<typename rType> static void reverseByteOrder(rType* b,stream_size n);
 	template<typename rType> static rType reverseByteOrder(rType b);
 	
+	char* getFilePath();
+	
 private:
 
 	/** templates for the readers **/

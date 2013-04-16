@@ -233,30 +233,3 @@ void dsdSampleReader::resizeBuffer() {
 }
 
 
-
-char* dsdSampleReader::latin1_to_utf8(char* latin1) {
-	return reinterpret_cast<char*>(latin1_to_utf8( reinterpret_cast<unsigned char*>(latin1)));
-}
-unsigned char* dsdSampleReader::latin1_to_utf8(unsigned char* latin1)
-{
-	if (latin1==NULL)
-		return NULL;
-		
-	// count latin1
-	int n=0;
-	while (latin1[n])
-		n++;
-	// make buffer for converted chars
-	unsigned char* utf8 = new unsigned char[n*2+1];
-	unsigned char* utf8_t = utf8;
-
-	while (*latin1) {
-		if (*latin1<128)
-			*utf8++=*latin1++;
-		else
-			*utf8++=0xc2+(*latin1>0xbf), *utf8++=(*latin1++&0x3f)+0x80;
-	}
-	*utf8='\0';
-	
-	return utf8_t;
-}

@@ -37,8 +37,8 @@
  */
 #include "dsdiff_file_reader.h"
 #include "iostream"
-#include "dst_init.h"
-#include "dst_fram.h"
+#include "libdstdec/dst_init.h"
+#include "libdstdec/dst_fram.h"
 static bool chanIdentsAllocated = false;
 static bool sampleBufferAllocated = false;
 static ebunch dstEbunch;
@@ -46,10 +46,10 @@ static bool dstEbunchAllocated = false;
 dsdiffFileReader::dsdiffFileReader(char* filePath) : dsdSampleReader()
 {
 	// set some defaults
-	ast_hours = 0;
-	ast_mins = 0;
-	ast_secs = 0;
-	ast_samples = 0;
+	ast.hours = 0;
+	ast.minutes = 0;
+	ast.seconds = 0;
+	ast.samples = 0;
 	samplesPerChar = 8; // always 8 samples per char (dsd wide not supported by dsdiff).
 	sampleBufferLenPerChan = 1024;
 	bufferMarker = 0;
@@ -67,6 +67,9 @@ dsdiffFileReader::dsdiffFileReader(char* filePath) : dsdSampleReader()
 	// try and read the header data
 	if (!(valid = readHeaders()))
 		return;
+		
+	// find the start and end of the tracks.
+	processTracks();
 		
 	// if DST data, then initialise the decoder
 	if (checkIdent(compressionType,const_cast<dsf2flac_int8*>("DST "))) {
@@ -245,6 +248,38 @@ bool dsdiffFileReader::step()
 	
 	posMarker++;
 	return ok;
+}
+/** 
+ * dsf2flac_uint64 dsdiffFileReader::getTrackStart(dsf2flac_uint32 trackNum);
+ * 
+ * return the index to the first sample of the nth track
+ */
+dsf2flac_uint64 dsdiffFileReader::getTrackStart(dsf2flac_uint32 trackNum) {
+	if (trackNum >= numTracks)
+		return 0;
+	return trackStartPositions[trackNum];
+}
+/** 
+ * dsf2flac_uint64 dsdiffFileReader::getTrackEnd(dsf2flac_uint32 trackNum);
+ * 
+ * return the index to the last sample of the nth track
+ */
+dsf2flac_uint64 dsdiffFileReader::getTrackEnd(dsf2flac_uint32 trackNum) {
+	if (trackNum >= numTracks)
+		return getLength();
+	return trackEndPositions[trackNum];
+		
+}
+/** 
+ * ID3_Tag dsdiffFileReader::getID3Tag(dsf2flac_uint32 trackNum);
+ * 
+ * Public function, returns id3tags for the specified track
+ * or NULL if there is no such tag.
+ */
+ ID3_Tag dsdiffFileReader::getID3Tag(dsf2flac_uint32 trackNum) {
+	if (trackNum >= tags.size())
+		return NULL;
+	return tags[trackNum];
 }
 /**
  * void dsdiffFileReader::readHeaders()
@@ -523,22 +558,22 @@ bool dsdiffFileReader::readChunk_ABSS(dsf2flac_uint64 chunkStart)
 		return false;
 	}
 	// hours
-	if (file.read_uint16_rev(&ast_hours,1)) {
+	if (file.read_uint16_rev(&ast.hours,1)) {
 		errorMsg = "dsdiffFileReader::readChunk_ABSS:file read error";
 		return false;
 	}
 	// mins
-	if (file.read_uint8(&ast_mins,1)) {
+	if (file.read_uint8(&ast.minutes,1)) {
 		errorMsg = "dsdiffFileReader::readChunk_ABSS:file read error";
 		return false;
 	}
 	// secs
-	if (file.read_uint8(&ast_secs,1)) {
+	if (file.read_uint8(&ast.seconds,1)) {
 		errorMsg = "dsdiffFileReader::readChunk_ABSS:file read error";
 		return false;
 	}
 	// samples
-	if (file.read_uint32_rev(&ast_samples,1)) {
+	if (file.read_uint32_rev(&ast.samples,1)) {
 		errorMsg = "dsdiffFileReader::readChunk_ABSS:file read error";
 		return false;
 	}
@@ -740,6 +775,59 @@ bool dsdiffFileReader::readChunk_MARK(dsf2flac_uint64 chunkStart)
 	//dispMarker(m);
 	return true;
 }
+
+
+dsf2flac_uint64 decodeMarkerPosition(DsdiffAst ast, DsdiffMarker marker, dsf2flac_uint32 fs) {
+	dsf2flac_int64 dhr = (dsf2flac_int64) marker.hours - (dsf2flac_int64) ast.hours;
+	dsf2flac_int64 dmi = (dsf2flac_int64) marker.minutes - (dsf2flac_int64) ast.minutes;
+	dsf2flac_int64 dse = (dsf2flac_int64) marker.seconds - (dsf2flac_int64) ast.seconds;
+	dsf2flac_int64 dsa = (dsf2flac_int64) marker.samples - (dsf2flac_int64) ast.samples;
+	dsf2flac_int64 pos = ( dhr*60*60 + dmi*60 + dse ) * fs + dsa;
+	pos += marker.offset;
+	return pos; // note div by 8 to give position in chars
+}
+
+
+void dsdiffFileReader::processTracks() {
+	
+	numTracks = 0;
+	dsf2flac_uint64 thisTrackStart = 0;
+	bool inTrack = false;
+	
+	for (unsigned int i = 0; i < markers.size(); i++) {
+		
+		// we only care about track markers
+		if (markers[i].markType != 0 && markers[i].markType != 1)
+			continue;
+			
+		// find the position of this marker in chars
+		dsf2flac_uint64 pos = decodeMarkerPosition(ast,markers[i],samplingFreq);
+		
+		// if we are inTrack then this marker must denote the end of the current track
+		if (inTrack) {
+			// add the track
+			numTracks ++;
+			trackStartPositions.push_back(thisTrackStart);
+			trackEndPositions.push_back(pos - 1);
+			inTrack = false;
+		}
+		
+		// if track start maker record pos and flag that we are inTrack.
+		if (markers[i].markType == 0) {
+			thisTrackStart = pos;
+			inTrack = true;
+		}
+	}
+	
+	// if there are no markers then make a sensible default
+	if ( numTracks ==0 ) {
+		numTracks = 1;
+		trackStartPositions.push_back(0);
+		trackEndPositions.push_back(getLength());
+	}
+	
+	return;
+}
 void dsdiffFileReader::dispMarker(DsdiffMarker m)
 {
 	printf("\nmarkType:\t%u\n",m.markType);
@@ -905,7 +993,7 @@ bool dsdiffFileReader::readChunk_DST(dsf2flac_uint64 chunkStart)
 		subChunkStart = subChunkStart + subChunkSz;
 	}
 	if (found_frte) {
-		sampleCountPerChan = dstInfo.numFrames * dstInfo.frameSizeInSamplesPerChan;
+		sampleCountPerChan = (dsf2flac_uint64)dstInfo.numFrames * (dsf2flac_uint64)dstInfo.frameSizeInSamplesPerChan;
 		sampleBufferLenPerChan = dstInfo.frameSizeInBytesPerChan;
 	}
 	return found_frte && found_dstf;
@@ -985,10 +1073,10 @@ void dsdiffFileReader::dispFileInfo()
 		printf("chanIdent%u: %s\n",i,chanIdents[i]);
 	printf("compressionType: %s\n",compressionType);
 	printf("compressionName: %s\n",compressionName);
-	printf("ast_hours: %u\n",ast_hours);
-	printf("ast_mins: %d\n",ast_mins);
-	printf("ast_secs: %d\n",ast_secs);
-	printf("ast_samples: %u\n",ast_samples);
+	printf("ast_hours: %u\n",ast.hours);
+	printf("ast_mins: %d\n",ast.minutes);
+	printf("ast_secs: %d\n",ast.seconds);
+	printf("ast_samples: %u\n",ast.samples);
 	printf("sampleDataPointer: %lu\n",sampleDataPointer);
 	printf("sampleCount: %lu\n",sampleCountPerChan);
 }

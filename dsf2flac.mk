@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Jack Oclee-Brown
-Date                   :=08/04/13
+Date                   :=16/04/13
 CodeLitePath           :="/home/jacko/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -36,7 +36,7 @@ ObjectsFileList        :="dsf2flac.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
 LinkOptions            :=  -static
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)./src/ $(IncludeSwitch)./src/libdstdec 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch)./src/ 
 IncludePCH             := 
 RcIncludePath          := 
 Libs                   := $(LibrarySwitch)FLAC++ $(LibrarySwitch)FLAC $(LibrarySwitch)boost_system $(LibrarySwitch)boost_timer $(LibrarySwitch)boost_filesystem $(LibrarySwitch)boost_chrono $(LibrarySwitch)id3 $(LibrarySwitch)z $(LibrarySwitch)rt $(LibrarySwitch)ogg 
@@ -58,8 +58,8 @@ CFLAGS   :=  -O3 -Wall $(Preprocessors)
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/src_cmdline$(ObjectSuffix) $(IntermediateDirectory)/src_dsd_decimator$(ObjectSuffix) $(IntermediateDirectory)/src_dsd_sample_reader$(ObjectSuffix) $(IntermediateDirectory)/src_dsf_file_reader$(ObjectSuffix) $(IntermediateDirectory)/src_filters$(ObjectSuffix) $(IntermediateDirectory)/src_main$(ObjectSuffix) $(IntermediateDirectory)/src_dsdiff_file_reader$(ObjectSuffix) $(IntermediateDirectory)/src_fstream_plus$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_ccp_calc$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_dst_init$(ObjectSuffix) \
-	$(IntermediateDirectory)/libdstdec_dst_fram$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_dst_data$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_unpack_dst$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/src_cmdline$(ObjectSuffix) $(IntermediateDirectory)/src_dsd_decimator$(ObjectSuffix) $(IntermediateDirectory)/src_dsd_sample_reader$(ObjectSuffix) $(IntermediateDirectory)/src_dsf_file_reader$(ObjectSuffix) $(IntermediateDirectory)/src_filters$(ObjectSuffix) $(IntermediateDirectory)/src_main$(ObjectSuffix) $(IntermediateDirectory)/src_dsdiff_file_reader$(ObjectSuffix) $(IntermediateDirectory)/src_fstream_plus$(ObjectSuffix) $(IntermediateDirectory)/src_tagConversion$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_ccp_calc$(ObjectSuffix) \
+	$(IntermediateDirectory)/libdstdec_dst_init$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_dst_fram$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_dst_data$(ObjectSuffix) $(IntermediateDirectory)/libdstdec_unpack_dst$(ObjectSuffix) 
 
 
 
@@ -150,6 +150,14 @@ $(IntermediateDirectory)/src_fstream_plus$(DependSuffix): ./src/fstream_plus.cpp
 $(IntermediateDirectory)/src_fstream_plus$(PreprocessSuffix): ./src/fstream_plus.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_fstream_plus$(PreprocessSuffix) "./src/fstream_plus.cpp"
 
+$(IntermediateDirectory)/src_tagConversion$(ObjectSuffix): src/tagConversion.cpp $(IntermediateDirectory)/src_tagConversion$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/jacko/programming/codelite/dsf2pcm/src/tagConversion.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/src_tagConversion$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/src_tagConversion$(DependSuffix): src/tagConversion.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/src_tagConversion$(ObjectSuffix) -MF$(IntermediateDirectory)/src_tagConversion$(DependSuffix) -MM "src/tagConversion.cpp"
+
+$(IntermediateDirectory)/src_tagConversion$(PreprocessSuffix): src/tagConversion.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/src_tagConversion$(PreprocessSuffix) "src/tagConversion.cpp"
+
 $(IntermediateDirectory)/libdstdec_ccp_calc$(ObjectSuffix): src/libdstdec/ccp_calc.c $(IntermediateDirectory)/libdstdec_ccp_calc$(DependSuffix)
 	$(CC) $(SourceSwitch) "/home/jacko/programming/codelite/dsf2pcm/src/libdstdec/ccp_calc.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/libdstdec_ccp_calc$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/libdstdec_ccp_calc$(DependSuffix): src/libdstdec/ccp_calc.c
@@ -220,6 +228,9 @@ clean:
 	$(RM) $(IntermediateDirectory)/src_fstream_plus$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/src_fstream_plus$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/src_fstream_plus$(PreprocessSuffix)
+	$(RM) $(IntermediateDirectory)/src_tagConversion$(ObjectSuffix)
+	$(RM) $(IntermediateDirectory)/src_tagConversion$(DependSuffix)
+	$(RM) $(IntermediateDirectory)/src_tagConversion$(PreprocessSuffix)
 	$(RM) $(IntermediateDirectory)/libdstdec_ccp_calc$(ObjectSuffix)
 	$(RM) $(IntermediateDirectory)/libdstdec_ccp_calc$(DependSuffix)
 	$(RM) $(IntermediateDirectory)/libdstdec_ccp_calc$(PreprocessSuffix)

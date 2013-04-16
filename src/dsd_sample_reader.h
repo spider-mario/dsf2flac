@@ -53,6 +53,7 @@
 #include "stdio.h"
 #include "dsf2flac_types.h"
 #include <boost/circular_buffer.hpp>
+#include "id3/tag.h"
 
 static const dsf2flac_uint32 defaultBufferLength = 5000;
 
@@ -67,16 +68,15 @@ public:
 	virtual void rewind() {}; // resets the dsd reader to the start of the dsd data. Implementors should call clearBuffer.
 	virtual dsf2flac_int64  getLength() {return 1;}; // length of file in samples
 	virtual dsf2flac_uint32 getNumChannels() {return 2;}; // number of channels in the file
-	virtual dsf2flac_uint32 getSamplingFreq() {return 44100;}; // the sampling freq of the dsd data
-	// CHILD CLASSES CAN OPTIONALLY OVERRIDE THESE!
-	virtual char* getArtist() {return NULL;} 
-	virtual char* getAlbum() {return NULL;}
-	virtual char* getTitle() {return NULL;}
-	virtual char* getTrack() {return NULL;}
-	virtual char* getYear() {return NULL;}
+	virtual dsf2flac_uint32 getSamplingFreq() {return 44100*64;}; // the sampling freq of the dsd data
+	ID3_Tag getID3Tag() {return getID3Tag(1);};
+	virtual ID3_Tag getID3Tag(dsf2flac_uint32 trackNum) {return NULL;};
 	virtual bool msbIsYoungest() {return true;} // the data is stored in 8-bit chars, returns true if the left most bit (msb) is the youngest.
 	virtual dsf2flac_uint8 getIdleSample() { return 0x69; }; // returns the idle tone used by this reader.
 	virtual bool samplesAvailable() { return getPosition()<getLength(); }; // false when no more samples left
+	virtual dsf2flac_uint32 getNumTracks() {return 1;}; // the number of audio tracks in the dsd data
+	virtual dsf2flac_uint64 getTrackStart(dsf2flac_uint32 trackNum) { return 0; } // return the index to the first sample of the nth track
+	virtual dsf2flac_uint64 getTrackEnd(dsf2flac_uint32 trackNum) { return getLength(); } // return the index to the first sample of the nth track
 	// positioning.
 	// public methods
 	boost::circular_buffer<dsf2flac_uint8>* getBuffer(); // get the char sample buffers (1 per channel) by default filled with getIdleSample()
@@ -91,7 +91,6 @@ public:
 	std::string getErrorMsg();
 	// static method to help out with latin1 charset
 	static char* latin1_to_utf8(char* latin1);
-	static unsigned char* latin1_to_utf8(unsigned char* latin1);
 protected:
 	// protected properties
 	boost::circular_buffer<dsf2flac_uint8>* circularBuffers;

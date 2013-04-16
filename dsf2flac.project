@@ -38,6 +38,8 @@
       <File Name="src/libdstdec/unpack_dst.c"/>
       <File Name="src/libdstdec/unpack_dst.h"/>
     </VirtualDirectory>
+    <File Name="src/tagConversion.cpp"/>
+    <File Name="src/tagConversion.h"/>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
   <Dependencies Name="Release"/>
@@ -100,7 +102,6 @@
     <Configuration Name="Release" CompilerType="gnu g++" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
       <Compiler Options="-O3;-Wall" C_Options="-O3;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
         <IncludePath Value="./src/"/>
-        <IncludePath Value="./src/libdstdec"/>
       </Compiler>
       <Linker Options="-static" Required="yes">
         <Library Value="FLAC++"/>
@@ -115,7 +116,7 @@
         <Library Value="ogg"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments=" -i /home/jacko/Music/UnknownAlbum.dff" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="-i /home/jacko/Music/SACD/08-FAURÉSicilienne.dsf" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="no"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
