@@ -80,6 +80,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a>  </div>
   <div class="headertitle">
@@ -87,7 +89,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 <!-- doxytag: class="DsfFileReader" --><!-- doxytag: inherits="DsdSampleReader" -->
-<p>This class extends dsdSampleReader providing acces to dsd samples and other info from dsf files.  
+<p>This class extends dsdSampleReader providing access to dsd samples and other info from dsf files.  
  <a href="classDsfFileReader.html#details">More...</a></p>
 
 <p><code>#include &lt;dsf_file_reader.h&gt;</code></p>
@@ -109,53 +111,80 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a3e6e305f6c46254aaf80551bbb67c5ef"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a6517784f4830df88eb1860c3c064177a">~DsfFileReader</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class destructor.  <a href="#a6517784f4830df88eb1860c3c064177a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a9f6133d1056a55ebcfb21a5ef40781ba">getSamplingFreq</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the DSD sampling rate of this reader (Hz).  <a href="#a9f6133d1056a55ebcfb21a5ef40781ba"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a9a8d618cf743e2b20c68aa295619f31d">step</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Step the reader forward by 8 DSD samples.  <a href="#a9a8d618cf743e2b20c68aa295619f31d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a421cd3e3e3ab13584cc1d7529079e318">rewind</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the reader position back to the start of the DSD data.  <a href="#a421cd3e3e3ab13584cc1d7529079e318"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1a32d69f3c592ed51cac6b2f17cd4503"></a><!-- doxytag: member="DsfFileReader::getLength" ref="a1a32d69f3c592ed51cac6b2f17cd4503" args="()" -->
-dsf2flac_int64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a1a32d69f3c592ed51cac6b2f17cd4503">getLength</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of DSD samples in the reader. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3339ce700e999365290ef880acf12d92"></a><!-- doxytag: member="DsfFileReader::getNumChannels" ref="a3339ce700e999365290ef880acf12d92" args="()" -->
-dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a3339ce700e999365290ef880acf12d92">getNumChannels</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of channels in the reader. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f6133d1056a55ebcfb21a5ef40781ba"></a><!-- doxytag: member="DsfFileReader::getSamplingFreq" ref="a9f6133d1056a55ebcfb21a5ef40781ba" args="()" -->
-dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a9f6133d1056a55ebcfb21a5ef40781ba">getSamplingFreq</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the DSD sampling rate of this reader (Hz). <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6aa2b69109139e22e1eb378f1336e97"></a><!-- doxytag: member="DsfFileReader::msbIsPlayedFirst" ref="ab6aa2b69109139e22e1eb378f1336e97" args="()" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#ab6aa2b69109139e22e1eb378f1336e97">msbIsPlayedFirst</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the order that the samples are packed into the int8 buffer entries. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb2e1f11fe4aa69bfd22446efe4ef4b9"></a><!-- doxytag: member="DsfFileReader::samplesAvailable" ref="adb2e1f11fe4aa69bfd22446efe4ef4b9" args="()" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#adb2e1f11fe4aa69bfd22446efe4ef4b9">samplesAvailable</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns false if there are no more samples left in the reader. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a22a1f631dcb2309c3da20efbde2aea71"></a><!-- doxytag: member="DsfFileReader::getID3Tag" ref="a22a1f631dcb2309c3da20efbde2aea71" args="(dsf2flac_uint32 trackNum)" -->
-ID3_Tag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a22a1f631dcb2309c3da20efbde2aea71">getID3Tag</a> (dsf2flac_uint32 trackNum)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ID3 tag corresponding to the provided track number. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1c936df8ddfdd010c0e821b9ac1cfab0"></a><!-- doxytag: member="DsfFileReader::dispFileInfo" ref="a1c936df8ddfdd010c0e821b9ac1cfab0" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a1c936df8ddfdd010c0e821b9ac1cfab0">dispFileInfo</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Can be called to display some useful info to stdout. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_int64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a1a32d69f3c592ed51cac6b2f17cd4503">getLength</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of DSD samples in the reader.  <a href="#a1a32d69f3c592ed51cac6b2f17cd4503"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a3339ce700e999365290ef880acf12d92">getNumChannels</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of channels in the reader.  <a href="#a3339ce700e999365290ef880acf12d92"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#ab6aa2b69109139e22e1eb378f1336e97">msbIsPlayedFirst</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the order that the samples are packed into the int8 buffer entries.  <a href="#ab6aa2b69109139e22e1eb378f1336e97"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#adb2e1f11fe4aa69bfd22446efe4ef4b9">samplesAvailable</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns false if there are no more samples left in the reader.  <a href="#adb2e1f11fe4aa69bfd22446efe4ef4b9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ID3_Tag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a22a1f631dcb2309c3da20efbde2aea71">getID3Tag</a> (dsf2flac_uint32 trackNum)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ID3 tag corresponding to the provided track number.  <a href="#a22a1f631dcb2309c3da20efbde2aea71"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a1c936df8ddfdd010c0e821b9ac1cfab0">dispFileInfo</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Can be called to display some useful info to stdout.  <a href="#a1c936df8ddfdd010c0e821b9ac1cfab0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#af38ca8dd15acd893825877655eaff344">isValid</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return false if the reader is invalid (format/file error for example).  <a href="#af38ca8dd15acd893825877655eaff344"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a55a93bdd363ad0caf9cd53d118faaed0">getErrorMsg</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a message explaining why the reader is invalid.  <a href="#a55a93bdd363ad0caf9cd53d118faaed0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_float64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a03a1ccf5fe2002951958b1a0315c0c17">getLengthInSeconds</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total length of the reader in seconds.  <a href="#a03a1ccf5fe2002951958b1a0315c0c17"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a59a12a45074ff35f40ea7632b4474b0d">getNumTracks</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of audio tracks in the reader.  <a href="#a59a12a45074ff35f40ea7632b4474b0d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual dsf2flac_uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a7acaaebbddc2d42e69fd999bd0d0c394">getTrackStart</a> (dsf2flac_uint32 trackNum)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the start position of the specified track.  <a href="#a7acaaebbddc2d42e69fd999bd0d0c394"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual dsf2flac_uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#af6f417791f38ba8140443b322bace86f">getTrackEnd</a> (dsf2flac_uint32 trackNum)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the end position of the specified track.  <a href="#af6f417791f38ba8140443b322bace86f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_int64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#aa4146b9597508d0d0cba9687cac10b0a">getPosition</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current position of the reader in DSD samples.  <a href="#aa4146b9597508d0d0cba9687cac10b0a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_float64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#ac9602a1a4068718248603510360d5a69">getPositionInSeconds</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current position of the reader in seconds.  <a href="#ac9602a1a4068718248603510360d5a69"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_float64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a482617bc01d3fd23d40ae5c6cccda769">getPositionAsPercent</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current position of the reader as a percent of the total length.  <a href="#a482617bc01d3fd23d40ae5c6cccda769"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">boost::circular_buffer<br class="typebreak"/>
+&lt; dsf2flac_uint8 &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#af89cd94df23fbc7a14f4693d41e559d9">getBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of circular buffers, one for each track.  <a href="#af89cd94df23fbc7a14f4693d41e559d9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a4047cf0d1e5509d09954b844e57194b5">getBufferLength</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples).  <a href="#a4047cf0d1e5509d09954b844e57194b5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a5853c6883b69c0e7431393b3af217579">setBufferLength</a> (dsf2flac_uint32 bufferLength)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples).  <a href="#a5853c6883b69c0e7431393b3af217579"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ID3_Tag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a10bc171b055f01dbfd8fdc13c8f29e05">getID3Tag</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ID3 tag of the first track in this reader.  <a href="#a10bc171b055f01dbfd8fdc13c8f29e05"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual dsf2flac_uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a57314cc6f55aa3b1302c4c6f2e1089d9">getIdleSample</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the idle tone used by this reader, by default the buffers are populated with this idle tone.  <a href="#a57314cc6f55aa3b1302c4c6f2e1089d9"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a54998d3ac12b20f0b30c4e781d266b19">latin1_to_utf8</a> (char *latin1)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">convert latin1 encoded char into utf8.  <a href="#a54998d3ac12b20f0b30c4e781d266b19"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a1a06abf0beea3efbedf16fbbf46efc74">allocateBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates the circular buffers.  <a href="#a1a06abf0beea3efbedf16fbbf46efc74"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a4985ec156a185ee79da43eaceb5f78f7">clearBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the buffers and fill with idleSample.  <a href="#a4985ec156a185ee79da43eaceb5f78f7"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a926c8fb9f3b533bcaf75639820af8a7d"></a><!-- doxytag: member="DsfFileReader::allocateBlockBuffer" ref="a926c8fb9f3b533bcaf75639820af8a7d" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a926c8fb9f3b533bcaf75639820af8a7d">allocateBlockBuffer</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates the block buffer which holds the dsd data read from the file for when it is required by the circular buffer. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0acf24e6968f50adf614e7331826c5de"></a><!-- doxytag: member="DsfFileReader::readHeaders" ref="a0acf24e6968f50adf614e7331826c5de" args="()" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a0acf24e6968f50adf614e7331826c5de">readHeaders</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads lots of info from the file. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a57713d52cd8412cfc546f295c75f29"></a><!-- doxytag: member="DsfFileReader::readMetadata" ref="a4a57713d52cd8412cfc546f295c75f29" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a4a57713d52cd8412cfc546f295c75f29">readMetadata</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to read the metadata from the end of the dsf file. <br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8152988e7fe4ad2f46ce0e7ff5d98bc3"></a><!-- doxytag: member="DsfFileReader::readNextBlock" ref="a8152988e7fe4ad2f46ce0e7ff5d98bc3" args="()" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a8152988e7fe4ad2f46ce0e7ff5d98bc3">readNextBlock</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This private function is called whenever new data from the file is needed for the block buffer. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a926c8fb9f3b533bcaf75639820af8a7d">allocateBlockBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates the block buffer which holds the dsd data read from the file for when it is required by the circular buffer.  <a href="#a926c8fb9f3b533bcaf75639820af8a7d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a0acf24e6968f50adf614e7331826c5de">readHeaders</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads lots of info from the file.  <a href="#a0acf24e6968f50adf614e7331826c5de"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a4a57713d52cd8412cfc546f295c75f29">readMetadata</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Attempts to read the metadata from the end of the dsf file.  <a href="#a4a57713d52cd8412cfc546f295c75f29"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a8152988e7fe4ad2f46ce0e7ff5d98bc3">readNextBlock</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This private function is called whenever new data from the file is needed for the block buffer.  <a href="#a8152988e7fe4ad2f46ce0e7ff5d98bc3"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a252533661e57096baadeb5c969f37f26"></a><!-- doxytag: member="DsfFileReader::checkIdent" ref="a252533661e57096baadeb5c969f37f26" args="(dsf2flac_int8 *a, dsf2flac_int8 *b)" -->
-static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a252533661e57096baadeb5c969f37f26">checkIdent</a> (dsf2flac_int8 *a, dsf2flac_int8 *b)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A handy little helper for checking idents. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsfFileReader.html#a252533661e57096baadeb5c969f37f26">checkIdent</a> (dsf2flac_int8 *a, dsf2flac_int8 *b)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A handy little helper for checking idents.  <a href="#a252533661e57096baadeb5c969f37f26"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>This class extends dsdSampleReader providing acces to dsd samples and other info from dsf files. </p>
+<div class="textblock"><p>This class extends dsdSampleReader providing access to dsd samples and other info from dsf files. </p>
 <p>Some of the rarer features of dsf are not well tested due to a lack of files: 8bit dsd </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a3e6e305f6c46254aaf80551bbb67c5ef"></a><!-- doxytag: member="DsfFileReader::DsfFileReader" ref="a3e6e305f6c46254aaf80551bbb67c5ef" args="(char *filePath)" -->
@@ -198,6 +227,527 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a926c8fb9f3b533bcaf75639820af8a7d"></a><!-- doxytag: member="DsfFileReader::allocateBlockBuffer" ref="a926c8fb9f3b533bcaf75639820af8a7d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classDsfFileReader.html#a926c8fb9f3b533bcaf75639820af8a7d">DsfFileReader::allocateBlockBuffer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Allocates the block buffer which holds the dsd data read from the file for when it is required by the circular buffer. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1a06abf0beea3efbedf16fbbf46efc74"></a><!-- doxytag: member="DsfFileReader::allocateBuffer" ref="a1a06abf0beea3efbedf16fbbf46efc74" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classDsdSampleReader.html#a1a06abf0beea3efbedf16fbbf46efc74">DsdSampleReader::allocateBuffer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Allocates the circular buffers. </p>
+<p>Child classes need to call this once they know the number of channels! </p>
+
+</div>
+</div>
+<a class="anchor" id="a252533661e57096baadeb5c969f37f26"></a><!-- doxytag: member="DsfFileReader::checkIdent" ref="a252533661e57096baadeb5c969f37f26" args="(dsf2flac_int8 *a, dsf2flac_int8 *b)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsfFileReader.html#a252533661e57096baadeb5c969f37f26">DsfFileReader::checkIdent</a> </td>
+          <td>(</td>
+          <td class="paramtype">dsf2flac_int8 *&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dsf2flac_int8 *&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [static, private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>A handy little helper for checking idents. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4985ec156a185ee79da43eaceb5f78f7"></a><!-- doxytag: member="DsfFileReader::clearBuffer" ref="a4985ec156a185ee79da43eaceb5f78f7" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classDsdSampleReader.html#a4985ec156a185ee79da43eaceb5f78f7">DsdSampleReader::clearBuffer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Clear the buffers and fill with idleSample. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1c936df8ddfdd010c0e821b9ac1cfab0"></a><!-- doxytag: member="DsfFileReader::dispFileInfo" ref="a1c936df8ddfdd010c0e821b9ac1cfab0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classDsfFileReader.html#a1c936df8ddfdd010c0e821b9ac1cfab0">DsfFileReader::dispFileInfo</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Can be called to display some useful info to stdout. </p>
+
+</div>
+</div>
+<a class="anchor" id="af89cd94df23fbc7a14f4693d41e559d9"></a><!-- doxytag: member="DsfFileReader::getBuffer" ref="af89cd94df23fbc7a14f4693d41e559d9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::circular_buffer&lt; dsf2flac_uint8 &gt; * <a class="el" href="classDsdSampleReader.html#af89cd94df23fbc7a14f4693d41e559d9">DsdSampleReader::getBuffer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns an array of circular buffers, one for each track. </p>
+<p>Each circular buffer contains <a class="el" href="classDsdSampleReader.html#a4047cf0d1e5509d09954b844e57194b5" title="Returns the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples)...">getBufferLength()</a> uint8 numbers. The DSD samples are packed into these uint8 numbers. The next uint8 set of 8 DSD samples is added into position 0 when <a class="el" href="classDsdSampleReader.html#a47dec63e6bd4cd9cf5235d8a4cbbe886" title="Step the reader forward by 8 DSD samples.">step()</a> is called. By default the buffer is filled with <a class="el" href="classDsdSampleReader.html#a57314cc6f55aa3b1302c4c6f2e1089d9" title="Return the idle tone used by this reader, by default the buffers are populated with this idle tone...">getIdleSample()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4047cf0d1e5509d09954b844e57194b5"></a><!-- doxytag: member="DsfFileReader::getBufferLength" ref="a4047cf0d1e5509d09954b844e57194b5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classDsdSampleReader.html#a4047cf0d1e5509d09954b844e57194b5">DsdSampleReader::getBufferLength</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples). </p>
+
+</div>
+</div>
+<a class="anchor" id="a55a93bdd363ad0caf9cd53d118faaed0"></a><!-- doxytag: member="DsfFileReader::getErrorMsg" ref="a55a93bdd363ad0caf9cd53d118faaed0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classDsdSampleReader.html#a55a93bdd363ad0caf9cd53d118faaed0">DsdSampleReader::getErrorMsg</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns a message explaining why the reader is invalid. </p>
+
+</div>
+</div>
+<a class="anchor" id="a22a1f631dcb2309c3da20efbde2aea71"></a><!-- doxytag: member="DsfFileReader::getID3Tag" ref="a22a1f631dcb2309c3da20efbde2aea71" args="(dsf2flac_uint32 trackNum)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ID3_Tag <a class="el" href="classDsfFileReader.html#a22a1f631dcb2309c3da20efbde2aea71">DsfFileReader::getID3Tag</a> </td>
+          <td>(</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
+          <td class="paramname"><em>trackNum</em></td><td>)</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the ID3 tag corresponding to the provided track number. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#abf203468082beefa04e80ceacc6df426">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a10bc171b055f01dbfd8fdc13c8f29e05"></a><!-- doxytag: member="DsfFileReader::getID3Tag" ref="a10bc171b055f01dbfd8fdc13c8f29e05" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ID3_Tag <a class="el" href="classDsdSampleReader.html#a10bc171b055f01dbfd8fdc13c8f29e05">DsdSampleReader::getID3Tag</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the ID3 tag of the first track in this reader. </p>
+<p>Useful for when there is only a single track in the reader. </p>
+
+</div>
+</div>
+<a class="anchor" id="a57314cc6f55aa3b1302c4c6f2e1089d9"></a><!-- doxytag: member="DsfFileReader::getIdleSample" ref="a57314cc6f55aa3b1302c4c6f2e1089d9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual dsf2flac_uint8 <a class="el" href="classDsdSampleReader.html#a57314cc6f55aa3b1302c4c6f2e1089d9">DsdSampleReader::getIdleSample</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the idle tone used by this reader, by default the buffers are populated with this idle tone. </p>
+
+</div>
+</div>
+<a class="anchor" id="a1a32d69f3c592ed51cac6b2f17cd4503"></a><!-- doxytag: member="DsfFileReader::getLength" ref="a1a32d69f3c592ed51cac6b2f17cd4503" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_int64 <a class="el" href="classDsfFileReader.html#a1a32d69f3c592ed51cac6b2f17cd4503">DsfFileReader::getLength</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the total number of DSD samples in the reader. </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#abeac2f3086bbb590f403a17a9fad112b">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a03a1ccf5fe2002951958b1a0315c0c17"></a><!-- doxytag: member="DsfFileReader::getLengthInSeconds" ref="a03a1ccf5fe2002951958b1a0315c0c17" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_float64 <a class="el" href="classDsdSampleReader.html#a03a1ccf5fe2002951958b1a0315c0c17">DsdSampleReader::getLengthInSeconds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the total length of the reader in seconds. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3339ce700e999365290ef880acf12d92"></a><!-- doxytag: member="DsfFileReader::getNumChannels" ref="a3339ce700e999365290ef880acf12d92" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classDsfFileReader.html#a3339ce700e999365290ef880acf12d92">DsfFileReader::getNumChannels</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the number of channels in the reader. </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#ae70fe02d2c45eed47980e3fd47a5fd23">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a59a12a45074ff35f40ea7632b4474b0d"></a><!-- doxytag: member="DsfFileReader::getNumTracks" ref="a59a12a45074ff35f40ea7632b4474b0d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual dsf2flac_uint32 <a class="el" href="classDsdSampleReader.html#a59a12a45074ff35f40ea7632b4474b0d">DsdSampleReader::getNumTracks</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the number of audio tracks in the reader. </p>
+
+<p>Reimplemented in <a class="el" href="classDsdiffFileReader.html#a3ddd8292bd0d2666009e44b7dd9d2474">DsdiffFileReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa4146b9597508d0d0cba9687cac10b0a"></a><!-- doxytag: member="DsfFileReader::getPosition" ref="aa4146b9597508d0d0cba9687cac10b0a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_int64 <a class="el" href="classDsdSampleReader.html#aa4146b9597508d0d0cba9687cac10b0a">DsdSampleReader::getPosition</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the current position of the reader in DSD samples. </p>
+<p>This is the position of the first entry in the circular buffers. </p>
+
+</div>
+</div>
+<a class="anchor" id="a482617bc01d3fd23d40ae5c6cccda769"></a><!-- doxytag: member="DsfFileReader::getPositionAsPercent" ref="a482617bc01d3fd23d40ae5c6cccda769" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_float64 <a class="el" href="classDsdSampleReader.html#a482617bc01d3fd23d40ae5c6cccda769">DsdSampleReader::getPositionAsPercent</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the current position of the reader as a percent of the total length. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac9602a1a4068718248603510360d5a69"></a><!-- doxytag: member="DsfFileReader::getPositionInSeconds" ref="ac9602a1a4068718248603510360d5a69" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_float64 <a class="el" href="classDsdSampleReader.html#ac9602a1a4068718248603510360d5a69">DsdSampleReader::getPositionInSeconds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the current position of the reader in seconds. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9f6133d1056a55ebcfb21a5ef40781ba"></a><!-- doxytag: member="DsfFileReader::getSamplingFreq" ref="a9f6133d1056a55ebcfb21a5ef40781ba" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classDsfFileReader.html#a9f6133d1056a55ebcfb21a5ef40781ba">DsfFileReader::getSamplingFreq</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the DSD sampling rate of this reader (Hz). </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#a8dd5f7fa19f0d364fb32e8d956b7c807">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af6f417791f38ba8140443b322bace86f"></a><!-- doxytag: member="DsfFileReader::getTrackEnd" ref="af6f417791f38ba8140443b322bace86f" args="(dsf2flac_uint32 trackNum)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual dsf2flac_uint64 <a class="el" href="classDsdSampleReader.html#af6f417791f38ba8140443b322bace86f">DsdSampleReader::getTrackEnd</a> </td>
+          <td>(</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
+          <td class="paramname"><em>trackNum</em></td><td>)</td>
+          <td><code> [inline, virtual, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the end position of the specified track. </p>
+
+<p>Reimplemented in <a class="el" href="classDsdiffFileReader.html#a4c6eefc2cc805e63c14482602a896534">DsdiffFileReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a7acaaebbddc2d42e69fd999bd0d0c394"></a><!-- doxytag: member="DsfFileReader::getTrackStart" ref="a7acaaebbddc2d42e69fd999bd0d0c394" args="(dsf2flac_uint32 trackNum)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual dsf2flac_uint64 <a class="el" href="classDsdSampleReader.html#a7acaaebbddc2d42e69fd999bd0d0c394">DsdSampleReader::getTrackStart</a> </td>
+          <td>(</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
+          <td class="paramname"><em>trackNum</em></td><td>)</td>
+          <td><code> [inline, virtual, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the start position of the specified track. </p>
+
+<p>Reimplemented in <a class="el" href="classDsdiffFileReader.html#aae619f113c088885ab00befa2fcb9778">DsdiffFileReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af38ca8dd15acd893825877655eaff344"></a><!-- doxytag: member="DsfFileReader::isValid" ref="af38ca8dd15acd893825877655eaff344" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsdSampleReader.html#af38ca8dd15acd893825877655eaff344">DsdSampleReader::isValid</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return false if the reader is invalid (format/file error for example). </p>
+
+</div>
+</div>
+<a class="anchor" id="a54998d3ac12b20f0b30c4e781d266b19"></a><!-- doxytag: member="DsfFileReader::latin1_to_utf8" ref="a54998d3ac12b20f0b30c4e781d266b19" args="(char *latin1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* <a class="el" href="classDsdSampleReader.html#a54998d3ac12b20f0b30c4e781d266b19">DsdSampleReader::latin1_to_utf8</a> </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>latin1</em></td><td>)</td>
+          <td><code> [static, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>convert latin1 encoded char into utf8. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab6aa2b69109139e22e1eb378f1336e97"></a><!-- doxytag: member="DsfFileReader::msbIsPlayedFirst" ref="ab6aa2b69109139e22e1eb378f1336e97" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsfFileReader.html#ab6aa2b69109139e22e1eb378f1336e97">DsfFileReader::msbIsPlayedFirst</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Describes the order that the samples are packed into the int8 buffer entries. </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#afcf63d915fce58c33317f9b9e38aefc2">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a0acf24e6968f50adf614e7331826c5de"></a><!-- doxytag: member="DsfFileReader::readHeaders" ref="a0acf24e6968f50adf614e7331826c5de" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsfFileReader.html#a0acf24e6968f50adf614e7331826c5de">DsfFileReader::readHeaders</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Reads lots of info from the file. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4a57713d52cd8412cfc546f295c75f29"></a><!-- doxytag: member="DsfFileReader::readMetadata" ref="a4a57713d52cd8412cfc546f295c75f29" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classDsfFileReader.html#a4a57713d52cd8412cfc546f295c75f29">DsfFileReader::readMetadata</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Attempts to read the metadata from the end of the dsf file. </p>
+
+</div>
+</div>
+<a class="anchor" id="a8152988e7fe4ad2f46ce0e7ff5d98bc3"></a><!-- doxytag: member="DsfFileReader::readNextBlock" ref="a8152988e7fe4ad2f46ce0e7ff5d98bc3" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsfFileReader.html#a8152988e7fe4ad2f46ce0e7ff5d98bc3">DsfFileReader::readNextBlock</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>This private function is called whenever new data from the file is needed for the block buffer. </p>
+
+</div>
+</div>
 <a class="anchor" id="a421cd3e3e3ab13584cc1d7529079e318"></a><!-- doxytag: member="DsfFileReader::rewind" ref="a421cd3e3e3ab13584cc1d7529079e318" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -215,7 +765,47 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Set the reader position back to the start of the DSD data. </p>
 <p>Note that child classes implementing this method must call <a class="el" href="classDsdSampleReader.html#a4985ec156a185ee79da43eaceb5f78f7" title="Clear the buffers and fill with idleSample.">clearBuffer()</a>; </p>
 
-<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#aa2545441bf8c641525cb3f2f14349d49">DsdSampleReader</a>.</p>
+<p>Implements <a class="el" href="classDsdSampleReader.html#a144883fdf0f2a4b270b97186bd86dbbb">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="adb2e1f11fe4aa69bfd22446efe4ef4b9"></a><!-- doxytag: member="DsfFileReader::samplesAvailable" ref="adb2e1f11fe4aa69bfd22446efe4ef4b9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsfFileReader.html#adb2e1f11fe4aa69bfd22446efe4ef4b9">DsfFileReader::samplesAvailable</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns false if there are no more samples left in the reader. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#aaca5f3d971b87e0bf13995902bbdabe6">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5853c6883b69c0e7431393b3af217579"></a><!-- doxytag: member="DsfFileReader::setBufferLength" ref="a5853c6883b69c0e7431393b3af217579" args="(dsf2flac_uint32 bufferLength)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsdSampleReader.html#a5853c6883b69c0e7431393b3af217579">DsdSampleReader::setBufferLength</a> </td>
+          <td>(</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
+          <td class="paramname"><em>bufferLength</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples). </p>
+<p>Note that this will cause <a class="el" href="classDsdSampleReader.html#a144883fdf0f2a4b270b97186bd86dbbb" title="Set the reader position back to the start of the DSD data.">rewind()</a> to be called. </p>
 
 </div>
 </div>
@@ -236,7 +826,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>Step the reader forward by 8 DSD samples. </p>
 <p>This causes the next 8 DSD samples to be added into the front of the circular buffers (one uint8). </p>
 
-<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#ab09a298f00c83340ac156e0041ee1838">DsdSampleReader</a>.</p>
+<p>Implements <a class="el" href="classDsdSampleReader.html#a47dec63e6bd4cd9cf5235d8a4cbbe886">DsdSampleReader</a>.</p>
 
 </div>
 </div>
@@ -262,7 +852,7 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 18 2013 23:41:52 for DSF2FLAC by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Oct 13 2013 22:00:19 for DSF2FLAC by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

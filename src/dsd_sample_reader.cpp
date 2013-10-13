@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *
- * Acknowledgements
+ * Acknowledgments
  *
  * Many thanks to the following authors and projects whose work has greatly
  * helped the development of this tool.

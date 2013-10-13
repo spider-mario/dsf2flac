@@ -110,7 +110,7 @@ boost::filesystem::path muti_track_name_helper(boost::filesystem::path outpath, 
  */
 int pcm_track_helper(
 	boost::filesystem::path outpath,
-	dsdDecimator* dec,
+	DsdDecimator* dec,
 	int bits,
 	dsf2flac_float64 scale,
 	dsf2flac_float64 tpdfDitherPeakAmplitude,
@@ -227,7 +227,7 @@ int do_pcm_conversion(
 	bool ok = true;
 
 	// create decimator
-	dsdDecimator dec(dsr,fs);
+	DsdDecimator dec(dsr,fs);
 	if (!dec.isValid()) {
 		printf("%s\n",dec.getErrorMsg().c_str());
 		return 0;
@@ -468,7 +468,7 @@ int main(int argc, char **argv)
 	if (inpath.extension() == ".dsf" || inpath.extension() == ".DSF")
 		dsr = new DsfFileReader((char*)inpath.c_str());
 	else if (inpath.extension() == ".dff" || inpath.extension() == ".DFF")
-		dsr = new dsdiffFileReader((char*)inpath.c_str());
+		dsr = new DsdiffFileReader((char*)inpath.c_str());
 	else {
 		printf("Sorry, only .dff or .dff input files are supported\n");
 		return 0;

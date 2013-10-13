@@ -80,22 +80,25 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pri-methods">Private Member Functions</a> &#124;
-<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
-<a href="#pri-attribs">Private Attributes</a>  </div>
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">dsdiffFileReader Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<!-- doxytag: class="dsdiffFileReader" --><!-- doxytag: inherits="dsdSampleReader" -->
-<p><code>#include &lt;<a class="el" href="dsdiff__file__reader_8h_source.html">dsdiff_file_reader.h</a>&gt;</code></p>
+<!-- doxytag: class="dsdiffFileReader" --><!-- doxytag: inherits="DsdSampleReader" -->
+<p>This class extends dsdSampleReader providing access to dsf samples and other info from dsdff files.  
+ <a href="classdsdiffFileReader.html#details">More...</a></p>
+
+<p><code>#include &lt;dsdiff_file_reader.h&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for dsdiffFileReader:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classdsdiffFileReader.png" usemap="#dsdiffFileReader_map" alt=""/>
   <map id="dsdiffFileReader_map" name="dsdiffFileReader_map">
-<area href="classdsdSampleReader.html" alt="dsdSampleReader" shape="rect" coords="0,0,114,24"/>
+<area href="classDsdSampleReader.html" title="Abstract class defining anything which reads dsd samples from something." alt="DsdSampleReader" shape="rect" coords="0,0,116,24"/>
 </map>
  </div></div>
 
@@ -104,80 +107,81 @@ Inheritance diagram for dsdiffFileReader:</div>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a0644364a7b27cb80774078de328d2056">dsdiffFileReader</a> (char *filePath)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a0644364a7b27cb80774078de328d2056"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a2a93345f77c1ac0b72ca8a56871cdb64">~dsdiffFileReader</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class destructor.  <a href="#a2a93345f77c1ac0b72ca8a56871cdb64"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a87c3469f452e4e985e1634122639a615">step</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Step the reader forward by 8 DSD samples.  <a href="#a87c3469f452e4e985e1634122639a615"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aa6ff9e680ec7f5b7c1abe5db3428faa7">rewind</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#afb5a83fbea5217eba40a40381a60bf9d">dsf2flac_int64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ab499ac4a334327d7da1ab8acc3f77eeb">getLength</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a87a51486ae8526dac7ed40ee3686704c">getNumChannels</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aa5b4aa095307d57131bbbeadd169435d">getSamplingFreq</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the reader position back to the start of the DSD data.  <a href="#aa6ff9e680ec7f5b7c1abe5db3428faa7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_int64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ab499ac4a334327d7da1ab8acc3f77eeb">getLength</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total number of DSD samples in the reader.  <a href="#ab499ac4a334327d7da1ab8acc3f77eeb"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a87a51486ae8526dac7ed40ee3686704c">getNumChannels</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of channels in the reader.  <a href="#a87a51486ae8526dac7ed40ee3686704c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aa5b4aa095307d57131bbbeadd169435d">getSamplingFreq</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the DSD sampling rate of this reader (Hz).  <a href="#aa5b4aa095307d57131bbbeadd169435d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a7c4c8d3960ecb334e42ac7a8a9c4875b">msbIsPlayedFirst</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Describes the order that the samples are packed into the int8 buffer entries.  <a href="#a7c4c8d3960ecb334e42ac7a8a9c4875b"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#af75ba8efcf1808694244117154b97cd3">samplesAvailable</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">ID3_Tag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a72add784b0326974b1d01994d5f194ba">getID3Tag</a> (<a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> trackNum)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a2b1c1b04ad8071f79084ffed7f008898">getNumTracks</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ab5130c1e6f0ac01d60db3dec3e1ea514">getTrackStart</a> (<a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> trackNum)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a8e87af43c9d73ee255daeb072c76bd66">getTrackEnd</a> (<a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> trackNum)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a7bd20444ceba0d35d014f4b137c7bbec">dispFileInfo</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns false if there are no more samples left in the reader.  <a href="#af75ba8efcf1808694244117154b97cd3"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ID3_Tag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a72add784b0326974b1d01994d5f194ba">getID3Tag</a> (dsf2flac_uint32 trackNum)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ID3 tag corresponding to the provided track number.  <a href="#a72add784b0326974b1d01994d5f194ba"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a2b1c1b04ad8071f79084ffed7f008898">getNumTracks</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of audio tracks in the reader.  <a href="#a2b1c1b04ad8071f79084ffed7f008898"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ab5130c1e6f0ac01d60db3dec3e1ea514">getTrackStart</a> (dsf2flac_uint32 trackNum)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the start position of the specified track.  <a href="#ab5130c1e6f0ac01d60db3dec3e1ea514"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a8e87af43c9d73ee255daeb072c76bd66">getTrackEnd</a> (dsf2flac_uint32 trackNum)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the end position of the specified track.  <a href="#a8e87af43c9d73ee255daeb072c76bd66"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#af38ca8dd15acd893825877655eaff344">isValid</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return false if the reader is invalid (format/file error for example).  <a href="#af38ca8dd15acd893825877655eaff344"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a55a93bdd363ad0caf9cd53d118faaed0">getErrorMsg</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a message explaining why the reader is invalid.  <a href="#a55a93bdd363ad0caf9cd53d118faaed0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_float64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a03a1ccf5fe2002951958b1a0315c0c17">getLengthInSeconds</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the total length of the reader in seconds.  <a href="#a03a1ccf5fe2002951958b1a0315c0c17"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_int64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#aa4146b9597508d0d0cba9687cac10b0a">getPosition</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current position of the reader in DSD samples.  <a href="#aa4146b9597508d0d0cba9687cac10b0a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_float64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#ac9602a1a4068718248603510360d5a69">getPositionInSeconds</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current position of the reader in seconds.  <a href="#ac9602a1a4068718248603510360d5a69"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_float64&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a482617bc01d3fd23d40ae5c6cccda769">getPositionAsPercent</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the current position of the reader as a percent of the total length.  <a href="#a482617bc01d3fd23d40ae5c6cccda769"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">boost::circular_buffer<br class="typebreak"/>
+&lt; dsf2flac_uint8 &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#af89cd94df23fbc7a14f4693d41e559d9">getBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an array of circular buffers, one for each track.  <a href="#af89cd94df23fbc7a14f4693d41e559d9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">dsf2flac_uint32&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a4047cf0d1e5509d09954b844e57194b5">getBufferLength</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples).  <a href="#a4047cf0d1e5509d09954b844e57194b5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a5853c6883b69c0e7431393b3af217579">setBufferLength</a> (dsf2flac_uint32 bufferLength)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples).  <a href="#a5853c6883b69c0e7431393b3af217579"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">ID3_Tag&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a10bc171b055f01dbfd8fdc13c8f29e05">getID3Tag</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the ID3 tag of the first track in this reader.  <a href="#a10bc171b055f01dbfd8fdc13c8f29e05"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual dsf2flac_uint8&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a57314cc6f55aa3b1302c4c6f2e1089d9">getIdleSample</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the idle tone used by this reader, by default the buffers are populated with this idle tone.  <a href="#a57314cc6f55aa3b1302c4c6f2e1089d9"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">static char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a54998d3ac12b20f0b30c4e781d266b19">latin1_to_utf8</a> (char *latin1)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">convert latin1 encoded char into utf8.  <a href="#a54998d3ac12b20f0b30c4e781d266b19"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a1a06abf0beea3efbedf16fbbf46efc74">allocateBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates the circular buffers.  <a href="#a1a06abf0beea3efbedf16fbbf46efc74"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDsdSampleReader.html#a4985ec156a185ee79da43eaceb5f78f7">clearBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear the buffers and fill with idleSample.  <a href="#a4985ec156a185ee79da43eaceb5f78f7"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a2c78322eea9f9f8ce4cda1d4ef3fe43f">allocateSampleBuffer</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate the buffer to hold samples.  <a href="#a2c78322eea9f9f8ce4cda1d4ef3fe43f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ae9464c125fa9a4a6ce0fd77d95557473">readNextBlock</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the next block of samples into the buffer.  <a href="#ae9464c125fa9a4a6ce0fd77d95557473"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#adab73c614b12f5b3eb0aa36fc920eb98">processTracks</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a23d6ecfcb529552148a934a524e5fc40">readHeaders</a> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ac1dfbaee3fa571f032684bb1b1a6c5ad">readChunkHeader</a> (<a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *ident, <a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a317db12e1b5be808c369ba97dbf5b1f5">readChunkHeader</a> (<a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *ident, <a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart, <a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> *chunkSz)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a6c4865f58c8a6f25c44f9ddd9e127312">readChunk_FRM8</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a8ea32a8f4b9fe5ff6c6de5257ee063c2">readChunk_FVER</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a7e2ab8729bdc743ed40b795c9ebc827b">readChunk_PROP</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a13166aea6f4cfbbd3baf6c1d44f92203">readChunk_FS</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a5796be5321ad4d8e025c73a205cf7ba2">readChunk_CHNL</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ad465086e717a1d251014bce7d184d3f3">readChunk_CMPR</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a546149090a58b1b1628f3eb02c7d9f82">readChunk_ABSS</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ae730a9748eccb30936932b3b8f79df69">readChunk_DSD</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a102ac250180d7c112ceb6ac3e9432e29">readChunk_DST</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a59d9817a5bcfc5aca7cbb029d84f8bc5">readChunk_DSTF</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aad8ced93045843145fd52777fa16ebfe">readChunk_COMT</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a8f58e06e690103fbc082410181b8d47f">readChunk_LSCO</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a5126ac790e09a223e121aaa794a40021">readChunk_ID3</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a29c44b36ef50fd544ac11e510d7ff9bc">readChunk_DIIN</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aa25d9d06bc157bc015af6b119892c66c">readChunk_EMID</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ad6b285c8e17cec25d472802b651687b3">readChunk_MARK</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#af18a7edc927dc87fa5c21afda5d34e6b">readChunk_DSTI</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ac8c58328b0555f5a024e1e7e7e985097">readChunk_FRTE</a> (<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> chunkStart)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ac94eb57146b8e5be930cdd8f15936912">dispComment</a> (<a class="el" href="structDsdiffComment.html">DsdiffComment</a> c)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ad4bd5f7d47de5b58f45b64135cd82fd4">dispMarker</a> (<a class="el" href="structDsdiffMarker.html">DsdiffMarker</a> m)</td></tr>
-<tr><td colspan="2"><h2><a name="pri-static-methods"></a>
-Static Private Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a93494591172b7b26078ab4e489cc40cc">checkIdent</a> (<a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *a, <a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *b)</td></tr>
-<tr><td colspan="2"><h2><a name="pri-attribs"></a>
-Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classfstreamPlus.html">fstreamPlus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a5462b10300473dc5c14b3c0ced5f3dc3">file</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ad08ea625e1ce70c323148f76da0d644c">dsdiffVersion</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a2ce2e2160421f69ad2c1070d7bc425a9">samplingFreq</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#aea0fd80be9de2dd50c6e1584979fba9f">dsf2flac_uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ad209d3c78d6ab2a9b697df0af499af39">chanNum</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a7d64bc179e0fa24a1615d9a024f191b7">chanIdents</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a2c2bd59e1a9c6893e7940302a3c156a2">compressionType</a> [5]</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aa50b8702198bd54d9e67fa58873f548d">compressionName</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structDsdiffAst.html">DsdiffAst</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aef4b83ed490e147db13944021e6612ea">ast</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#af6d281c1b25a0b8e0d5d2130e2c664fd">sampleDataPointer</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a441476ee377670465180fc4f299c75d1">dstChunkEnd</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a03d310eab1aeb64c8f553fbcd4f896c4">sampleCountPerChan</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#aea0fd80be9de2dd50c6e1584979fba9f">dsf2flac_uint16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a694975e92a4fa8de61f10d1b12d58cbf">lsConfig</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structDsdiffComment.html">DsdiffComment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ac200a0dcc997ed7078047abc4cf0df8e">comments</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; ID3_Tag &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a4808d1e8b12928767b5be28e3948e6c8">tags</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structDsdiffMarker.html">DsdiffMarker</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a02a32eb30fc9bc7f33a72eb40d921396">markers</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a8603128337de10ca8056854ac15d93b2">isEm</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a6f96198b3e7ac1439a4b9f7165db51a7">emid</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structDSTFrameIndex.html">DSTFrameIndex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a6952f3ee8af09121a9d8bd6804a467dd">dstFrameIndices</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structDSTFrameInformation.html">DSTFrameInformation</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a4d018b50f6ef0e1809a58c2fcfdb37a6">dstInfo</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a1ddaac9caa2fc775be7dbe629974a8cb">numTracks</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a45e174caff1eb673209e1d437b0d9c61">trackStartPositions</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#adb3ea1c2cf5cda50f23029d07ff2c3e5">trackEndPositions</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#a50a63c812600e2f1567435073d1ceec6">dsf2flac_uint8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a5e6a7288f68446a4dd4dd2ce1f071726">sampleBuffer</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a1196ec3250ae9673ca11d4523254ef3c">sampleBufferLenPerChan</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#afb5a83fbea5217eba40a40381a60bf9d">dsf2flac_int64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a0e6a3d24ce0a3cefdb704a3f21d567da">bufferCounter</a></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="dsf2flac__types_8h.html#afb5a83fbea5217eba40a40381a60bf9d">dsf2flac_int64</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#aad7e2f01a468ce41fd72e318bae0f975">bufferMarker</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds the number, start and end points of the tracks in the file.  <a href="#adab73c614b12f5b3eb0aa36fc920eb98"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#ac1dfbaee3fa571f032684bb1b1a6c5ad">readChunkHeader</a> (dsf2flac_int8 *ident, dsf2flac_uint64 chunkStart)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A little helper to get rid of repetitive code!  <a href="#ac1dfbaee3fa571f032684bb1b1a6c5ad"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdsdiffFileReader.html#a317db12e1b5be808c369ba97dbf5b1f5">readChunkHeader</a> (dsf2flac_int8 *ident, dsf2flac_uint64 chunkStart, dsf2flac_uint64 *chunkSz)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A little helper to get rid of repetitive code!  <a href="#a317db12e1b5be808c369ba97dbf5b1f5"></a><br/></td></tr>
 </table>
-<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>This class extends dsdSampleReader providing access to dsf samples and other info from dsdff files. </p>
+<p>Editied master files are supported, as is the undocumented ID3 chunk. </p>
+</div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a0644364a7b27cb80774078de328d2056"></a><!-- doxytag: member="dsdiffFileReader::dsdiffFileReader" ref="a0644364a7b27cb80774078de328d2056" args="(char *filePath)" -->
 <div class="memitem">
 <div class="memproto">
@@ -192,6 +196,9 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Class constructor. </p>
+<p>filePath must be a valid dsdff file location. If there is an issue reading or loading the file then <a class="el" href="classDsdSampleReader.html#af38ca8dd15acd893825877655eaff344" title="Return false if the reader is invalid (format/file error for example).">isValid()</a> will be false. </p>
 
 </div>
 </div>
@@ -209,9 +216,31 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Class destructor. </p>
+<p>Closes the file and frees the internal buffers. </p>
+
 </div>
 </div>
 <hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a1a06abf0beea3efbedf16fbbf46efc74"></a><!-- doxytag: member="dsdiffFileReader::allocateBuffer" ref="a1a06abf0beea3efbedf16fbbf46efc74" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classDsdSampleReader.html#a1a06abf0beea3efbedf16fbbf46efc74">DsdSampleReader::allocateBuffer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [protected, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Allocates the circular buffers. </p>
+<p>Child classes need to call this once they know the number of channels! </p>
+
+</div>
+</div>
 <a class="anchor" id="a2c78322eea9f9f8ce4cda1d4ef3fe43f"></a><!-- doxytag: member="dsdiffFileReader::allocateSampleBuffer" ref="a2c78322eea9f9f8ce4cda1d4ef3fe43f" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -225,85 +254,100 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>void <a class="el" href="classdsdiffFileReader.html#a2c78322eea9f9f8ce4cda1d4ef3fe43f">dsdiffFileReader::allocateSampleBuffer()</a></p>
-<p>allocate the buffer to hold samples </p>
+
+<p>Allocate the buffer to hold samples. </p>
 
 </div>
 </div>
-<a class="anchor" id="a93494591172b7b26078ab4e489cc40cc"></a><!-- doxytag: member="dsdiffFileReader::checkIdent" ref="a93494591172b7b26078ab4e489cc40cc" args="(dsf2flac_int8 *a, dsf2flac_int8 *b)" -->
+<a class="anchor" id="a4985ec156a185ee79da43eaceb5f78f7"></a><!-- doxytag: member="dsdiffFileReader::clearBuffer" ref="a4985ec156a185ee79da43eaceb5f78f7" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a93494591172b7b26078ab4e489cc40cc">dsdiffFileReader::checkIdent</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *&#160;</td>
-          <td class="paramname"><em>a</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *&#160;</td>
-          <td class="paramname"><em>b</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td><code> [static, private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac94eb57146b8e5be930cdd8f15936912"></a><!-- doxytag: member="dsdiffFileReader::dispComment" ref="ac94eb57146b8e5be930cdd8f15936912" args="(DsdiffComment c)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classdsdiffFileReader.html#ac94eb57146b8e5be930cdd8f15936912">dsdiffFileReader::dispComment</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structDsdiffComment.html">DsdiffComment</a>&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7bd20444ceba0d35d014f4b137c7bbec"></a><!-- doxytag: member="dsdiffFileReader::dispFileInfo" ref="a7bd20444ceba0d35d014f4b137c7bbec" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="classdsdiffFileReader.html#a7bd20444ceba0d35d014f4b137c7bbec">dsdiffFileReader::dispFileInfo</a> </td>
+          <td class="memname">void <a class="el" href="classDsdSampleReader.html#a4985ec156a185ee79da43eaceb5f78f7">DsdSampleReader::clearBuffer</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td><code> [protected, inherited]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
+<p>Clear the buffers and fill with idleSample. </p>
+
 </div>
 </div>
-<a class="anchor" id="ad4bd5f7d47de5b58f45b64135cd82fd4"></a><!-- doxytag: member="dsdiffFileReader::dispMarker" ref="ad4bd5f7d47de5b58f45b64135cd82fd4" args="(DsdiffMarker m)" -->
+<a class="anchor" id="af89cd94df23fbc7a14f4693d41e559d9"></a><!-- doxytag: member="dsdiffFileReader::getBuffer" ref="af89cd94df23fbc7a14f4693d41e559d9" args="()" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classdsdiffFileReader.html#ad4bd5f7d47de5b58f45b64135cd82fd4">dsdiffFileReader::dispMarker</a> </td>
+          <td class="memname">boost::circular_buffer&lt; dsf2flac_uint8 &gt; * <a class="el" href="classDsdSampleReader.html#af89cd94df23fbc7a14f4693d41e559d9">DsdSampleReader::getBuffer</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structDsdiffMarker.html">DsdiffMarker</a>&#160;</td>
-          <td class="paramname"><em>m</em></td><td>)</td>
-          <td><code> [private]</code></td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Returns an array of circular buffers, one for each track. </p>
+<p>Each circular buffer contains <a class="el" href="classDsdSampleReader.html#a4047cf0d1e5509d09954b844e57194b5" title="Returns the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples)...">getBufferLength()</a> uint8 numbers. The DSD samples are packed into these uint8 numbers. The next uint8 set of 8 DSD samples is added into position 0 when <a class="el" href="classDsdSampleReader.html#a47dec63e6bd4cd9cf5235d8a4cbbe886" title="Step the reader forward by 8 DSD samples.">step()</a> is called. By default the buffer is filled with <a class="el" href="classDsdSampleReader.html#a57314cc6f55aa3b1302c4c6f2e1089d9" title="Return the idle tone used by this reader, by default the buffers are populated with this idle tone...">getIdleSample()</a>. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4047cf0d1e5509d09954b844e57194b5"></a><!-- doxytag: member="dsdiffFileReader::getBufferLength" ref="a4047cf0d1e5509d09954b844e57194b5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classDsdSampleReader.html#a4047cf0d1e5509d09954b844e57194b5">DsdSampleReader::getBufferLength</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples). </p>
+
+</div>
+</div>
+<a class="anchor" id="a55a93bdd363ad0caf9cd53d118faaed0"></a><!-- doxytag: member="dsdiffFileReader::getErrorMsg" ref="a55a93bdd363ad0caf9cd53d118faaed0" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classDsdSampleReader.html#a55a93bdd363ad0caf9cd53d118faaed0">DsdSampleReader::getErrorMsg</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns a message explaining why the reader is invalid. </p>
+
+</div>
+</div>
+<a class="anchor" id="a10bc171b055f01dbfd8fdc13c8f29e05"></a><!-- doxytag: member="dsdiffFileReader::getID3Tag" ref="a10bc171b055f01dbfd8fdc13c8f29e05" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">ID3_Tag <a class="el" href="classDsdSampleReader.html#a10bc171b055f01dbfd8fdc13c8f29e05">DsdSampleReader::getID3Tag</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the ID3 tag of the first track in this reader. </p>
+<p>Useful for when there is only a single track in the reader. </p>
 
 </div>
 </div>
@@ -314,17 +358,35 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">ID3_Tag <a class="el" href="classdsdiffFileReader.html#a72add784b0326974b1d01994d5f194ba">dsdiffFileReader::getID3Tag</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
           <td class="paramname"><em>trackNum</em></td><td>)</td>
           <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>ID3_Tag <a class="el" href="classdsdiffFileReader.html#a72add784b0326974b1d01994d5f194ba">dsdiffFileReader::getID3Tag(dsf2flac_uint32 trackNum)</a>;</p>
-<p>Public function, returns id3tags for the specified track or NULL if there is no such tag. </p>
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a7f5e3ceb6c63f7d678da564005610c49">dsdSampleReader</a>.</p>
+<p>Return the ID3 tag corresponding to the provided track number. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#abf203468082beefa04e80ceacc6df426">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a57314cc6f55aa3b1302c4c6f2e1089d9"></a><!-- doxytag: member="dsdiffFileReader::getIdleSample" ref="a57314cc6f55aa3b1302c4c6f2e1089d9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual dsf2flac_uint8 <a class="el" href="classDsdSampleReader.html#a57314cc6f55aa3b1302c4c6f2e1089d9">DsdSampleReader::getIdleSample</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, virtual, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the idle tone used by this reader, by default the buffers are populated with this idle tone. </p>
 
 </div>
 </div>
@@ -333,7 +395,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#afb5a83fbea5217eba40a40381a60bf9d">dsf2flac_int64</a> <a class="el" href="classdsdiffFileReader.html#ab499ac4a334327d7da1ab8acc3f77eeb">dsdiffFileReader::getLength</a> </td>
+          <td class="memname">dsf2flac_int64 <a class="el" href="classdsdiffFileReader.html#ab499ac4a334327d7da1ab8acc3f77eeb">dsdiffFileReader::getLength</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [inline, virtual]</code></td>
@@ -342,7 +404,27 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#ae281735da76dbc5cd921bb27bd99e364">dsdSampleReader</a>.</p>
+<p>Returns the total number of DSD samples in the reader. </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#abeac2f3086bbb590f403a17a9fad112b">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a03a1ccf5fe2002951958b1a0315c0c17"></a><!-- doxytag: member="dsdiffFileReader::getLengthInSeconds" ref="a03a1ccf5fe2002951958b1a0315c0c17" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_float64 <a class="el" href="classDsdSampleReader.html#a03a1ccf5fe2002951958b1a0315c0c17">DsdSampleReader::getLengthInSeconds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Returns the total length of the reader in seconds. </p>
 
 </div>
 </div>
@@ -351,7 +433,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#a87a51486ae8526dac7ed40ee3686704c">dsdiffFileReader::getNumChannels</a> </td>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classdsdiffFileReader.html#a87a51486ae8526dac7ed40ee3686704c">dsdiffFileReader::getNumChannels</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [inline, virtual]</code></td>
@@ -360,7 +442,9 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a36eb5831b24efb0da0896c7df4105983">dsdSampleReader</a>.</p>
+<p>Returns the number of channels in the reader. </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#ae70fe02d2c45eed47980e3fd47a5fd23">DsdSampleReader</a>.</p>
 
 </div>
 </div>
@@ -369,7 +453,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#a2b1c1b04ad8071f79084ffed7f008898">dsdiffFileReader::getNumTracks</a> </td>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classdsdiffFileReader.html#a2b1c1b04ad8071f79084ffed7f008898">dsdiffFileReader::getNumTracks</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [inline, virtual]</code></td>
@@ -378,7 +462,64 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#abef759cf3c802a05c5b49035a4d928b2">dsdSampleReader</a>.</p>
+<p>Returns the number of audio tracks in the reader. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#a59a12a45074ff35f40ea7632b4474b0d">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="aa4146b9597508d0d0cba9687cac10b0a"></a><!-- doxytag: member="dsdiffFileReader::getPosition" ref="aa4146b9597508d0d0cba9687cac10b0a" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_int64 <a class="el" href="classDsdSampleReader.html#aa4146b9597508d0d0cba9687cac10b0a">DsdSampleReader::getPosition</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the current position of the reader in DSD samples. </p>
+<p>This is the position of the first entry in the circular buffers. </p>
+
+</div>
+</div>
+<a class="anchor" id="a482617bc01d3fd23d40ae5c6cccda769"></a><!-- doxytag: member="dsdiffFileReader::getPositionAsPercent" ref="a482617bc01d3fd23d40ae5c6cccda769" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_float64 <a class="el" href="classDsdSampleReader.html#a482617bc01d3fd23d40ae5c6cccda769">DsdSampleReader::getPositionAsPercent</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the current position of the reader as a percent of the total length. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac9602a1a4068718248603510360d5a69"></a><!-- doxytag: member="dsdiffFileReader::getPositionInSeconds" ref="ac9602a1a4068718248603510360d5a69" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">dsf2flac_float64 <a class="el" href="classDsdSampleReader.html#ac9602a1a4068718248603510360d5a69">DsdSampleReader::getPositionInSeconds</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return the current position of the reader in seconds. </p>
 
 </div>
 </div>
@@ -387,7 +528,7 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#aa5b4aa095307d57131bbbeadd169435d">dsdiffFileReader::getSamplingFreq</a> </td>
+          <td class="memname">dsf2flac_uint32 <a class="el" href="classdsdiffFileReader.html#aa5b4aa095307d57131bbbeadd169435d">dsdiffFileReader::getSamplingFreq</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td><code> [inline, virtual]</code></td>
@@ -396,7 +537,9 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a54fbb420d521cfb9da0419082f92b305">dsdSampleReader</a>.</p>
+<p>Returns the DSD sampling rate of this reader (Hz). </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#a8dd5f7fa19f0d364fb32e8d956b7c807">DsdSampleReader</a>.</p>
 
 </div>
 </div>
@@ -405,19 +548,19 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> <a class="el" href="classdsdiffFileReader.html#a8e87af43c9d73ee255daeb072c76bd66">dsdiffFileReader::getTrackEnd</a> </td>
+          <td class="memname">dsf2flac_uint64 <a class="el" href="classdsdiffFileReader.html#a8e87af43c9d73ee255daeb072c76bd66">dsdiffFileReader::getTrackEnd</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
           <td class="paramname"><em>trackNum</em></td><td>)</td>
           <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>dsf2flac_uint64 <a class="el" href="classdsdiffFileReader.html#a8e87af43c9d73ee255daeb072c76bd66">dsdiffFileReader::getTrackEnd(dsf2flac_uint32 trackNum)</a>;</p>
-<p>return the index to the last sample of the nth track </p>
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#ae5ed5723b542ae25d0f2232d0b3965d8">dsdSampleReader</a>.</p>
+<p>Returns the end position of the specified track. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#af6f417791f38ba8140443b322bace86f">DsdSampleReader</a>.</p>
 
 </div>
 </div>
@@ -426,19 +569,56 @@ Private Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> <a class="el" href="classdsdiffFileReader.html#ab5130c1e6f0ac01d60db3dec3e1ea514">dsdiffFileReader::getTrackStart</a> </td>
+          <td class="memname">dsf2flac_uint64 <a class="el" href="classdsdiffFileReader.html#ab5130c1e6f0ac01d60db3dec3e1ea514">dsdiffFileReader::getTrackStart</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a>&#160;</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
           <td class="paramname"><em>trackNum</em></td><td>)</td>
           <td><code> [virtual]</code></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>dsf2flac_uint64 <a class="el" href="classdsdiffFileReader.html#ab5130c1e6f0ac01d60db3dec3e1ea514">dsdiffFileReader::getTrackStart(dsf2flac_uint32 trackNum)</a>;</p>
-<p>return the index to the first sample of the nth track </p>
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a0034f7b0eab16a869cd4d9c3609f7b59">dsdSampleReader</a>.</p>
+<p>Returns the start position of the specified track. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#a7acaaebbddc2d42e69fd999bd0d0c394">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="af38ca8dd15acd893825877655eaff344"></a><!-- doxytag: member="dsdiffFileReader::isValid" ref="af38ca8dd15acd893825877655eaff344" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsdSampleReader.html#af38ca8dd15acd893825877655eaff344">DsdSampleReader::isValid</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Return false if the reader is invalid (format/file error for example). </p>
+
+</div>
+</div>
+<a class="anchor" id="a54998d3ac12b20f0b30c4e781d266b19"></a><!-- doxytag: member="dsdiffFileReader::latin1_to_utf8" ref="a54998d3ac12b20f0b30c4e781d266b19" args="(char *latin1)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">static char* <a class="el" href="classDsdSampleReader.html#a54998d3ac12b20f0b30c4e781d266b19">DsdSampleReader::latin1_to_utf8</a> </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>latin1</em></td><td>)</td>
+          <td><code> [static, inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>convert latin1 encoded char into utf8. </p>
 
 </div>
 </div>
@@ -456,7 +636,9 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a461c65aadcb4853ecf0894f74861352b">dsdSampleReader</a>.</p>
+<p>Describes the order that the samples are packed into the int8 buffer entries. </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#afcf63d915fce58c33317f9b9e38aefc2">DsdSampleReader</a>.</p>
 
 </div>
 </div>
@@ -474,311 +656,8 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a546149090a58b1b1628f3eb02c7d9f82"></a><!-- doxytag: member="dsdiffFileReader::readChunk_ABSS" ref="a546149090a58b1b1628f3eb02c7d9f82" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a546149090a58b1b1628f3eb02c7d9f82">dsdiffFileReader::readChunk_ABSS</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5796be5321ad4d8e025c73a205cf7ba2"></a><!-- doxytag: member="dsdiffFileReader::readChunk_CHNL" ref="a5796be5321ad4d8e025c73a205cf7ba2" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a5796be5321ad4d8e025c73a205cf7ba2">dsdiffFileReader::readChunk_CHNL</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad465086e717a1d251014bce7d184d3f3"></a><!-- doxytag: member="dsdiffFileReader::readChunk_CMPR" ref="ad465086e717a1d251014bce7d184d3f3" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#ad465086e717a1d251014bce7d184d3f3">dsdiffFileReader::readChunk_CMPR</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aad8ced93045843145fd52777fa16ebfe"></a><!-- doxytag: member="dsdiffFileReader::readChunk_COMT" ref="aad8ced93045843145fd52777fa16ebfe" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#aad8ced93045843145fd52777fa16ebfe">dsdiffFileReader::readChunk_COMT</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a29c44b36ef50fd544ac11e510d7ff9bc"></a><!-- doxytag: member="dsdiffFileReader::readChunk_DIIN" ref="a29c44b36ef50fd544ac11e510d7ff9bc" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a29c44b36ef50fd544ac11e510d7ff9bc">dsdiffFileReader::readChunk_DIIN</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ae730a9748eccb30936932b3b8f79df69"></a><!-- doxytag: member="dsdiffFileReader::readChunk_DSD" ref="ae730a9748eccb30936932b3b8f79df69" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#ae730a9748eccb30936932b3b8f79df69">dsdiffFileReader::readChunk_DSD</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a102ac250180d7c112ceb6ac3e9432e29"></a><!-- doxytag: member="dsdiffFileReader::readChunk_DST" ref="a102ac250180d7c112ceb6ac3e9432e29" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a102ac250180d7c112ceb6ac3e9432e29">dsdiffFileReader::readChunk_DST</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a59d9817a5bcfc5aca7cbb029d84f8bc5"></a><!-- doxytag: member="dsdiffFileReader::readChunk_DSTF" ref="a59d9817a5bcfc5aca7cbb029d84f8bc5" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a59d9817a5bcfc5aca7cbb029d84f8bc5">dsdiffFileReader::readChunk_DSTF</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="af18a7edc927dc87fa5c21afda5d34e6b"></a><!-- doxytag: member="dsdiffFileReader::readChunk_DSTI" ref="af18a7edc927dc87fa5c21afda5d34e6b" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#af18a7edc927dc87fa5c21afda5d34e6b">dsdiffFileReader::readChunk_DSTI</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa25d9d06bc157bc015af6b119892c66c"></a><!-- doxytag: member="dsdiffFileReader::readChunk_EMID" ref="aa25d9d06bc157bc015af6b119892c66c" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#aa25d9d06bc157bc015af6b119892c66c">dsdiffFileReader::readChunk_EMID</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6c4865f58c8a6f25c44f9ddd9e127312"></a><!-- doxytag: member="dsdiffFileReader::readChunk_FRM8" ref="a6c4865f58c8a6f25c44f9ddd9e127312" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a6c4865f58c8a6f25c44f9ddd9e127312">dsdiffFileReader::readChunk_FRM8</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac8c58328b0555f5a024e1e7e7e985097"></a><!-- doxytag: member="dsdiffFileReader::readChunk_FRTE" ref="ac8c58328b0555f5a024e1e7e7e985097" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#ac8c58328b0555f5a024e1e7e7e985097">dsdiffFileReader::readChunk_FRTE</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a13166aea6f4cfbbd3baf6c1d44f92203"></a><!-- doxytag: member="dsdiffFileReader::readChunk_FS" ref="a13166aea6f4cfbbd3baf6c1d44f92203" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a13166aea6f4cfbbd3baf6c1d44f92203">dsdiffFileReader::readChunk_FS</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a8ea32a8f4b9fe5ff6c6de5257ee063c2"></a><!-- doxytag: member="dsdiffFileReader::readChunk_FVER" ref="a8ea32a8f4b9fe5ff6c6de5257ee063c2" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a8ea32a8f4b9fe5ff6c6de5257ee063c2">dsdiffFileReader::readChunk_FVER</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5126ac790e09a223e121aaa794a40021"></a><!-- doxytag: member="dsdiffFileReader::readChunk_ID3" ref="a5126ac790e09a223e121aaa794a40021" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a5126ac790e09a223e121aaa794a40021">dsdiffFileReader::readChunk_ID3</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a8f58e06e690103fbc082410181b8d47f"></a><!-- doxytag: member="dsdiffFileReader::readChunk_LSCO" ref="a8f58e06e690103fbc082410181b8d47f" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a8f58e06e690103fbc082410181b8d47f">dsdiffFileReader::readChunk_LSCO</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad6b285c8e17cec25d472802b651687b3"></a><!-- doxytag: member="dsdiffFileReader::readChunk_MARK" ref="ad6b285c8e17cec25d472802b651687b3" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#ad6b285c8e17cec25d472802b651687b3">dsdiffFileReader::readChunk_MARK</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7e2ab8729bdc743ed40b795c9ebc827b"></a><!-- doxytag: member="dsdiffFileReader::readChunk_PROP" ref="a7e2ab8729bdc743ed40b795c9ebc827b" args="(dsf2flac_uint64 chunkStart)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a7e2ab8729bdc743ed40b795c9ebc827b">dsdiffFileReader::readChunk_PROP</a> </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
-          <td class="paramname"><em>chunkStart</em></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
+<p>Finds the number, start and end points of the tracks in the file. </p>
+<p>Must be called after the marker chunks have been read. </p>
 
 </div>
 </div>
@@ -789,13 +668,13 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#ac1dfbaee3fa571f032684bb1b1a6c5ad">dsdiffFileReader::readChunkHeader</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *&#160;</td>
+          <td class="paramtype">dsf2flac_int8 *&#160;</td>
           <td class="paramname"><em>ident</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
+          <td class="paramtype">dsf2flac_uint64&#160;</td>
           <td class="paramname"><em>chunkStart</em>&#160;</td>
         </tr>
         <tr>
@@ -806,8 +685,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>bool <a class="el" href="classdsdiffFileReader.html#ac1dfbaee3fa571f032684bb1b1a6c5ad">dsdiffFileReader::readChunkHeader(dsf2flac_int8* ident, dsf2flac_uint64 chunkStart)</a></p>
-<p>Private method: a little helper to get rid of repetitive code! </p>
+
+<p>A little helper to get rid of repetitive code! </p>
 
 </div>
 </div>
@@ -818,19 +697,19 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#ac1dfbaee3fa571f032684bb1b1a6c5ad">dsdiffFileReader::readChunkHeader</a> </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> *&#160;</td>
+          <td class="paramtype">dsf2flac_int8 *&#160;</td>
           <td class="paramname"><em>ident</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&#160;</td>
+          <td class="paramtype">dsf2flac_uint64&#160;</td>
           <td class="paramname"><em>chunkStart</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> *&#160;</td>
+          <td class="paramtype">dsf2flac_uint64 *&#160;</td>
           <td class="paramname"><em>chunkSz</em>&#160;</td>
         </tr>
         <tr>
@@ -842,23 +721,7 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-</div>
-</div>
-<a class="anchor" id="a23d6ecfcb529552148a934a524e5fc40"></a><!-- doxytag: member="dsdiffFileReader::readHeaders" ref="a23d6ecfcb529552148a934a524e5fc40" args="()" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a23d6ecfcb529552148a934a524e5fc40">dsdiffFileReader::readHeaders</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>void <a class="el" href="classdsdiffFileReader.html#a23d6ecfcb529552148a934a524e5fc40">dsdiffFileReader::readHeaders()</a></p>
-<p>Private function, called on create. Reads lots of info from the file. </p>
+<p>A little helper to get rid of repetitive code! </p>
 
 </div>
 </div>
@@ -875,8 +738,8 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>bool <a class="el" href="classdsdiffFileReader.html#ae9464c125fa9a4a6ce0fd77d95557473">dsdiffFileReader::readNextBlock()</a></p>
-<p>read a block of samples into the buffer. </p>
+
+<p>Read the next block of samples into the buffer. </p>
 
 </div>
 </div>
@@ -893,10 +756,11 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>void <a class="el" href="classdsdiffFileReader.html#aa6ff9e680ec7f5b7c1abe5db3428faa7">dsdiffFileReader::rewind()</a></p>
-<p>Reset the position back to the start of the file </p>
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a2b1f95917a27acf7b3f75034fafa8e0f">dsdSampleReader</a>.</p>
+<p>Set the reader position back to the start of the DSD data. </p>
+<p>Note that child classes implementing this method must call <a class="el" href="classDsdSampleReader.html#a4985ec156a185ee79da43eaceb5f78f7" title="Clear the buffers and fill with idleSample.">clearBuffer()</a>; </p>
+
+<p>Implements <a class="el" href="classDsdSampleReader.html#a144883fdf0f2a4b270b97186bd86dbbb">DsdSampleReader</a>.</p>
 
 </div>
 </div>
@@ -914,7 +778,29 @@ Private Attributes</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#ac24dcb34d45195e26dda7358e4b793e6">dsdSampleReader</a>.</p>
+<p>Returns false if there are no more samples left in the reader. </p>
+
+<p>Reimplemented from <a class="el" href="classDsdSampleReader.html#aaca5f3d971b87e0bf13995902bbdabe6">DsdSampleReader</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a5853c6883b69c0e7431393b3af217579"></a><!-- doxytag: member="dsdiffFileReader::setBufferLength" ref="a5853c6883b69c0e7431393b3af217579" args="(dsf2flac_uint32 bufferLength)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classDsdSampleReader.html#a5853c6883b69c0e7431393b3af217579">DsdSampleReader::setBufferLength</a> </td>
+          <td>(</td>
+          <td class="paramtype">dsf2flac_uint32&#160;</td>
+          <td class="paramname"><em>bufferLength</em></td><td>)</td>
+          <td><code> [inherited]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets the length of the buffers (the number of uint8 numbers, NOT the number of DSD samples). </p>
+<p>Note that this will cause <a class="el" href="classDsdSampleReader.html#a144883fdf0f2a4b270b97186bd86dbbb" title="Set the reader position back to the start of the DSD data.">rewind()</a> to be called. </p>
 
 </div>
 </div>
@@ -931,355 +817,17 @@ Private Attributes</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>void <a class="el" href="classdsdiffFileReader.html#a87c3469f452e4e985e1634122639a615">dsdiffFileReader::step()</a></p>
-<p>Increments the position in the file by 8 dsd samples (1 byte of data). The block buffers are updated with the new samples. </p>
 
-<p>Reimplemented from <a class="el" href="classdsdSampleReader.html#a4e00ddfc99a3629c53f39fabbc057fd2">dsdSampleReader</a>.</p>
+<p>Step the reader forward by 8 DSD samples. </p>
+<p>This causes the next 8 DSD samples to be added into the front of the circular buffers (one uint8). </p>
 
-</div>
-</div>
-<hr/><h2>Member Data Documentation</h2>
-<a class="anchor" id="aef4b83ed490e147db13944021e6612ea"></a><!-- doxytag: member="dsdiffFileReader::ast" ref="aef4b83ed490e147db13944021e6612ea" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structDsdiffAst.html">DsdiffAst</a> <a class="el" href="classdsdiffFileReader.html#aef4b83ed490e147db13944021e6612ea">dsdiffFileReader::ast</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a0e6a3d24ce0a3cefdb704a3f21d567da"></a><!-- doxytag: member="dsdiffFileReader::bufferCounter" ref="a0e6a3d24ce0a3cefdb704a3f21d567da" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#afb5a83fbea5217eba40a40381a60bf9d">dsf2flac_int64</a> <a class="el" href="classdsdiffFileReader.html#a0e6a3d24ce0a3cefdb704a3f21d567da">dsdiffFileReader::bufferCounter</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aad7e2f01a468ce41fd72e318bae0f975"></a><!-- doxytag: member="dsdiffFileReader::bufferMarker" ref="aad7e2f01a468ce41fd72e318bae0f975" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#afb5a83fbea5217eba40a40381a60bf9d">dsf2flac_int64</a> <a class="el" href="classdsdiffFileReader.html#aad7e2f01a468ce41fd72e318bae0f975">dsdiffFileReader::bufferMarker</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a7d64bc179e0fa24a1615d9a024f191b7"></a><!-- doxytag: member="dsdiffFileReader::chanIdents" ref="a7d64bc179e0fa24a1615d9a024f191b7" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a>** <a class="el" href="classdsdiffFileReader.html#a7d64bc179e0fa24a1615d9a024f191b7">dsdiffFileReader::chanIdents</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad209d3c78d6ab2a9b697df0af499af39"></a><!-- doxytag: member="dsdiffFileReader::chanNum" ref="ad209d3c78d6ab2a9b697df0af499af39" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#aea0fd80be9de2dd50c6e1584979fba9f">dsf2flac_uint16</a> <a class="el" href="classdsdiffFileReader.html#ad209d3c78d6ab2a9b697df0af499af39">dsdiffFileReader::chanNum</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac200a0dcc997ed7078047abc4cf0df8e"></a><!-- doxytag: member="dsdiffFileReader::comments" ref="ac200a0dcc997ed7078047abc4cf0df8e" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structDsdiffComment.html">DsdiffComment</a>&gt; <a class="el" href="classdsdiffFileReader.html#ac200a0dcc997ed7078047abc4cf0df8e">dsdiffFileReader::comments</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="aa50b8702198bd54d9e67fa58873f548d"></a><!-- doxytag: member="dsdiffFileReader::compressionName" ref="aa50b8702198bd54d9e67fa58873f548d" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a>* <a class="el" href="classdsdiffFileReader.html#aa50b8702198bd54d9e67fa58873f548d">dsdiffFileReader::compressionName</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2c2bd59e1a9c6893e7940302a3c156a2"></a><!-- doxytag: member="dsdiffFileReader::compressionType" ref="a2c2bd59e1a9c6893e7940302a3c156a2" args="[5]" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a35e551c377f4e3e53cdc09218b458741">dsf2flac_int8</a> <a class="el" href="classdsdiffFileReader.html#a2c2bd59e1a9c6893e7940302a3c156a2">dsdiffFileReader::compressionType</a>[5]<code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ad08ea625e1ce70c323148f76da0d644c"></a><!-- doxytag: member="dsdiffFileReader::dsdiffVersion" ref="ad08ea625e1ce70c323148f76da0d644c" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#ad08ea625e1ce70c323148f76da0d644c">dsdiffFileReader::dsdiffVersion</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a441476ee377670465180fc4f299c75d1"></a><!-- doxytag: member="dsdiffFileReader::dstChunkEnd" ref="a441476ee377670465180fc4f299c75d1" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> <a class="el" href="classdsdiffFileReader.html#a441476ee377670465180fc4f299c75d1">dsdiffFileReader::dstChunkEnd</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6952f3ee8af09121a9d8bd6804a467dd"></a><!-- doxytag: member="dsdiffFileReader::dstFrameIndices" ref="a6952f3ee8af09121a9d8bd6804a467dd" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structDSTFrameIndex.html">DSTFrameIndex</a>&gt; <a class="el" href="classdsdiffFileReader.html#a6952f3ee8af09121a9d8bd6804a467dd">dsdiffFileReader::dstFrameIndices</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4d018b50f6ef0e1809a58c2fcfdb37a6"></a><!-- doxytag: member="dsdiffFileReader::dstInfo" ref="a4d018b50f6ef0e1809a58c2fcfdb37a6" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="structDSTFrameInformation.html">DSTFrameInformation</a> <a class="el" href="classdsdiffFileReader.html#a4d018b50f6ef0e1809a58c2fcfdb37a6">dsdiffFileReader::dstInfo</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a6f96198b3e7ac1439a4b9f7165db51a7"></a><!-- doxytag: member="dsdiffFileReader::emid" ref="a6f96198b3e7ac1439a4b9f7165db51a7" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">char* <a class="el" href="classdsdiffFileReader.html#a6f96198b3e7ac1439a4b9f7165db51a7">dsdiffFileReader::emid</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5462b10300473dc5c14b3c0ced5f3dc3"></a><!-- doxytag: member="dsdiffFileReader::file" ref="a5462b10300473dc5c14b3c0ced5f3dc3" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classfstreamPlus.html">fstreamPlus</a> <a class="el" href="classdsdiffFileReader.html#a5462b10300473dc5c14b3c0ced5f3dc3">dsdiffFileReader::file</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a8603128337de10ca8056854ac15d93b2"></a><!-- doxytag: member="dsdiffFileReader::isEm" ref="a8603128337de10ca8056854ac15d93b2" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool <a class="el" href="classdsdiffFileReader.html#a8603128337de10ca8056854ac15d93b2">dsdiffFileReader::isEm</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a694975e92a4fa8de61f10d1b12d58cbf"></a><!-- doxytag: member="dsdiffFileReader::lsConfig" ref="a694975e92a4fa8de61f10d1b12d58cbf" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#aea0fd80be9de2dd50c6e1584979fba9f">dsf2flac_uint16</a> <a class="el" href="classdsdiffFileReader.html#a694975e92a4fa8de61f10d1b12d58cbf">dsdiffFileReader::lsConfig</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a02a32eb30fc9bc7f33a72eb40d921396"></a><!-- doxytag: member="dsdiffFileReader::markers" ref="a02a32eb30fc9bc7f33a72eb40d921396" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="structDsdiffMarker.html">DsdiffMarker</a>&gt; <a class="el" href="classdsdiffFileReader.html#a02a32eb30fc9bc7f33a72eb40d921396">dsdiffFileReader::markers</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1ddaac9caa2fc775be7dbe629974a8cb"></a><!-- doxytag: member="dsdiffFileReader::numTracks" ref="a1ddaac9caa2fc775be7dbe629974a8cb" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#a1ddaac9caa2fc775be7dbe629974a8cb">dsdiffFileReader::numTracks</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a5e6a7288f68446a4dd4dd2ce1f071726"></a><!-- doxytag: member="dsdiffFileReader::sampleBuffer" ref="a5e6a7288f68446a4dd4dd2ce1f071726" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a50a63c812600e2f1567435073d1ceec6">dsf2flac_uint8</a>* <a class="el" href="classdsdiffFileReader.html#a5e6a7288f68446a4dd4dd2ce1f071726">dsdiffFileReader::sampleBuffer</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a1196ec3250ae9673ca11d4523254ef3c"></a><!-- doxytag: member="dsdiffFileReader::sampleBufferLenPerChan" ref="a1196ec3250ae9673ca11d4523254ef3c" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#a1196ec3250ae9673ca11d4523254ef3c">dsdiffFileReader::sampleBufferLenPerChan</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a03d310eab1aeb64c8f553fbcd4f896c4"></a><!-- doxytag: member="dsdiffFileReader::sampleCountPerChan" ref="a03d310eab1aeb64c8f553fbcd4f896c4" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> <a class="el" href="classdsdiffFileReader.html#a03d310eab1aeb64c8f553fbcd4f896c4">dsdiffFileReader::sampleCountPerChan</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="af6d281c1b25a0b8e0d5d2130e2c664fd"></a><!-- doxytag: member="dsdiffFileReader::sampleDataPointer" ref="af6d281c1b25a0b8e0d5d2130e2c664fd" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a> <a class="el" href="classdsdiffFileReader.html#af6d281c1b25a0b8e0d5d2130e2c664fd">dsdiffFileReader::sampleDataPointer</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a2ce2e2160421f69ad2c1070d7bc425a9"></a><!-- doxytag: member="dsdiffFileReader::samplingFreq" ref="a2ce2e2160421f69ad2c1070d7bc425a9" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="dsf2flac__types_8h.html#ae94ca55c71bf85f62e6d46ad0f70e00d">dsf2flac_uint32</a> <a class="el" href="classdsdiffFileReader.html#a2ce2e2160421f69ad2c1070d7bc425a9">dsdiffFileReader::samplingFreq</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a4808d1e8b12928767b5be28e3948e6c8"></a><!-- doxytag: member="dsdiffFileReader::tags" ref="a4808d1e8b12928767b5be28e3948e6c8" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;ID3_Tag&gt; <a class="el" href="classdsdiffFileReader.html#a4808d1e8b12928767b5be28e3948e6c8">dsdiffFileReader::tags</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="adb3ea1c2cf5cda50f23029d07ff2c3e5"></a><!-- doxytag: member="dsdiffFileReader::trackEndPositions" ref="adb3ea1c2cf5cda50f23029d07ff2c3e5" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&gt; <a class="el" href="classdsdiffFileReader.html#adb3ea1c2cf5cda50f23029d07ff2c3e5">dsdiffFileReader::trackEndPositions</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a45e174caff1eb673209e1d437b0d9c61"></a><!-- doxytag: member="dsdiffFileReader::trackStartPositions" ref="a45e174caff1eb673209e1d437b0d9c61" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="dsf2flac__types_8h.html#a92edf8b6c6a2796bebd22252f84ea0c3">dsf2flac_uint64</a>&gt; <a class="el" href="classdsdiffFileReader.html#a45e174caff1eb673209e1d437b0d9c61">dsdiffFileReader::trackStartPositions</a><code> [private]</code></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
+<p>Implements <a class="el" href="classDsdSampleReader.html#a47dec63e6bd4cd9cf5235d8a4cbbe886">DsdSampleReader</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li><a class="el" href="dsdiff__file__reader_8h_source.html">dsdiff_file_reader.h</a></li>
-<li><a class="el" href="dsdiff__file__reader_8cpp.html">dsdiff_file_reader.cpp</a></li>
+<li>dsdiff_file_reader.h</li>
+<li>dsdiff_file_reader.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- window showing the filter options -->
@@ -1287,7 +835,7 @@ Private Attributes</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Defines</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -1299,7 +847,7 @@ Private Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Sep 13 2013 14:17:52 for DSF2FLAC by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Oct 13 2013 13:40:47 for DSF2FLAC by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>

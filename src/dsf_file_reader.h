@@ -42,7 +42,7 @@
 #include "fstream_plus.h"
 
 /**
- * This class extends dsdSampleReader providing acces to dsd samples and other info
+ * This class extends dsdSampleReader providing access to dsd samples and other info
  * from dsf files.
  *
  * Some of the rarer features of dsf are not well tested due to a lack of files:
@@ -61,11 +61,12 @@ public:
 	 */
 	virtual ~DsfFileReader();
 public: // methods overriding dsdSampleReader
+
+	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
 	bool step();
 	void rewind();
 	dsf2flac_int64 getLength() {return sampleCount;};
 	dsf2flac_uint32 getNumChannels() {return chanNum;};
-	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
 	bool msbIsPlayedFirst() { return true;}
 	bool samplesAvailable() { return !file.eof() && DsdSampleReader::samplesAvailable(); }; // false when no more samples left
 	ID3_Tag getID3Tag(dsf2flac_uint32 trackNum) {return metadata;}

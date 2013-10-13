@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  * 
- * Acknowledgements
+ * Acknowledgments
  * 
  * Many thanks to the following authors and projects whose work has greatly
  * helped the development of this tool.
@@ -63,11 +63,11 @@ public:
 	std::string getErrorMsg();
 
 	/// Returns the DSD sampling rate of this reader (Hz).
-	virtual dsf2flac_uint32 getSamplingFreq() {return 2822400;};
+	virtual dsf2flac_uint32 getSamplingFreq() = 0;
 	/// Returns the number of channels in the reader.
-	virtual dsf2flac_uint32 getNumChannels() {return 2;};
+	virtual dsf2flac_uint32 getNumChannels() = 0;
 	/// Returns the total number of DSD samples in the reader
-	virtual dsf2flac_int64  getLength() {return 1;};
+	virtual dsf2flac_int64  getLength() = 0;
 	/// Returns the total length of the reader in seconds.
 	dsf2flac_float64 getLengthInSeconds();
 	/// Returns the number of audio tracks in the reader
@@ -77,9 +77,10 @@ public:
 	/// Returns the end position of the specified track.
 	virtual dsf2flac_uint64 getTrackEnd(dsf2flac_uint32 trackNum) { return getLength(); }
 
-	/// Step the reader forward by 8 DSD samples.
-	/// This causes the next 8 DSD samples to be added into the front of the circular buffers (one uint8).
-	virtual bool step() {return false;};
+	/** Step the reader forward by 8 DSD samples.
+	 *  This causes the next 8 DSD samples to be added into the front of the circular buffers (one uint8).
+	 */
+	virtual bool step() = 0;
 	/// Returns false if there are no more samples left in the reader.
 	virtual bool samplesAvailable() { return getPosition()<getLength(); };
 
@@ -93,7 +94,7 @@ public:
 
 	/// Set the reader position back to the start of the DSD data.
 	/// Note that child classes implementing this method must call clearBuffer();
-	virtual void rewind() {};
+	virtual void rewind() = 0;
 
 	/**
 	 * Returns an array of circular buffers, one for each track.
@@ -109,7 +110,7 @@ public:
 	/// Note that this will cause rewind() to be called.
 	bool setBufferLength(dsf2flac_uint32 bufferLength);
 	/// Describes the order that the samples are packed into the int8 buffer entries.
-	virtual bool msbIsPlayedFirst() {return true;};
+	virtual bool msbIsPlayedFirst() = 0;
 
 	/// Return the ID3 tag of the first track in this reader.
 	/// Useful for when there is only a single track in the reader.

@@ -97,16 +97,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDopPacker.html#a4df822e610b9b0d36f2a0a2334cc80b7">DopPacker</a> (<a class="el" href="classDsdSampleReader.html">DsdSampleReader</a> *<a class="el" href="classDopPacker.html#a823ef9f0da46e84eed233a2e00f38e3b">reader</a>)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class constructor.  <a href="#a4df822e610b9b0d36f2a0a2334cc80b7"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab7eb362b4eee8564c464224e38af0d7f"></a><!-- doxytag: member="DopPacker::~DopPacker" ref="ab7eb362b4eee8564c464224e38af0d7f" args="()" -->
-virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDopPacker.html#ab7eb362b4eee8564c464224e38af0d7f">~DopPacker</a> ()</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class destructor. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDopPacker.html#ab7eb362b4eee8564c464224e38af0d7f">~DopPacker</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Class destructor.  <a href="#ab7eb362b4eee8564c464224e38af0d7f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDopPacker.html#a5afb6411fdfeefc7f3303883c6501cca">pack_buffer</a> (dsf2flac_int32 *buffer, dsf2flac_uint32 bufferLen)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Read DOP PCM samples from the reader.  <a href="#a5afb6411fdfeefc7f3303883c6501cca"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a823ef9f0da46e84eed233a2e00f38e3b"></a><!-- doxytag: member="DopPacker::reader" ref="a823ef9f0da46e84eed233a2e00f38e3b" args="" -->
-<a class="el" href="classDsdSampleReader.html">DsdSampleReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDopPacker.html#a823ef9f0da46e84eed233a2e00f38e3b">reader</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A pointer to the <a class="el" href="classDsdSampleReader.html" title="Abstract class defining anything which reads dsd samples from something.">DsdSampleReader</a>. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="classDsdSampleReader.html">DsdSampleReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDopPacker.html#a823ef9f0da46e84eed233a2e00f38e3b">reader</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A pointer to the <a class="el" href="classDsdSampleReader.html" title="Abstract class defining anything which reads dsd samples from something.">DsdSampleReader</a>.  <a href="#a823ef9f0da46e84eed233a2e00f38e3b"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A class which takes DSD samples from a <a class="el" href="classDsdSampleReader.html" title="Abstract class defining anything which reads dsd samples from something.">DsdSampleReader</a> and packs them into DOP encoded PCM. </p>
@@ -128,6 +126,24 @@ Private Attributes</h2></td></tr>
 
 <p>Class constructor. </p>
 <p>reader can be any type of DSD sample reader. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab7eb362b4eee8564c464224e38af0d7f"></a><!-- doxytag: member="DopPacker::~DopPacker" ref="ab7eb362b4eee8564c464224e38af0d7f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classDopPacker.html#ab7eb362b4eee8564c464224e38af0d7f">DopPacker::~DopPacker</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Class destructor. </p>
 
 </div>
 </div>
@@ -162,6 +178,22 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<hr/><h2>Member Data Documentation</h2>
+<a class="anchor" id="a823ef9f0da46e84eed233a2e00f38e3b"></a><!-- doxytag: member="DopPacker::reader" ref="a823ef9f0da46e84eed233a2e00f38e3b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classDsdSampleReader.html">DsdSampleReader</a>* <a class="el" href="classDopPacker.html#a823ef9f0da46e84eed233a2e00f38e3b">DopPacker::reader</a><code> [private]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>A pointer to the <a class="el" href="classDsdSampleReader.html" title="Abstract class defining anything which reads dsd samples from something.">DsdSampleReader</a>. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>dop_packer.h</li>
 <li>dop_packer.cpp</li>
@@ -184,7 +216,7 @@ Private Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 18 2013 23:41:51 for DSF2FLAC by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Oct 13 2013 22:00:19 for DSF2FLAC by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.6.1
 </small></address>
