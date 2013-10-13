@@ -22,7 +22,7 @@ just look in filters.cpp.
 
 COMPILING
 
-I developed and tested this program on Linux x86_64 with GCC. It probably compile and
+I developed and tested this program on Linux x86_64 with GCC. It probably compiles and
 works on x86 GCC too. Windows might be a bit more work.
 
 If you are building statically you'll need to link against these libs:

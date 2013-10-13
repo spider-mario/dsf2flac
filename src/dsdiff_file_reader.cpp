@@ -1,9 +1,8 @@
-/**
+/*
  * dsf2flac - http://code.google.com/p/dsf2flac/
  *
  * A file conversion tool for translating dsf dsd audio files into
  * flac pcm audio files.
- *
  *
  * Copyright (c) 2013 by respective authors.
  *
@@ -35,6 +34,8 @@
  * Jesus R - www.sonore.us
  *
  */
+
+
 #include "dsdiff_file_reader.h"
 #include "iostream"
 #include "libdstdec/dst_init.h"
@@ -43,7 +44,7 @@ static bool chanIdentsAllocated = false;
 static bool sampleBufferAllocated = false;
 static ebunch dstEbunch;
 static bool dstEbunchAllocated = false;
-dsdiffFileReader::dsdiffFileReader(char* filePath) : dsdSampleReader()
+dsdiffFileReader::dsdiffFileReader(char* filePath) : DsdSampleReader()
 {
 	// set some defaults
 	ast.hours = 0;

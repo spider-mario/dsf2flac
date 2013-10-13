@@ -1,9 +1,8 @@
-/**
+/*
  * dsf2flac - http://code.google.com/p/dsf2flac/
  * 
  * A file conversion tool for translating dsf dsd audio files into
  * flac pcm audio files.
- * 
  *
  * Copyright (c) 2013 by respective authors.
  *
@@ -95,7 +94,7 @@ typedef struct {
 
 
 
-class dsdiffFileReader : public dsdSampleReader
+class dsdiffFileReader : public DsdSampleReader
 {
 public:
 	// constructor and destructor
@@ -108,8 +107,8 @@ public:
 	dsf2flac_int64 getLength() {return sampleCountPerChan;};
 	dsf2flac_uint32 getNumChannels() {return chanNum;};
 	dsf2flac_uint32 getSamplingFreq() {return samplingFreq;};
-	bool msbIsYoungest() { return false;}
-	bool samplesAvailable() { return !file.eof() && dsdSampleReader::samplesAvailable(); }; // false when no more samples left
+	bool msbIsPlayedFirst() { return false;}
+	bool samplesAvailable() { return !file.eof() && DsdSampleReader::samplesAvailable(); }; // false when no more samples left
 	ID3_Tag getID3Tag(dsf2flac_uint32 trackNum);
 	dsf2flac_uint32 getNumTracks() {return numTracks;}; // the number of audio tracks in the dsd data
 	dsf2flac_uint64 getTrackStart(dsf2flac_uint32 trackNum);// return the index to the first sample of the nth track

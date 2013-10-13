@@ -1,9 +1,8 @@
-/**
+/*
  * dsf2flac - http://code.google.com/p/dsf2flac/
  * 
  * A file conversion tool for translating dsf dsd audio files into
  * flac pcm audio files.
- * 
  *
  * Copyright (c) 2013 by respective authors.
  *
@@ -57,9 +56,9 @@
 class dsdDecimator
 {
 public:
-	dsdDecimator(dsdSampleReader *reader, dsf2flac_uint32 outputSampleRate);
+	dsdDecimator(DsdSampleReader *reader, dsf2flac_uint32 outputSampleRate);
 	virtual ~dsdDecimator();
-	// Method to get the output sampels
+	// Method to get the output samples
 	template <typename sampleType> void getSamples(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude = 0);
 	dsf2flac_uint32 getOutputSampleRate();
 	dsf2flac_int64 getLength(); // return total length in samples of decimated data
@@ -74,7 +73,7 @@ public:
 	void step() { reader->step(); }; // handy wrappers.
 	dsf2flac_uint32 getDecimationRatio() {return ratio;};
 private:
-	dsdSampleReader *reader;
+	DsdSampleReader *reader;
 	dsf2flac_uint32 outputSampleRate;
 	dsf2flac_uint32 nLookupTable;
 	dsf2flac_uint32 tzero; // filter t=0 position

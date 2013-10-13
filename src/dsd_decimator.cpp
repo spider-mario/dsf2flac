@@ -1,9 +1,8 @@
-/**
+/*
  * dsf2flac - http://code.google.com/p/dsf2flac/
  * 
  * A file conversion tool for translating dsf dsd audio files into
  * flac pcm audio files.
- * 
  *
  * Copyright (c) 2013 by respective authors.
  *
@@ -61,7 +60,7 @@ static bool lookupTableAllocated = false;
  * Pass in a dsdSampleReader and the desired output sample rate.
  * 
  */
-dsdDecimator::dsdDecimator(dsdSampleReader *r, dsf2flac_uint32 rate)
+dsdDecimator::dsdDecimator(DsdSampleReader *r, dsf2flac_uint32 rate)
 {
 	reader = r;
 	outputSampleRate = rate;
@@ -126,7 +125,7 @@ dsf2flac_int64 dsdDecimator::getLength()
  */
 dsf2flac_float64 dsdDecimator::getPosition()
 {
-	return (dsf2flac_float64)reader->getPosition(tzero)/ratio;
+	return (dsf2flac_float64) (reader->getPosition()-tzero)/ratio;
 }
 /**
  * dsf2flac_float64 dsdDecimator::dsdDecimator::getFirstValidSample()
@@ -205,10 +204,11 @@ void dsdDecimator::initLookupTable(const int nCoefs,const dsf2flac_float64* coef
 			dsf2flac_float64 acc = 0.0;
 			for (int bit=0; bit<k; bit++) {
 				dsf2flac_float64 val;
-				if (reader->msbIsYoungest())
+				if (reader->msbIsPlayedFirst()) {
 					val = -1 + 2*(dsf2flac_float64) !!( dsdSeq & (1<<(7-bit)) );
-				else
+				} else {
 					val = -1 + 2*(dsf2flac_float64) !!( dsdSeq & (1<<(bit)) );
+				}
 				acc += val * coefs[t*8+bit];
 			}
 			lookupTable[t][dsdSeq] = (calc_type) acc;
@@ -276,7 +276,7 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 		exit(EXIT_FAILURE);
 	}
 	// get the sample buffer
-	boost::circular_buffer<dsf2flac_uint8>* buff = (*reader).getBuffer();
+	boost::circular_buffer<dsf2flac_uint8>* buff = reader->getBuffer();
 	for (int i=0; i<d.quot ; i++) {
 		// filter each chan in turn
 		for (dsf2flac_uint32 c=0; c<getNumChannels(); c++) {
@@ -289,8 +289,8 @@ template <typename sampleType> void dsdDecimator::getSamplesInternal(sampleType 
 			// dither before rounding/truncating
 			if (tpdfDitherPeakAmplitude > 0) {
 				// TPDF dither
-				calc_type rand1 = (calc_type)(rand()) / (calc_type)(RAND_MAX); // rand value between 0 and 1
-				calc_type rand2 = (calc_type)(rand()) / (calc_type)(RAND_MAX); // rand value between 0 and 1
+				calc_type rand1 = ((calc_type) rand()) / ((calc_type) RAND_MAX); // rand value between 0 and 1
+				calc_type rand2 = ((calc_type) rand()) / ((calc_type) RAND_MAX); // rand value between 0 and 1
 				sum = sum + (rand1-rand2)*tpdfDitherPeakAmplitude;
 			}
 			if (roundToInt)
