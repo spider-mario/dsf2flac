@@ -38,10 +38,10 @@
 #ifndef DSDSAMPLEREADER_H
 #define DSDSAMPLEREADER_H
 
-#include "stdio.h"
+#include <stdio.h>
 #include <dsf2flac_types.h>
 #include <boost/circular_buffer.hpp>
-#include "id3/tag.h"
+#include <id3/tag.h>
 
 static const dsf2flac_uint32 defaultBufferLength = 5000; //!< The default length of the circular buffers.
 

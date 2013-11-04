@@ -38,8 +38,8 @@
 #ifndef DSFFILEREADER_H
 #define DSFFILEREADER_H
 
-#include "dsd_sample_reader.h" // Base class: dsdSampleReader
-#include "fstream_plus.h"
+#include <dsd_sample_reader.h> // Base class: dsdSampleReader
+#include <fstream_plus.h>
 
 /**
  * This class extends dsdSampleReader providing access to dsd samples and other info

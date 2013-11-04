@@ -568,15 +568,21 @@ bool DsdiffFileReader::readChunk_ID3(dsf2flac_uint64 chunkStart)
 	}
 	// check this is actually an id3 header
 	dsf2flac_int32 id3tagLen;
-	if ( (id3tagLen = ID3_IsTagHeader(id3header)) > -1 )
+	if ( (id3tagLen = ID3_Tag::IsV2Tag(id3header)) < 1 ) {
 		return false;
-	// read the tag
+	}
+	// return to the start of the metadata
+	if (file.seekg(-ID3_TAGHEADERSIZE,std::ios_base::cur)) {
+		file.clear();
+		return false;
+	}
+	// read the full id3 data
 	dsf2flac_uint8* id3tag = new dsf2flac_uint8[ id3tagLen ];
 	if (file.read_uint8(id3tag,id3tagLen)) {
 		return false;
 	}
 	ID3_Tag t;
-	t.Parse (id3header, id3tag);
+	t.Parse(id3tag,id3tagLen);
 	tags.push_back(t);
 	delete[] id3tag;
 	return true;

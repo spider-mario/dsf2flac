@@ -35,7 +35,7 @@
  *
  */
 
-#include "dsf_file_reader.h"
+#include <dsf_file_reader.h>
 
 static bool blockBufferAllocated = false;
 
@@ -314,25 +314,32 @@ void DsfFileReader::readMetadata()
 		return;
 	}
 	
-	// read the first 10 bytes of the metadata (which should be the header).
-	dsf2flac_uint8 id3header[10];
-	if (file.read_uint8(id3header,10)) {
+	if (fileSz <= metaChunkPointer) {
+		file.clear();
 		return;
 	}
-	
-	
+	// read the first ID3_TAGHEADERSIZE bytes of the id3 (which should be the header).
+	dsf2flac_uint8 id3header[ID3_TAGHEADERSIZE];
+	if (file.read_uint8(id3header,ID3_TAGHEADERSIZE)) {
+		return;
+	}
 	// check this is actually an id3 header
 	dsf2flac_int32 id3tagLen;
-	if ( (id3tagLen = ID3_IsTagHeader(id3header)) > -1 )
-		return;
-	// read the tag
-	dsf2flac_uint8* id3tag = new dsf2flac_uint8[ id3tagLen ];
-	if (file.read_uint8(id3tag,id3tagLen)) {
+	if ( (id3tagLen = ID3_Tag::IsV2Tag(id3header)) < 1 ) {
 		return;
 	}
-	
-	metadata.Parse (id3header, id3tag);
-	
+	// return to the start of the metadata
+	if (file.seekg(-ID3_TAGHEADERSIZE,std::ios_base::cur)) {
+		file.clear();
+		return;
+	}
+	// read the full id3 data
+	dsf2flac_uint8* id3tag = new dsf2flac_uint8[ id3tagLen ];
+	if (file.read_uint8(id3tag,id3tagLen)) {
+			return;
+	}
+	metadata.Parse(id3tag,id3tagLen);
+
 	delete[] id3tag;
 }
 

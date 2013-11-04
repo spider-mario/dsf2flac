@@ -41,14 +41,14 @@
 #include <dsf_file_reader.h>
 #include <dsdiff_file_reader.h>
 #include <tagConversion.h>
-#include "FLAC++/metadata.h"
-#include "FLAC++/encoder.h"
-#include "math.h"
-#include "cmdline.h"
+#include <FLAC++/metadata.h>
+#include <FLAC++/encoder.h>
+#include <math.h>
+#include <cmdline.h>
 #include <sstream>
-#include "dop_packer.h"
+#include <dop_packer.h>
 
-#define flacBlockLen 100
+#define flacBlockLen 1024
 
 using boost::timer::cpu_timer;
 using boost::timer::cpu_times;
@@ -130,7 +130,7 @@ int pcm_track_helper(
 	bool ok = true;
 	FLAC::Encoder::File encoder;
 	FLAC__StreamEncoderInitStatus init_status;
-	FLAC__StreamMetadata *metadata[2];
+	FLAC__StreamMetadata* metadata[2];
 
 	// setup the encoder
 	if(!encoder) {
