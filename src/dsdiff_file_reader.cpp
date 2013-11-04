@@ -567,7 +567,7 @@ bool DsdiffFileReader::readChunk_ID3(dsf2flac_uint64 chunkStart)
 		return false;
 	}
 	// check this is actually an id3 header
-	dsf2flac_uint64 id3tagLen;
+	dsf2flac_int32 id3tagLen;
 	if ( (id3tagLen = ID3_IsTagHeader(id3header)) > -1 )
 		return false;
 	// read the tag

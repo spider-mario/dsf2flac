@@ -39,7 +39,7 @@
 #define DSDSAMPLEREADER_H
 
 #include "stdio.h"
-#include "dsf2flac_types.h"
+#include <dsf2flac_types.h>
 #include <boost/circular_buffer.hpp>
 #include "id3/tag.h"
 

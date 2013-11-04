@@ -106,20 +106,36 @@ public:
 	 * You also need to provide a scaling factor. This is particularly important for int sample types. The raw DSD data has peak amplitude +-1.
 	 *
 	 * If you wish to add TPDF dither to the data before quantization then please also provide the peak amplitude.
+	 * You can also choose to clip the data above a certain amplitude, set to <=0 for no clipping but be warned this can cause strange overflow behaviour.
 	 *
 	 * These sample types are supported:
 	 *
-	 * short int, int, long int, float, double
+	 * int16
+	 * int32
+	 * int64
+	 * float32
+	 * float64
 	 *
 	 * Others should be very simple to add (just take a look at the templates in the source code).
 	 *
 	 */
-	template <typename sampleType> void getSamples(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude = 0);
+	template <typename sampleType> void getSamples(
+			sampleType *buffer,
+			dsf2flac_uint32 bufferLen,
+			dsf2flac_float64 scale,
+			dsf2flac_float64 tpdfDitherPeakAmplitude = 0,
+			dsf2flac_float64 clipAmplitude = 0);
 private:	// private methods
 	/// Initializes the filter lookup table.
 	void initLookupTable(const dsf2flac_int32 nCoefs,const dsf2flac_float64* coefs,const dsf2flac_int32 tzero);
 	/// Does the actual calculation for the getSamples method. Using the lookup tables FIR calculation is a pretty simple summing operation.
-	template <typename sampleType> void getSamplesInternal(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude, bool roundToInt);
+	template <typename sampleType> void getSamplesInternal(
+			sampleType *buffer,
+			dsf2flac_uint32 bufferLen,
+			dsf2flac_float64 scale,
+			dsf2flac_float64 tpdfDitherPeakAmplitude,
+			dsf2flac_float64 clipAmplitude,
+			bool roundToInt);
 private:
 	DsdSampleReader *reader;
 	dsf2flac_uint32 outputSampleRate;

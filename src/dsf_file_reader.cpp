@@ -36,8 +36,6 @@
  */
 
 #include "dsf_file_reader.h"
-#include "taglib/tfile.h"
-#include "taglib/id3v2tag.h"
 
 static bool blockBufferAllocated = false;
 
@@ -324,7 +322,7 @@ void DsfFileReader::readMetadata()
 	
 	
 	// check this is actually an id3 header
-	dsf2flac_uint64 id3tagLen;
+	dsf2flac_int32 id3tagLen;
 	if ( (id3tagLen = ID3_IsTagHeader(id3header)) > -1 )
 		return;
 	// read the tag

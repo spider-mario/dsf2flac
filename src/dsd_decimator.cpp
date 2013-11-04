@@ -150,27 +150,33 @@ void DsdDecimator::initLookupTable(const int nCoefs,const dsf2flac_float64* coef
 	lookupTableAllocated = true;
 }
 
-template<> void DsdDecimator::getSamples(short int *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
+template<> void DsdDecimator::getSamples(dsf2flac_int16 *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude,dsf2flac_float64 clipAmplitude)
 {
-	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,true);
+	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,clipAmplitude,true);
 }
-template<> void DsdDecimator::getSamples(int *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
+template<> void DsdDecimator::getSamples(dsf2flac_int32 *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude,dsf2flac_float64 clipAmplitude)
 {
-	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,true);
+	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,clipAmplitude,true);
 }
-template<> void DsdDecimator::getSamples(long int *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
+template<> void DsdDecimator::getSamples(dsf2flac_int64 *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude,dsf2flac_float64 clipAmplitude)
 {
-	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,true);
+	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,clipAmplitude,true);
 }
-template<> void DsdDecimator::getSamples(float *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
+template<> void DsdDecimator::getSamples(dsf2flac_float32 *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude,dsf2flac_float64 clipAmplitude)
 {
-	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,false);
+	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,clipAmplitude,false);
 }
-template<> void DsdDecimator::getSamples(double *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude)
+template<> void DsdDecimator::getSamples(dsf2flac_float64 *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude,dsf2flac_float64 clipAmplitude)
 {
-	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,false);
+	getSamplesInternal(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,clipAmplitude,false);
 }
-template <typename sampleType> void DsdDecimator::getSamplesInternal(sampleType *buffer, dsf2flac_uint32 bufferLen, dsf2flac_float64 scale, dsf2flac_float64 tpdfDitherPeakAmplitude, bool roundToInt)
+template <typename sampleType> void DsdDecimator::getSamplesInternal(
+		sampleType *buffer,
+		dsf2flac_uint32 bufferLen,
+		dsf2flac_float64 scale,
+		dsf2flac_float64 tpdfDitherPeakAmplitude,
+		dsf2flac_float64 clipAmplitude,
+		bool roundToInt)
 {
 	// check the buffer seems sensible
 	div_t d = div(bufferLen,getNumChannels());
@@ -178,6 +184,8 @@ template <typename sampleType> void DsdDecimator::getSamplesInternal(sampleType 
 		fputs("Buffer length is not a multiple of getNumChannels()",stderr);
 		exit(EXIT_FAILURE);
 	}
+	// flag if we need to clip
+	bool clip = clipAmplitude > 0;
 	// get the sample buffer
 	boost::circular_buffer<dsf2flac_uint8>* buff = reader->getBuffer();
 	for (int i=0; i<d.quot ; i++) {
@@ -195,6 +203,12 @@ template <typename sampleType> void DsdDecimator::getSamplesInternal(sampleType 
 				calc_type rand1 = ((calc_type) rand()) / ((calc_type) RAND_MAX); // rand value between 0 and 1
 				calc_type rand2 = ((calc_type) rand()) / ((calc_type) RAND_MAX); // rand value between 0 and 1
 				sum = sum + (rand1-rand2)*tpdfDitherPeakAmplitude;
+			}
+			if (clip) {
+				if (sum > clipAmplitude)
+					sum = clipAmplitude;
+				else if (sum < -clipAmplitude)
+					sum = -clipAmplitude;
 			}
 			if (roundToInt)
 				buffer[i*getNumChannels()+c] = static_cast<sampleType>(round(sum));

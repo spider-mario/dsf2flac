@@ -114,6 +114,7 @@ int pcm_track_helper(
 	int bits,
 	dsf2flac_float64 scale,
 	dsf2flac_float64 tpdfDitherPeakAmplitude,
+	dsf2flac_float64 clipAmplitude,
 	dsf2flac_float64 startPos,
 	dsf2flac_float64 endPos,
 	ID3_Tag	id3tag)
@@ -173,7 +174,7 @@ int pcm_track_helper(
 	FLAC__int32* buffer = new FLAC__int32[bufferLen];
 	// MAIN CONVERSION LOOP //
 	while (dec->getPosition() <= endPos-flacBlockLen) {
-		dec->getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude);
+		dec->getSamples(buffer,bufferLen,scale,tpdfDitherPeakAmplitude,clipAmplitude);
 		if(!(ok = encoder.process_interleaved(buffer, flacBlockLen)))
 			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
 		checkTimer(dec->getPositionInSeconds(),dec->getPositionAsPercent());
@@ -183,7 +184,7 @@ int pcm_track_helper(
 	buffer = new FLAC__int32[dec->getNumChannels()];
 	// creep up to the end
 	while (dec->getPosition() <= endPos) {
-		dec->getSamples(buffer,dec->getNumChannels(),scale,tpdfDitherPeakAmplitude);
+		dec->getSamples(buffer,dec->getNumChannels(),scale,tpdfDitherPeakAmplitude,clipAmplitude);
 		if(!(ok = encoder.process_interleaved(buffer, 1)))
 			fprintf(stderr, "   state: %s\n", encoder.get_state().resolved_as_cstring(encoder));
 		checkTimer(dec->getPositionInSeconds(),dec->getPositionAsPercent());
@@ -240,6 +241,7 @@ int do_pcm_conversion(
 		tpdfDitherPeakAmplitude = 1.0;
 	else
 		tpdfDitherPeakAmplitude = 0.0;
+	dsf2flac_float64 clipAmplitude = pow(2.0,bits-1)-1; // clip at max range.
 
 	setupTimer(dsr->getPositionInSeconds());
 
@@ -268,7 +270,7 @@ int do_pcm_conversion(
 
 		printf("Output file\n\t%s\n",trackOutPath.c_str());
 		// use the pcm_track_helper
-		ok &= pcm_track_helper(trackOutPath,&dec,bits,scale,tpdfDitherPeakAmplitude,trackStart,trackEnd,dsr->getID3Tag(n));
+		ok &= pcm_track_helper(trackOutPath,&dec,bits,scale,tpdfDitherPeakAmplitude,clipAmplitude,trackStart,trackEnd,dsr->getID3Tag(n));
 	}
 
 	return ok;

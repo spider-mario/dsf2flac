@@ -16,7 +16,7 @@ at a full CPP program. I'm sure there are errors, hopefully none to horrible.
 I've tried to write things in a pretty versatile/clear way. It should be possible
 to expand the functionality to add other file types quite easily.
 
-If you want to try different convesion filters then it should be dead simple:
+If you want to try different conversion filters then it should be dead simple:
 just look in filters.cpp.
 
 
@@ -25,7 +25,20 @@ COMPILING
 I developed and tested this program on Linux x86_64 with GCC. It probably compiles and
 works on x86 GCC too. Windows might be a bit more work.
 
-If you are building statically you'll need to link against these libs:
+I've added a cmake build configuration which works on Linux and should be relatively easy to
+adapt for other platforms.
+
+Usage:
+
+mkdir build
+cd build
+cmake ..
+make
+
+
+
+
+If you want to try manual compilation then you'll need to link against these libs:
 
 FLAC++
 FLAC
@@ -37,15 +50,6 @@ id3
 z
 rt
 ogg
-
-The list is a little smaller if you want to use dynamic linking:
-
-FLAC++
-boost_system
-boost_timer
-boost_filesystem
-id3
-
 
 
 RUNNING
