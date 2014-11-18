@@ -1,5 +1,5 @@
 package "dsf2flac"
-version "0.1Rev30"
+version "0.1Rev53"
 purpose "Convert DSD audio files from DFF or DSF format into PCM flac audio."
 #usage "<usage>"
 #args "<command line options>"
